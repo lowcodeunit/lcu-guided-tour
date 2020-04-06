@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './controls/home/home.component';
 import { DocumentationComponent } from './controls/documentation/documentation.component';
-import { LcuDocumentationModule } from '@lowcodeunit/lcu-documentation-common';
 import { LcuGuidedTourModule } from '@lowcodeunit/lcu-guided-tour-common';
 
 @NgModule({
@@ -23,7 +22,6 @@ import { LcuGuidedTourModule } from '@lowcodeunit/lcu-guided-tour-common';
     FathymSharedModule,
     MaterialModule,
     FlexLayoutModule,
-    LcuDocumentationModule.forRoot(),
     LcuGuidedTourModule.forRoot()
   ],
   providers: [],

@@ -7,9 +7,9 @@
         </a>
       </div>
       <span fxFlex="nogrow">
-        <button matTooltip="Documentation" mat-icon-button routerLink="/documentation">
+        <!-- <button matTooltip="Documentation" mat-icon-button routerLink="/documentation">
           <mat-icon>description</mat-icon>
-        </button>
+        </button> -->
         <button matTooltip="Select a Theme" mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>format_color_fill</mat-icon>
         </button>
@@ -24,11 +24,10 @@
         </mat-menu>
       </span>
     </mat-toolbar>
-  
+
     <div class="lcu-content mat-drawer-container">
       <div class="lcu-card-container" fxLayout="row" fxLayout.lt-md="column">
         <router-outlet></router-outlet>
       </div>
     </div>
   </div>
-  

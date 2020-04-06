@@ -1,0 +1,14 @@
+{
+  "templates": {
+    "repository": "lowcodeunit-devkit/lcu-cli-templates-core",
+    "scope": "@lowcodeunit",
+    "workspace": "lcu-guided-tour"
+  },
+  "config": {
+    "wc": ["wc/lcu-guided-tour.lcu.js"],
+    "solutions": {},
+    "elements": {},
+    "data-flow": {},
+    "dependencies": {}
+  }
+}

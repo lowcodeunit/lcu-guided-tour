@@ -1,0 +1,19 @@
+.lcu-card {
+  cursor: pointer;
+  display: inline-block;
+  margin: 5px;
+  min-height: 250px;
+
+  .lcu-card-avatar {
+
+    .mat-icon {
+      font-size: 40px;
+    }
+  }
+
+  .lcu-card-content {
+    text-align: justify;
+    padding: 5px;
+    line-height: 20px;
+  }
+}

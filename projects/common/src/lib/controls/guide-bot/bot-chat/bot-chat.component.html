@@ -1,0 +1,25 @@
+<!-- THINKY CHAT -->
+<div #chat class="thinky-chat-container" *ngIf="ChatEnabled && IsChatVisible">
+  <div fxFlex fxLayout="column" class="thinky-chat">
+    <div fxFlex="1 1 100%" fxLayout="column">
+      <div #messageContainer [scrollTop]="ScrollHeight" fxFlex fxLayout="column" class="thinky-messages">
+        <div class="message"*ngFor="let msg of BotMessages" [ngClass]="{'thinky-message': msg.type === 'BOT', 'user-message': msg.type === 'USER', '': msg.type === 'CUSTOM'}" >
+          <div #customMsg>
+            {{ msg.message }}
+          </div>
+        </div>
+        <div class="typing-indicator message thinky-message" *ngIf="IsBotThinking">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="thinky-close">
+          <mat-icon (click)="OnBotChatClosed()">close</mat-icon>
+        </div>
+      </div>
+    </div>
+    <div class="thinky-input">
+      <mat-form-field class="chat-form-field" appearance="outline">
+        <input matInput [formControl]="QuestionFormControl" placeholder="Type your question..." autocomplete="off" (keyup.enter)="OnMessageEntered()">
+      </mat-form-field>
+    </div>
+  </div>
+</div>

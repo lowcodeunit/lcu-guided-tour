@@ -202,7 +202,8 @@
               "projects/demo/src/docs"
             ],
             "styles": [
-              "projects/demo/src/styles.scss"
+              "projects/demo/src/styles.scss",
+              "projects/common/assets/styles/lcu-guided-tour.scss"
             ],
             "scripts": []
           },

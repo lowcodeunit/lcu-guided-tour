@@ -1,0 +1,12 @@
+<!-- THINKY GUIDE -->
+<div #guide class="thinky-guide">
+  <div class="thinky-logo" (click)="ToggleBotSubItems()">
+    <div #bounce class="thinky-bounce play"></div>
+  </div>
+  <div #bubbles class="thinky-bubbles" *ngIf="ShowBotSubItems && !IsTourOpen">
+    <div class="thinky-logo thinky-bubble-trail" *ngFor="let item of BotSubItems" (click)="item.action()">
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span>{{ item.label }}</span>
+    </div>
+  </div>
+</div>

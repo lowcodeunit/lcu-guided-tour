@@ -1,0 +1,128 @@
+@mixin thinky-chat($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $bg-color: mat-color($background, card) !default;
+  $fg-color: mat-color($foreground, text) !default;
+
+  /** THINKY CHAT **/
+  .thinky-chat-container {
+    height: 225px;
+    margin: 5px;
+    position: fixed;
+    width: 365px;
+    z-index: 500;
+
+    .thinky-chat {
+      background-color: $bg-color;
+      border-radius: 15px;
+      box-shadow: 0 0 0 rgba($fg-color, 0.2), inset 0px 0px 10px -5px rgba($fg-color, 1);
+      padding: 10px;
+
+      .thinky-messages {
+        overflow-y: auto;
+
+        .message {
+          border-radius: 20px;
+          box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+          font-size: 0.8em;
+          margin: 2px;
+          max-width: 80%;
+          padding: 8px;
+          width: fit-content;
+          color: $fg-color;
+        }
+
+        .thinky-message {
+          align-self: flex-start;
+          background-color: mat-color($primary);
+        }
+
+        .user-message {
+          align-self: flex-end;
+          background-color: mat-color($accent, 400);
+        }
+
+        .thinky-close {
+          cursor: pointer;
+          position: absolute;
+          right: 5px;
+          top: 5px;
+          background-color: rgba(255, 255, 255, 0.5);
+          border-radius: 100%;
+          padding: 3px 3px 0px 3px;
+        }
+      }
+
+      .thinky-input {
+        color: $fg-color;
+        font-size: 0.8em;
+        margin-top: 5px;
+
+        .chat-form-field {
+          margin-bottom: -1.25em;
+          width: 100%;
+
+          .mat-form-field-flex {
+            padding: 0 .5em;
+
+            .mat-form-field-infix {
+              padding: .5em 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 7px !important;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #ccc !important;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: mat-color($primary) !important;
+  }
+
+  /** CHAT TYPING INDICATOR **/
+  .typing-indicator {
+    animation: 2s bulge infinite ease-out;
+    display: table;
+    position: relative;
+    width: 25px;
+    will-change: transform;
+
+    span {
+      background-color: rgb(243, 243, 243);
+      border-radius: 50%;
+      display: block;
+      float: left;
+      height: 5px;
+      margin: 0 1px;
+      opacity: 0.4;
+      width: 5px;
+
+      @for $i from 1 through 3 {
+        &:nth-of-type(#{$i}) {
+          animation: 1s blink infinite ($i * .3333s);
+        }
+      }
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes bulge {
+    50% {
+      transform: scale(1.05);
+    }
+  }
+}

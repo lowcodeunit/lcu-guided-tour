@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { LcuUtils } from '@lowcodeunit/lcu-guided-tour-common';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { ThemeColorPickerService } from '@lcu/common';
+import { GuidedTourService, GuidedTour, TourStep, Orientation, GuideBotScreenPosition, GuideBotSubItem, GuideBotEventService } from '@lowcodeunit/lcu-guided-tour-common';
+import { AppEventService } from './app-event.service';
 
 @Component({
   selector: 'lcu-root',
@@ -9,26 +10,62 @@ import { ThemeColorPickerService } from '@lcu/common';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  public BotBoundingContainer: string = 'body';
+  public BotPadding: number = 5;
+  public BotScreenPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
+  public BotSubItems: GuideBotSubItem[];
+  public DemoTour: GuidedTour;
+  public EnableChat: boolean = true;
   public ThemeClass: BehaviorSubject<string>;
   public Themes: Array<any>;
-  public Title = 'LCU-Starter-App';
+  public Title = 'LCU-Guided-Tour';
 
   constructor(
-    protected themeService: ThemeColorPickerService
-  ) { }
+    private appEventService: AppEventService,
+    private guideBotEventService: GuideBotEventService,
+    private guidedTourService: GuidedTourService,
+    private themeService: ThemeColorPickerService
+  ) {
+    this.BotSubItems = this.setBotSubItems();
+    this.DemoTour = {
+      tourId: 'demo-tour',
+      useOrb: false,
+      steps: this.setupTourSteps()
+    };
+    this.appEventService.GetPositionChangedEvent().subscribe(
+      (position: GuideBotScreenPosition) => {
+        this.BotScreenPosition = position;
+      }
+    );
+    this.appEventService.GetBoundsContainerChangedEvent().subscribe(
+      (container: string) => {
+        this.BotBoundingContainer = container;
+      }
+    );
+    this.appEventService.GetBotPaddingChangedEvent().subscribe(
+      (padding: number) => {
+        this.BotPadding = padding;
+      }
+    );
+    this.appEventService.GetStartTourEvent().subscribe(
+      () => {
+        this.startTour();
+      }
+    );
+  }
 
   public ngOnInit(): void {
-    this.Title = LcuUtils.upperLcu(this.Title);
     this.resetTheme();
     this.setThemes();
   }
 
-  protected resetTheme(): void {
-    this.ThemeClass = this.themeService.GetColorClass();
-  }
-
+  /** THEME PICKER */
   public PickTheme(color: string): void {
     this.themeService.SetColorClass(`fathym-${color}-theme`);
+  }
+
+  protected resetTheme(): void {
+    this.ThemeClass = this.themeService.GetColorClass();
   }
 
   protected setThemes(): void {
@@ -44,7 +81,43 @@ export class AppComponent implements OnInit {
     ];
   }
 
-  public DisplayDetails(): void {
-    console.log('DisplayDetails()');
+  /** GUIDED TOUR */
+  private startTour(): void {
+    this.guidedTourService.startTour(this.DemoTour);
+  }
+
+  private setupTourSteps(): TourStep[] {
+    return [
+      {
+        title: 'LCU-Guided-Tour',
+        selector: '#guidedTourHeader',
+        content: `Welcome to the tour! As you can see, you can highlight certain elements of an application
+        and display more information here.`,
+        orientation: Orientation.Bottom
+      },
+      {
+        title: 'First Paragraph',
+        selector: '#p1',
+        content: `Here, we are selecting the first paragraph.`,
+        orientation: Orientation.Bottom
+      },
+      {
+        title: 'Second Paragraph',
+        selector: '#p2',
+        content: `Here, we are selecting the second paragraph.`,
+        orientation: Orientation.Top
+      }
+    ];
+  }
+
+  private setBotSubItems(): GuideBotSubItem[] {
+    return [
+      new GuideBotSubItem({ label: 'Start Tour', icon: 'all_out', action: () => this.startTour() }),
+      new GuideBotSubItem({ label: 'Toggle Chat', icon: 'chat_bubble_outline', action: () => this.toggleChat() })
+    ];
+  }
+
+  private toggleChat(): void {
+    this.guideBotEventService.EmitChatToggledEvent();
   }
 }

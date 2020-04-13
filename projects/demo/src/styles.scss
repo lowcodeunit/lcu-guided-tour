@@ -3,6 +3,8 @@
 @import "../../../node_modules/@lcu/common/assets/theming/fathym_themes";
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap");
 @import "./app/app.component.scss";
+@import "./app/controls/home/home.component.scss";
+@import "../../common/assets/styles/lcu-guided-tour.scss"; // TODO: Pull from node_modules
 
 @mixin opacity($opacity) {
   opacity: $opacity;
@@ -30,7 +32,12 @@
 }
 
 @mixin component-themes($theme) {
+  @include thinky-bot($theme);
+  @include thinky-bounce($theme);
+  @include thinky-chat($theme);
+  @include guided-tour($theme);
   @include lcu-component-theme($theme);
+  @include home-component($theme);
 }
 
 @mixin primary-logo($logo, $theme, $opacity) {

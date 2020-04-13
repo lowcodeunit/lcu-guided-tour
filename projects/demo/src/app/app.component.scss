@@ -49,7 +49,7 @@
   .lcu-content {
     box-sizing: border-box;
     display: flex;
-    height: calc(100% - #{$header-height});
+    min-height: calc(100% - #{$header-height});
     justify-content: center;
     padding: 10px;
 

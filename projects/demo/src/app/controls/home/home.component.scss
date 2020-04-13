@@ -4,7 +4,7 @@
   $fg-color: mat-color(map-get($theme, foreground), text);
 
   .home-container {
-    margin: 5%;
+    margin: 2% 5%;
 
     .section {
       background-color: rgba(mat-color($primary), 0.1);
@@ -28,7 +28,7 @@
       align-items: center;
       background-color: rgba(mat-color($primary), 0.1);
       border: 2px solid $fg-color;
-      height: 500px;
+      height: 450px;
       justify-content: center;
     }
   }

@@ -1,0 +1,103 @@
+<div *ngIf="currentTourStep && selectedElementRect && isOrbShowing"
+  (mouseenter)="handleOrb()"
+  class="tour-orb tour-{{ currentTourStep.orientation }}"
+  [style.top.px]="orbTopPosition"
+  [style.left.px]="orbLeftPosition"
+  [style.transform]="orbTransform">
+
+  <div class="tour-orb-ring"></div>
+</div>
+
+<div *ngIf="currentTourStep && !isOrbShowing">
+  <div class="guided-tour-user-input-mask" (click)="backdropClick($event)"></div>
+
+  <div class="guided-tour-spotlight-overlay"
+      [style.top.px]="overlayTop"
+      [style.left.px]="overlayLeft"
+      [style.height.px]="overlayHeight"
+      [style.width.px]="overlayWidth">
+  </div>
+</div>
+
+<div *ngIf="currentTourStep && !isOrbShowing">
+  <div #tourStep *ngIf="currentTourStep"
+    class="tour-step tour-{{ currentTourStep.orientation }}"
+    [ngClass]="{'page-tour-step': !currentTourStep.selector}"
+    [style.top.px]="(currentTourStep.selector && selectedElementRect ? topPosition : null)"
+    [style.left.px]="(currentTourStep.selector && selectedElementRect ? leftPosition : null)"
+    [style.width.px]="(currentTourStep.selector && selectedElementRect ? calculatedTourStepWidth : null)"
+    [style.transform]="(currentTourStep.selector && selectedElementRect ? transform : null)">
+    <div *ngIf="currentTourStep.selector" class="tour-arrow"></div>
+
+    <mat-card class="tour-block">
+      <div *ngIf="progressIndicatorLocation === progressIndicatorLocations.TopOfTourBlock
+        && !guidedTourService.onResizeMessage"
+        class="tour-progress-indicator">
+
+        <ng-container *ngTemplateOutlet="progress"></ng-container>
+      </div>
+
+
+      <mat-card-header *ngIf="currentTourStep.title && currentTourStep.selector">
+        <mat-card-title>{{ currentTourStep.title }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-header *ngIf="currentTourStep.title && !currentTourStep.selector">
+        <mat-card-title>{{ currentTourStep.title }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="tour-content">
+        <p>
+          {{ currentTourStep.content }}
+        </p>
+      </mat-card-content>
+
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <button mat-stroked-button color="primary" *ngIf="!guidedTourService.onResizeMessage"
+          (click)="guidedTourService.skipTour()">
+          {{ skipText }}
+        </button>
+
+        <div fxLayout="row"  class="tour-buttons">
+          <button mat-stroked-button *ngIf="!guidedTourService.onFirstStep && !guidedTourService.onResizeMessage"
+            (click)="guidedTourService.backStep()">
+            {{ backText }}
+          </button>
+
+          <button mat-raised-button color="primary" *ngIf="!guidedTourService.onLastStep && !guidedTourService.onResizeMessage"
+            (click)="guidedTourService.nextStep()">
+            {{ nextText }}
+
+            <ng-container *ngIf="progressIndicatorLocation === progressIndicatorLocations.InsideNextButton">
+              <ng-container *ngTemplateOutlet="progress"></ng-container>
+            </ng-container>
+          </button>
+
+          <button mat-raised-button color="primary" *ngIf="guidedTourService.onLastStep"
+            (click)="guidedTourService.nextStep()">
+
+            {{ doneText }}
+          </button>
+
+          <button mat-raised-button color="primary" *ngIf="guidedTourService.onResizeMessage"
+            (click)="guidedTourService.resetTour()">
+            {{ closeText }}
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #progress>
+  <ng-container *ngTemplateOutlet="progressIndicator || defaultProgressIndicator;
+    context: { currentStepNumber: guidedTourService.currentTourStepDisplay, totalSteps: guidedTourService.currentTourStepCount }">
+  </ng-container>
+</ng-template>
+
+<ng-template #defaultProgressIndicator let-currentStepNumber="currentStepNumber" let-totalSteps="totalSteps">
+  <ng-container *ngIf="progressIndicatorLocation === progressIndicatorLocations.InsideNextButton">
+    &nbsp;
+  </ng-container>
+  {{ currentStepNumber }}/{{ totalSteps }}
+</ng-template>

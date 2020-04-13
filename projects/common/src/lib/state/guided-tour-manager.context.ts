@@ -1,29 +1,27 @@
 import { Injectable, Injector } from '@angular/core';
 import { StateManagerContext } from '@lcu/common';
-import { LcuModel } from '../models/lcu.model';
+import { GuidedTour } from '../models/guided-tour.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class LcuManagerContext extends StateManagerContext<LcuModel> {
+export class GuidedTourManagerContext extends StateManagerContext<GuidedTour> {
 
-    protected State: LcuModel;
+    protected State: GuidedTour;
 
     constructor(protected injector: Injector) {
         super(injector);
     }
 
-    public GetLcuById(id: number): void {
-        this.State.Loading = true;
-
+    public GetTourById(id: number): void {
         this.Execute({
             Arguments: {
-                LcuId: id
+                TourId: id
             },
-            Type: 'get-lcu-by-id'
+            Type: 'get-tour-by-id'
         });
     }
-    
+
     protected async loadStateKey() {
         return 'main';
     }

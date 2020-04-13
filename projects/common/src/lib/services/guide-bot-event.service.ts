@@ -1,0 +1,40 @@
+import { Injectable, EventEmitter } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GuideBotEventService {
+  private botMovedEvent: EventEmitter<any>;
+  private botToggledEvent: EventEmitter<boolean>;
+  private chatToggledEvent: EventEmitter<boolean>;
+
+  constructor() {
+    this.botMovedEvent = new EventEmitter<any>();
+    this.botToggledEvent = new EventEmitter<boolean>();
+    this.chatToggledEvent = new EventEmitter<boolean>();
+  }
+
+  public EmitBotMovedEvent(): void {
+    this.botMovedEvent.emit();
+  }
+
+  public GetBotMovedEvent(): EventEmitter<any> {
+    return this.botMovedEvent;
+  }
+
+  public EmitBotToggledEvent(isBotOpen: boolean): void {
+    this.botToggledEvent.emit(isBotOpen);
+  }
+
+  public GetBotToggledEvent(): EventEmitter<boolean> {
+    return this.botToggledEvent;
+  }
+
+  public EmitChatToggledEvent(isChatOpen?: boolean): void {
+    this.chatToggledEvent.emit(isChatOpen);
+  }
+
+  public GetChatToggledEvent(): EventEmitter<boolean> {
+    return this.chatToggledEvent;
+  }
+}

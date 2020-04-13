@@ -1,0 +1,12 @@
+<div class="guide-bot-container">
+  <lcu-guide-bot-logo
+    [bot-logo-position]="BotLogoPosition"
+    [bot-padding]="BotPadding"
+    [bot-sub-items]="BotSubItems"
+    [bounding-element-selector]="BoundingElementSelector"
+    (tour-started-event)="OnTourStarted($event)">
+  </lcu-guide-bot-logo>
+  <lcu-guide-bot-chat *ngIf="ChatEnabled" [enable-chat]="IsChatOpen"></lcu-guide-bot-chat>
+</div>
+
+<lcu-guided-tour></lcu-guided-tour>

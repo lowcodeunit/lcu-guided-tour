@@ -15,11 +15,11 @@ import { Orientation } from '../../models/orientation.model';
 })
 export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     @Input() public topOfPageAdjustment ?= 0;
-    @Input() public tourStepWidth ?= 300;
+    @Input() public tourStepWidth ?= 350;
     @Input() public minimalTourStepWidth ?= 200;
     @Input() public skipText ?= 'Skip';
     @Input() public nextText ?= 'Next';
-    @Input() public doneText ?= 'Done';
+    @Input() public doneText ?= 'Finish';
     @Input() public closeText ?= 'Close';
     @Input() public backText ?= 'Back';
     @Input() public progressIndicatorLocation?: ProgressIndicatorLocation = ProgressIndicatorLocation.InsideNextButton;

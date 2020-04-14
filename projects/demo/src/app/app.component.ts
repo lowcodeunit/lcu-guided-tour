@@ -90,6 +90,7 @@ export class AppComponent implements OnInit {
     return [
       {
         title: 'LCU-Guided-Tour',
+        subtitle: 'Guided Tour',
         selector: '#guidedTourHeader',
         content: `Welcome to the tour! As you can see, you can highlight certain elements of an application
         and display more information here.`,
@@ -97,15 +98,46 @@ export class AppComponent implements OnInit {
       },
       {
         title: 'First Paragraph',
+        subtitle: 'Guided Tour',
         selector: '#p1',
         content: `Here, we are selecting the first paragraph.`,
-        orientation: Orientation.Bottom
+        orientation: Orientation.BottomRight
       },
       {
         title: 'Second Paragraph',
+        subtitle: 'Guided Tour',
         selector: '#p2',
         content: `Here, we are selecting the second paragraph.`,
         orientation: Orientation.Top
+      },
+      {
+        title: 'Modifiers',
+        subtitle: 'Guided Tour',
+        selector: '#formBox',
+        content: `You can modify certain properties of the Bot, so that you can customize to your needs.`,
+        orientation: Orientation.Right
+      },
+      {
+        title: 'Bounding Container',
+        subtitle: 'Guided Tour',
+        selector: '#boundingBox',
+        content: `This includes being about to bound to any container that is rendered on the screen.
+        The bot supports being bound to elements, classes, and IDs!`,
+        orientation: Orientation.Left
+      },
+      {
+        title: 'First Paragraph',
+        subtitle: 'Guided Tour',
+        selector: '#p1',
+        content: `Here, we are selecting the first paragraph.`,
+        orientation: Orientation.BottomLeft
+      },
+      {
+        title: 'Second Paragraph',
+        subtitle: 'Guided Tour',
+        selector: '#p2',
+        content: `Here, we are selecting the second paragraph.`,
+        orientation: Orientation.TopRight
       }
     ];
   }

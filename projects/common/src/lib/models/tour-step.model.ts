@@ -5,6 +5,8 @@ export interface TourStep {
   selector?: string;
   /** Tour title text */
   title?: string;
+  /** Tour subtitle text */
+  subtitle?: string;
   /** Tour step text */
   content: string;
   /** Where the tour step will appear next to the selected element */

@@ -22,7 +22,7 @@
     </div> -->
 
     <div fxLayout="row" fxLayoutAlign="space-between">
-      <div fxLayout="column" fxFlex="0 0 18%">
+      <div id="formBox" fxLayout="column" fxFlex="0 0 18%">
         <div class="section">
           <h4>Bot Position:</h4>
           <mat-radio-group fxLayout="column" aria-label="Select Bot Position" [(ngModel)]="CurrentPosition" (change)="OnPositionChanged()">

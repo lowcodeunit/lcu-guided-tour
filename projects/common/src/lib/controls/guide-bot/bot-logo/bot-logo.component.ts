@@ -127,15 +127,12 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
     console.log('BOT ------ calculateBotTourPosition()');
     setTimeout(() => {
       this.renderer.removeClass(this.guide.nativeElement, 'play');
-      const selectedTourItem = document.querySelector('.tour-step');
+      const selectedTourItem = document.querySelector('.tour-logo');
       if (selectedTourItem) {
         const selectedTourItemPos = (selectedTourItem.getBoundingClientRect() as DOMRect);
 
-        const botWidth: number = 100;
-        const centerPos: number = ((selectedTourItemPos.right + selectedTourItemPos.left) / 2) - (botWidth / 2);
-
-        this.renderer.setStyle(this.guide.nativeElement, 'top', (selectedTourItemPos.top - 75) + 'px');
-        this.renderer.setStyle(this.guide.nativeElement, 'left', centerPos + 'px');
+        this.renderer.setStyle(this.guide.nativeElement, 'top', selectedTourItemPos.y + 'px');
+        this.renderer.setStyle(this.guide.nativeElement, 'left', selectedTourItemPos.x + 'px');
         this.renderer.addClass(this.guide.nativeElement, 'play');
         this.triggerBotBounceAnim();
       }

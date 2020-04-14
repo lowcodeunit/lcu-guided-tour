@@ -91,53 +91,64 @@ export class AppComponent implements OnInit {
       {
         title: 'LCU-Guided-Tour',
         subtitle: 'Guided Tour',
+        content: `Welcome to the LCU-Guided-Tour library! This library provides the functionality to do your own guided tour
+        of an application. Click the 'Next' button to get started with an example Tour!`
+      },
+      {
+        title: 'Title',
+        subtitle: 'Guided Tour',
         selector: '#guidedTourHeader',
-        content: `Welcome to the tour! As you can see, you can highlight certain elements of an application
-        and display more information here.`,
+        content: `With the LCU-Guided-Tour, you can select anything that is on the screen that has a valid CSS selector.
+        For example, you can select this title, which as an id of #guidedTourHeader.
+        Valid selectors are as follows: .class, #id, element`,
         orientation: Orientation.Bottom
       },
       {
         title: 'First Paragraph',
         subtitle: 'Guided Tour',
-        selector: '#p1',
-        content: `Here, we are selecting the first paragraph.`,
+        selector: 'p',
+        content: `Here, we are selecting the first paragraph element on the screen with 'p'.`,
         orientation: Orientation.BottomRight
       },
       {
         title: 'Second Paragraph',
         subtitle: 'Guided Tour',
         selector: '#p2',
-        content: `Here, we are selecting the second paragraph.`,
+        content: `Here, we are selecting the second paragraph, with has an id of #p2, in which we are targeting.`,
         orientation: Orientation.Top
+      },
+      {
+        title: 'Complex Selectors',
+        subtitle: 'Guided Tour',
+        selector: '.section:nth-of-type(2) .mat-radio-button:nth-child(3)',
+        content: `You can even target more specific, complex elements, by using various built-in CSS selectors. In
+        this case, we are targeting the third radio item in the second section with the selector of:
+        .section:nth-of-type(2) .mat-radio-button:nth-child(3)`,
+        orientation: Orientation.Right
       },
       {
         title: 'Modifiers',
         subtitle: 'Guided Tour',
         selector: '#formBox',
-        content: `You can modify certain properties of the Bot, so that you can customize to your needs.`,
+        content: `As for the bot, you can modify certain properties of it in order to customize it to your needs.
+        Here we can change the position it lives on the screen, the container it should position itself in, as well
+        as the amount of padding we would like to have between the bot and the container.`,
         orientation: Orientation.Right
       },
       {
         title: 'Bounding Container',
         subtitle: 'Guided Tour',
         selector: '#boundingBox',
-        content: `This includes being about to bound to any container that is rendered on the screen.
-        The bot supports being bound to elements, classes, and IDs!`,
+        content: `As an example, you can set the Bot to be positioned inside this box by setting the container to
+        the #boundingBox selector.`,
         orientation: Orientation.Left
       },
       {
-        title: 'First Paragraph',
+        title: 'Start Tour',
         subtitle: 'Guided Tour',
-        selector: '#p1',
-        content: `Here, we are selecting the first paragraph.`,
+        selector: '.mat-stroked-button:first-of-type',
+        content: `Whenever you want to start the tour again, you can press this button or the 'tour' button on Thinky!`,
         orientation: Orientation.BottomLeft
-      },
-      {
-        title: 'Second Paragraph',
-        subtitle: 'Guided Tour',
-        selector: '#p2',
-        content: `Here, we are selecting the second paragraph.`,
-        orientation: Orientation.TopRight
       }
     ];
   }

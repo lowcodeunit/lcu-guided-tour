@@ -95,6 +95,7 @@ body.tour-open {
 
             span {
               background: rgba(mat-color($primary), 0.1);
+              box-shadow: inset 0px 0px 3px 1px rgba(0, 0, 0, 0.25);
               border-radius: 50%;
               border: 1px solid rgba(255, 255, 255, 0.12);
               height: 10px;
@@ -104,6 +105,7 @@ body.tour-open {
 
               &.filled {
                 background: mat-color($primary);
+                box-shadow: none;
                 transition: 1s;
 
                 &:after {
@@ -115,7 +117,7 @@ body.tour-open {
 
               &:after {
                 content: ' ';
-                background: rgba(255, 255, 255, 0.12);
+                background: rgba($fg-color, 0.12);
                 width: 10px;
                 height: 1px;
                 position: absolute;

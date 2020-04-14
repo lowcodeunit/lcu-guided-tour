@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   public BotSubItems: GuideBotSubItem[];
   public DemoTour: GuidedTour;
   public EnableChat: boolean = true;
+  public EnableFirstTimePopup: boolean = true;
   public ThemeClass: BehaviorSubject<string>;
   public Themes: Array<any>;
   public Title = 'LCU-Guided-Tour';

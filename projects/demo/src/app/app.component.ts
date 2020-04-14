@@ -10,7 +10,7 @@ import { AppEventService } from './app-event.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public BotBoundingContainer: string = 'body';
+  public BotBoundingContainer: string = '#boundingBox';
   public BotPadding: number = 5;
   public BotScreenPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
   public BotSubItems: GuideBotSubItem[];

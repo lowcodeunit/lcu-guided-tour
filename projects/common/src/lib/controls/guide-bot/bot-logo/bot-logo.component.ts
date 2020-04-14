@@ -31,10 +31,10 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
 
   private boundingElementRect: DOMRect;
 
-  @Input('bot-logo-position') public BotLogoPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
-  @Input('bot-padding') public BotPadding: number = 5;
+  @Input('bot-logo-position') public BotLogoPosition: GuideBotScreenPosition;
+  @Input('bot-padding') public BotPadding: number;
   @Input('bot-sub-items') public BotSubItems: GuideBotSubItem[];
-  @Input('bounding-element-selector') public BoundingElementSelector: string = '#boundingBox';
+  @Input('bounding-element-selector') public BoundingElementSelector: string;
 
   @Output('tour-started-event') public TourStartedEvent: EventEmitter<boolean>;
 
@@ -70,20 +70,24 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
     const isFirstChange = Object.values(changes).some((change: SimpleChange) => change.isFirstChange());
     if (!isFirstChange) {
       console.log('BOT ------ ngOnChanges: ', changes);
-      this.boundingElementRect = document.querySelector(this.BoundingElementSelector).getBoundingClientRect() as DOMRect;
+      this.findBoundingElementRect();
       this.setScreenPosition();
     }
   }
 
   public ngAfterViewInit(): void {
-    console.log('BOT ------ ngAfterViewInit()');
-    this.anchorBotToSelector();
-    this.boundingElementRect = document.querySelector(this.BoundingElementSelector).getBoundingClientRect() as DOMRect;
+    console.log('BOT ------ ngAfterViewInit()', this.BoundingElementSelector);
+    setTimeout(() => { // setTimeout queues this task to run later in the thread. Prevents trying to find the element before it's rendered.
+      this.findBoundingElementRect();
+      if (this.boundingElementRect) {
+        this.anchorBotToSelector();
+      }
+    });
   }
 
   @HostListener('window:resize', ['$event'])
   public onResize(_: any) {
-    this.boundingElementRect = document.querySelector(this.BoundingElementSelector).getBoundingClientRect() as DOMRect;
+    this.findBoundingElementRect();
     this.setScreenPosition(); // TODO: Make responsive with the Tour on
   }
 
@@ -136,6 +140,16 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
         this.triggerBotBounceAnim();
       }
     }, 100);
+  }
+
+  private findBoundingElementRect() {
+    const element = document.querySelector(this.BoundingElementSelector);
+    if (element) {
+      this.boundingElementRect = element.getBoundingClientRect() as DOMRect;
+    } else {
+      console.warn(`BOT ------ findBoundingElementRect() could not find '${this.BoundingElementSelector}', getting 'body' instead`);
+      this.boundingElementRect = document.querySelector('body').getBoundingClientRect() as DOMRect;
+    }
   }
 
   private triggerBotBounceAnim(): void {

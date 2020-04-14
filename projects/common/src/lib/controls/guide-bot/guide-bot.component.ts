@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { GuideBotEventService } from '../../services/guide-bot-event.service';
 import { GuideBotScreenPosition } from '../../models/guide-bot-position.enum';
 import { GuidedTour } from '../../models/guided-tour.model';
@@ -13,11 +13,11 @@ import { GuideBotSubItem } from '../../models/guide-bot-sub-item.model';
 export class GuideBotComponent implements OnInit {
   public IsChatOpen: boolean = false;
 
-  @Input('bot-screen-position') public BotLogoPosition: GuideBotScreenPosition = GuideBotScreenPosition.TopRight;
+  @Input('bot-screen-position') public BotLogoPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
 
-  @Input('bounding-element-selector') public BoundingElementSelector: string = '#boundingBox';
+  @Input('bounding-element-selector') public BoundingElementSelector: string = 'body';
 
-  @Input('bot-padding') public BotPadding: number;
+  @Input('bot-padding') public BotPadding: number = 5;
 
   @Input('bot-sub-items') public BotSubItems: GuideBotSubItem[] = this.setDefaultBotSubItems();
 

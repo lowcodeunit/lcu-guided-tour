@@ -51,9 +51,7 @@
       </mat-card-header>
 
       <mat-card-content class="tour-content">
-        <p>
-          {{ currentTourStep.content }}
-        </p>
+        <p [innerHTML]="currentTourStep.content"></p>
       </mat-card-content>
 
       <div fxLayout="row" fxLayoutAlign="space-between">

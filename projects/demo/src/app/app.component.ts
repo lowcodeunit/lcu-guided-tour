@@ -93,29 +93,34 @@ export class AppComponent implements OnInit {
         title: 'LCU-Guided-Tour',
         subtitle: 'Guided Tour',
         content: `Welcome to the LCU-Guided-Tour library! This library provides the functionality to do your own guided tour
-        of an application. Click the 'Next' button to get started with an example Tour!`
+        of an application. <br/><br/> Click the <b>Next</b> button to get started with an example Tour!`
       },
       {
         title: 'Title',
         subtitle: 'Guided Tour',
         selector: '#guidedTourHeader',
         content: `With the LCU-Guided-Tour, you can select anything that is on the screen that has a valid CSS selector.
-        For example, you can select this title, which as an id of #guidedTourHeader.
-        Valid selectors are as follows: .class, #id, element`,
+        For example, you can select this title, which as an id of <b>#guidedTourHeader</b>. <br/><br/>
+        Valid selectors are as follows:
+        <ul>
+          <li>.class</li>
+          <li>#id</li>
+          <li>element</li>
+        </ul>`,
         orientation: Orientation.Bottom
       },
       {
         title: 'First Paragraph',
         subtitle: 'Guided Tour',
         selector: 'p',
-        content: `Here, we are selecting the first paragraph element on the screen with 'p'.`,
+        content: `Here, we are selecting the first paragraph element on the screen with <b>p</b>.`,
         orientation: Orientation.BottomRight
       },
       {
         title: 'Second Paragraph',
         subtitle: 'Guided Tour',
         selector: '#p2',
-        content: `Here, we are selecting the second paragraph, with has an id of #p2, in which we are targeting.`,
+        content: `Now we are selecting the second paragraph, that has an id of <b>#p2</b>, in which we are targeting.`,
         orientation: Orientation.Top
       },
       {
@@ -123,8 +128,8 @@ export class AppComponent implements OnInit {
         subtitle: 'Guided Tour',
         selector: '.section:nth-of-type(2) .mat-radio-button:nth-child(3)',
         content: `You can even target more specific, complex elements, by using various built-in CSS selectors. In
-        this case, we are targeting the third radio item in the second section with the selector of:
-        .section:nth-of-type(2) .mat-radio-button:nth-child(3)`,
+        this case, we are targeting the third radio item in the second section with the selector of: <br/>
+        <b>.section:nth-of-type(2) .mat-radio-button:nth-child(3)</b>`,
         orientation: Orientation.Right
       },
       {
@@ -141,7 +146,7 @@ export class AppComponent implements OnInit {
         subtitle: 'Guided Tour',
         selector: '#boundingBox',
         content: `As an example, you can set the Bot to be positioned inside this box by setting the container to
-        the #boundingBox selector.`,
+        the <b>#boundingBox</b> selector.`,
         orientation: Orientation.Left
       },
       {
@@ -149,7 +154,7 @@ export class AppComponent implements OnInit {
         subtitle: 'Guided Tour',
         selector: '.mat-tab-label:nth-of-type(2)',
         content: `You can assign each step an action as well, in case you want to run logic before or after a step is displayed.
-        Click 'Next' to see this in action!`,
+        Click <b>Next</b> to see this in action!`,
         orientation: Orientation.BottomLeft
       },
       {
@@ -157,7 +162,7 @@ export class AppComponent implements OnInit {
         subtitle: 'Guided Tour',
         selector: '#boxLogoForm',
         content: `As you can see, this tab was selected so that the Tour could continue after the DOM has rendered a different view.
-        You can also use the 'actionDelay' property to specify a time delay before showing the next step, in order to properly
+        You can also use the <b>actionDelay</b> property to specify a time delay before showing the next step, in order to properly
         render the next view.`,
         orientation: Orientation.BottomLeft,
         actionDelay: 500,

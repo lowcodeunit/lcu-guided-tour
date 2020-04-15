@@ -63,6 +63,15 @@ body.tour-open {
       .tour-block {
         padding: 15px;
 
+        .tour-content {
+          margin-top: 5px;
+          min-height: 30px;
+
+          b {
+            color: mat-color($primary);
+          }
+        }
+
         .tour-logo {
           height: 100px;
           width: 100px;

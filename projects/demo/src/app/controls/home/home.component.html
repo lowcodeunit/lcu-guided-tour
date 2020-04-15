@@ -21,31 +21,55 @@
       </p>
     </div> -->
 
-    <div fxLayout="row" fxLayoutAlign="space-between">
-      <div id="formBox" fxLayout="column" fxFlex="0 0 18%">
-        <div class="section">
-          <h4>Bot Position:</h4>
-          <mat-radio-group fxLayout="column" aria-label="Select Bot Position" [(ngModel)]="CurrentPosition" (change)="OnPositionChanged()">
-            <mat-radio-button *ngFor="let pos of BotPositions" [value]="pos">{{ pos }}</mat-radio-button>
-          </mat-radio-group>
+    <mat-tab-group [selectedIndex]="SelectedTabIndex">
+
+      <mat-tab label="Bot Position">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div id="formBox" fxLayout="column" fxFlex="0 0 18%">
+            <div class="section">
+              <h4>Bot Position:</h4>
+              <mat-radio-group fxLayout="column" aria-label="Select Bot Position" [(ngModel)]="CurrentPosition" (change)="OnPositionChanged()">
+                <mat-radio-button *ngFor="let pos of BotPositions" [value]="pos">{{ pos }}</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="section">
+              <h4>Bounds Container:</h4>
+              <mat-radio-group fxLayout="column" aria-label="Select Bounds Container" [(ngModel)]="CurrentContainer" (change)="OnBoundsContainerChanged()">
+                <mat-radio-button *ngFor="let container of BoundsContainers" [value]="container">{{ container }}</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="section">
+              <h4>Bot Padding:</h4>
+              <mat-form-field class="example-form-field">
+                <mat-label>Bot Padding</mat-label>
+                <input matInput type="number" [(ngModel)]="BotPadding" (change)="OnBotPaddingChange()">
+              </mat-form-field>
+            </div>
+          </div>
+          <div id="boundingBox" fxLayout="column" fxFlex="0 0 80%">
+            You can bound the Bot to any container!
+          </div>
         </div>
-        <div class="section">
-          <h4>Bounds Container:</h4>
-          <mat-radio-group fxLayout="column" aria-label="Select Bounds Container" [(ngModel)]="CurrentContainer" (change)="OnBoundsContainerChanged()">
-            <mat-radio-button *ngFor="let container of BoundsContainers" [value]="container">{{ container }}</mat-radio-button>
-          </mat-radio-group>
+      </mat-tab>
+
+      <mat-tab label="Bot Logo">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div id="boxLogoForm" fxLayout="column" fxFlex="0 0 18%">
+            <div class="section">
+              <h4>Bot Logo:</h4>
+              Coming Eventually, Maybe...
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="0 0 80%">
+
+          </div>
         </div>
-        <div class="section">
-          <h4>Bot Padding:</h4>
-          <mat-form-field class="example-form-field">
-            <mat-label>Bot Padding</mat-label>
-            <input matInput type="number" [(ngModel)]="BotPadding" (change)="OnBotPaddingChange()">
-          </mat-form-field>
-        </div>
-      </div>
-      <div id="boundingBox" fxLayout="column" fxFlex="0 0 80%">
-        You can bound the Bot to any container!
-      </div>
-    </div>
+      </mat-tab>
+
+      <mat-tab label="Misc">
+        Coming Eventually, Maybe...
+      </mat-tab>
+
+    </mat-tab-group>
   </div>
 </div>

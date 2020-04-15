@@ -145,12 +145,36 @@ export class AppComponent implements OnInit {
         orientation: Orientation.Left
       },
       {
-        title: 'Start Tour',
+        title: 'Assigning Actions',
         subtitle: 'Guided Tour',
-        selector: '.mat-stroked-button:first-of-type',
-        content: `Whenever you want to start the tour again, you can press this button or the 'tour' button on Thinky!`,
+        selector: '.mat-tab-label:nth-of-type(2)',
+        content: `You can assign each step an action as well, in case you want to run logic before or after a step is displayed.
+        Click 'Next' to see this in action!`,
         orientation: Orientation.BottomLeft
-      }
+      },
+      {
+        title: 'Tab Movement',
+        subtitle: 'Guided Tour',
+        selector: '#boxLogoForm',
+        content: `As you can see, this tab was selected so that the Tour could continue after the DOM has rendered a different view.
+        You can also use the 'actionDelay' property to specify a time delay before showing the next step, in order to properly
+        render the next view.`,
+        orientation: Orientation.BottomLeft,
+        actionDelay: 500,
+        action: () => {
+          this.appEventService.EmitTabIndexEvent(1);
+        },
+        closeAction: () => {
+          this.appEventService.EmitTabIndexEvent(0);
+        }
+      },
+      // {
+      //   title: 'Start Tour',
+      //   subtitle: 'Guided Tour',
+      //   selector: '.mat-stroked-button:first-of-type',
+      //   content: `Whenever you want to start the tour again, you can press this button or the 'tour' button on Thinky!`,
+      //   orientation: Orientation.BottomLeft
+      // }
     ];
   }
 

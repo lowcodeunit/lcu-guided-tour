@@ -66,7 +66,7 @@ export class GuidedTourService {
                     } else {
                         this.nextStep();
                     }
-                });
+                }, this._currentTour.steps[this._currentTourStepIndex].actionDelay);
             } else {
                 if (this._checkSelectorValidity()) {
                     this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
@@ -97,7 +97,7 @@ export class GuidedTourService {
                     } else {
                         this.backStep();
                     }
-                });
+                }, this._currentTour.steps[this._currentTourStepIndex].actionDelay);
             } else {
                 if (this._checkSelectorValidity()) {
                     this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));

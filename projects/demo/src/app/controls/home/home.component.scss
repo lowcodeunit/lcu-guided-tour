@@ -6,6 +6,10 @@
   .home-container {
     margin: 2% 5%;
 
+    .mat-tab-body-wrapper {
+      margin-top: 10px;
+    }
+
     .section {
       background-color: rgba(mat-color($primary), 0.1);
       border: 2px solid $fg-color;

@@ -39,7 +39,7 @@
     [bounding-element-selector]="BotBoundingContainer"
     [enable-chat]="EnableChat"
     [enable-first-time-popup]="EnableFirstTimePopup"
-    [tour]="DemoTour"
+    [tour]="State.CurrentTour"
     (on-complete)="OnComplete()"
     (on-skipped)="OnSkipped()"
     (on-step-closed)="OnStepClosed($event)"

@@ -16,24 +16,22 @@ import { GuidedTourManagementStateContext } from './state/guided-tour-management
     GuidedTourComponent,
     GuideBotComponent,
     GuideBotChatComponent,
-    GuideBotLogoComponent
+    GuideBotLogoComponent,
   ],
   imports: [
     FathymSharedModule,
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    MaterialModule
+    MaterialModule,
   ],
-  providers: [
-    WindowRefService
-  ],
+  providers: [WindowRefService],
   exports: [
     GuidedTourComponent,
     GuideBotComponent,
     GuideBotChatComponent,
-    GuideBotLogoComponent
-  ]
+    GuideBotLogoComponent,
+  ],
 })
 export class LcuGuidedTourModule {
   static forRoot(): ModuleWithProviders<LcuGuidedTourModule> {
@@ -43,8 +41,8 @@ export class LcuGuidedTourModule {
         ErrorHandler,
         GuidedTourService,
         GuideBotEventService,
-        GuidedTourManagementStateContext
-      ]
+        GuidedTourManagementStateContext,
+      ],
     };
   }
 }

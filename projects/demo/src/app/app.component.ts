@@ -12,6 +12,7 @@ import { AppEventService } from './app-event.service';
 export class AppComponent implements OnInit {
   public BotBoundingContainer: string = '#boundingBox';
   public BotPadding: number = 5;
+  public BotScale: number = 1;
   public BotScreenPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
   public BotSubItems: GuideBotSubItem[];
   public DemoTour: GuidedTour;
@@ -46,6 +47,11 @@ export class AppComponent implements OnInit {
     this.appEventService.GetBotPaddingChangedEvent().subscribe(
       (padding: number) => {
         this.BotPadding = padding;
+      }
+    );
+    this.appEventService.GetBotScaleChangedEvent().subscribe(
+      (scale: number) => {
+        this.BotScale = scale;
       }
     );
     this.appEventService.GetStartTourEvent().subscribe(

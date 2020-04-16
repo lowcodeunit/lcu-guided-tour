@@ -7,8 +7,9 @@ import { AppEventService } from '../../app-event.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public BotPadding: number = 5;
+  public BotPadding: number;
   public BotPositions: any[];
+  public BotScale: number;
   public BoundsContainers: string[];
   public CurrentContainer: string;
   public CurrentPosition: any;
@@ -44,6 +45,10 @@ export class HomeComponent implements OnInit {
 
   public OnBotPaddingChange(): void {
     this.appEventService.EmitBotPaddingChangedEvent(this.BotPadding);
+  }
+
+  public OnBotScaleChange(): void {
+    this.appEventService.EmitBotScaleChangedEvent(this.BotScale);
   }
 
   public OnStartTour(): void {

@@ -12,15 +12,18 @@
 
     .section {
       background-color: rgba(mat-color($primary), 0.1);
-      border: 2px solid $fg-color;
+      border-top: 1px solid $fg-color;
+      border-bottom: 1px solid $fg-color;
+      border-left: 2px solid $fg-color;
+      border-right: 2px solid $fg-color;
       padding: 15px;
 
       &:first-of-type {
-        border-bottom: none;
+        border-top-width: 2px;
       }
 
       &:last-of-type {
-        border-top: none;
+        border-bottom-width: 2px;
       }
 
       h4 {

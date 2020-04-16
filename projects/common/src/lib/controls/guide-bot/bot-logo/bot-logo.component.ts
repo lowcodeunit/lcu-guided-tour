@@ -30,10 +30,12 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   public ShowBotSubItems: boolean = false;
 
   private boundingElementRect: DOMRect;
+  private logoInitialWidth: number;
 
   @Input('bot-logo-position') public BotLogoPosition: GuideBotScreenPosition;
   @Input('bot-padding') public BotPadding: number;
   @Input('bot-sub-items') public BotSubItems: GuideBotSubItem[];
+  @Input('bot-scale') public BotScale: number;
   @Input('bounding-element-selector') public BoundingElementSelector: string;
 
   @Output('tour-started-event') public TourStartedEvent: EventEmitter<boolean>;
@@ -51,6 +53,7 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
     this.guidedTourService.isTourOpenStream.subscribe(
       (isTourOpen: boolean) => {
         this.IsTourOpen = isTourOpen;
+        this.setBotScale();
       }
     );
     this.guidedTourService.guidedTourCurrentStepStream.subscribe(
@@ -71,12 +74,16 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
     if (!isFirstChange) {
       console.log('BOT ------ ngOnChanges: ', changes);
       this.findBoundingElementRect();
+      this.logoInitialWidth = this.guide.nativeElement.offsetWidth;
+      this.setBotScale();
       this.setScreenPosition();
     }
   }
 
   public ngAfterViewInit(): void {
     console.log('BOT ------ ngAfterViewInit()', this.BoundingElementSelector);
+    this.setBotScale();
+    this.logoInitialWidth = this.guide.nativeElement.offsetWidth;
     setTimeout(() => { // setTimeout queues this task to run later in the thread. Prevents trying to find the element before it's rendered.
       this.findBoundingElementRect();
       if (this.boundingElementRect) {
@@ -101,6 +108,7 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   public ToggleBotSubItems(): void {
     this.ShowBotSubItems = !this.ShowBotSubItems;
     this.guideBotEventService.EmitBotToggledEvent(this.ShowBotSubItems);
+    this.setBotScale();
     this.anchorBotToSelector();
   }
 
@@ -155,17 +163,38 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
     this.renderer.addClass(this.bounce.nativeElement, 'play');
   }
 
+  private setBotScale() {
+    const parent: any = this.renderer.parentNode(this.bounce.nativeElement);
+    const scale: number = (this.IsTourOpen || this.ShowBotSubItems) ? 1 : this.BotScale;
+    console.log('BOT ------  setBotScale()', scale);
+
+    this.renderer.setStyle(parent, 'transform', `scale(${scale})`);
+    this.renderer.setStyle(parent, 'margin', `calc(-37px * (1 - ${scale}))`);
+
+    if (this.ShowBotSubItems) {
+      this.renderer.setStyle(parent, 'transition', 'all 0.5s cubic-bezier(0.6, -0.28, 0.74, 0.05) 0s');
+    } else {
+      this.renderer.removeStyle(parent, 'transition');
+    }
+  }
+
   private setScreenPosition(x: number = this.BotPadding, y: number = this.BotPadding): void {
+
+    // TODO: We might be able to use this with the Tour async problem
+    // this.renderer.listen(this.guide.nativeElement, 'transitionend', () => { console.log('WOW!!!! YOU GET THE TRANSITIONEND EVENT!!!!!!!!!!!!!!!'); });
+
+
     console.log('BOT ------ setScreenPosition()');
     if (this.boundingElementRect) {
       let pos1 = x ? x : this.BotPadding;
       let pos2 = y ? y : this.BotPadding;
-      const logoSideDimension: number = 100;
+      const logoMaxSize: number = 95; // Size of logo at full scale(1). TODO: Make more dynamic in future
+      const logoDimension: number = this.ShowBotSubItems ? logoMaxSize : this.logoInitialWidth;
       const logoContainerHeight: number = 220;
       if (this.ShowBotSubItems) {
         pos1 += logoContainerHeight;
       } else {
-        pos1 += logoSideDimension;
+        pos1 += logoDimension;
       }
 
       let topPos = 0;
@@ -182,7 +211,7 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
           break;
         case GuideBotScreenPosition.BottomRight:
           topPos = (this.boundingElementRect.y + this.boundingElementRect.height) - pos1;
-          leftPos = (this.boundingElementRect.x + this.boundingElementRect.width) - logoSideDimension - x;
+          leftPos = (this.boundingElementRect.x + this.boundingElementRect.width) - logoDimension - x;
           this.renderer.setStyle(this.guide.nativeElement, 'top', topPos + 'px');
           this.renderer.setStyle(this.guide.nativeElement, 'left', leftPos + 'px');
           this.renderer.removeStyle(this.guide.nativeElement, 'bottom');
@@ -198,7 +227,7 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
           break;
         case GuideBotScreenPosition.TopRight:
           topPos = (this.boundingElementRect.y + y);
-          leftPos = (this.boundingElementRect.x + this.boundingElementRect.width) - logoSideDimension - x;
+          leftPos = (this.boundingElementRect.x + this.boundingElementRect.width) - logoDimension - x;
           this.renderer.setStyle(this.guide.nativeElement, 'top', topPos + 'px');
           this.renderer.setStyle(this.guide.nativeElement, 'left', leftPos + 'px');
           this.renderer.removeStyle(this.guide.nativeElement, 'bottom');

@@ -16,6 +16,7 @@ export class GuideBotComponent implements OnInit {
   private readonly FIRST_TIME_KEY: string = 'first-time-user';
 
   @Input('bot-padding') public BotPadding: number = 5;
+  @Input('bot-scale') public BotScale: number = 1;
   @Input('bot-screen-position') public BotLogoPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
   @Input('bot-sub-items') public BotSubItems: GuideBotSubItem[] = this.setDefaultBotSubItems();
   @Input('bounding-element-selector') public BoundingElementSelector: string = 'body';

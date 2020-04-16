@@ -32,6 +32,6 @@ export class GuidedTourManagementStateContext extends StateContext<GuidedTourMan
   }
 
   protected loadStateName(): string {
-    return 'lcu';
+    return 'guidedtour';
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, ViewChild, QueryList, ElementRef, Renderer2, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ChatMessage, MessageType } from '../../../models/chat-message.model';
+import { ChatMessage, MessageType } from '../../../models/guide-bot/chat-message.model';
 import { GuideBotEventService } from '../../../services/guide-bot-event.service';
 import { GuidedTourService } from '../../../services/guided-tour.service';
 

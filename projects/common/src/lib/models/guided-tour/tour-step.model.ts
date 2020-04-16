@@ -1,28 +1,27 @@
-import { Orientation, OrientationConfiguration } from './orientation.model';
+import { OrientationConfiguration } from './orientation-configuration.model';
+import { OrientationTypes } from './orientation-types.enum';
 
-export interface TourStep {
+export class TourStep {
   /** Selector for element that will be highlighted */
-  selector?: string;
+  public Selector?: string;
   /** Tour title text */
-  title?: string;
+  public Title?: string;
   /** Tour subtitle text */
-  subtitle?: string;
+  public Subtitle?: string;
   /** Tour step text */
-  content: string;
+  public Content: string;
   /** Where the tour step will appear next to the selected element */
-  orientation?: Orientation | OrientationConfiguration[];
-  /** Action that happens when the step is opened */
-  action?: () => void;
-  /** Action that happens when the step is closed */
-  closeAction?: () => void;
+  public Orientation?: OrientationTypes;
+  /** Where the tour step will appear next to the selected element */
+  public OrientationConfiguration?: OrientationConfiguration[];
   /** The amount (in milliseconds) of a delay before action() function is called */
-  actionDelay?: number;
+  public ActionDelay?: number;
   /** Skips this step, this is so you do not have create multiple tour configurations based on user settings/configuration */
-  skipStep?: boolean;
+  public SkipStep?: boolean;
   /** Adds some padding for things like sticky headers when scrolling to an element */
-  scrollAdjustment?: number;
+  public ScrollAdjustment?: number;
   /** Adds default padding around tour highlighting. Does not need to be true for highlightPadding to work */
-  useHighlightPadding?: boolean;
+  public UseHighlightPadding?: boolean;
   /** Adds padding around tour highlighting in pixels, this overwrites the default for this step. Is not dependent on useHighlightPadding being true */
-  highlightPadding?: number;
+  public HighlightPadding?: number;
 }

@@ -14,10 +14,10 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { GuideBotEventService } from '../../../services/guide-bot-event.service';
-import { GuideBotScreenPosition } from '../../../models/guide-bot-position.enum';
-import { GuideBotSubItem } from '../../../models/guide-bot-sub-item.model';
+import { GuideBotScreenPosition } from '../../../models/guide-bot/guide-bot-position.enum';
+import { GuideBotSubItem } from '../../../models/guide-bot/guide-bot-sub-item.model';
 import { GuidedTourService } from '../../../services/guided-tour.service';
-import { TourStep } from '../../../models/tour-step.model';
+import { TourStep } from '../../../models/guided-tour/tour-step.model';
 
 @Component({
   selector: 'lcu-guide-bot-logo',

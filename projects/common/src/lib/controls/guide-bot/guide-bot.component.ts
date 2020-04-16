@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { GuideBotEventService } from '../../services/guide-bot-event.service';
-import { GuideBotScreenPosition } from '../../models/guide-bot-position.enum';
-import { GuidedTour } from '../../models/guided-tour.model';
+import { GuideBotScreenPosition } from '../../models/guide-bot/guide-bot-position.enum';
 import { GuidedTourService } from '../../services/guided-tour.service';
-import { GuideBotSubItem } from '../../models/guide-bot-sub-item.model';
+import { GuideBotSubItem } from '../../models/guide-bot/guide-bot-sub-item.model';
+import { GuidedTour } from '../../models/guided-tour/guided-tour.model';
+import { TourStep } from '../../models/guided-tour/tour-step.model';
 
 @Component({
   selector: 'lcu-guide-bot',
@@ -24,6 +25,11 @@ export class GuideBotComponent implements OnInit {
   @Input('enable-first-time-popup') public FirstTimePopupEnabled: boolean = false;
   @Input('tour') public Tour: GuidedTour;
 
+  @Output('on-complete') public OnCompleteEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output('on-skipped') public OnSkippedEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output('on-step-closed') public OnStepClosedEvent: EventEmitter<TourStep> = new EventEmitter<TourStep>();
+  @Output('on-step-opened') public OnStepOpenedEvent: EventEmitter<TourStep> = new EventEmitter<TourStep>();
+
   constructor(
     private guideBotEventService: GuideBotEventService,
     private guidedTourService: GuidedTourService
@@ -33,6 +39,26 @@ export class GuideBotComponent implements OnInit {
         if (this.FirstTimePopupEnabled && !isTourOpen) {
           this.setFirstTimeKey(false);
         }
+      }
+    );
+    this.guidedTourService.onTourCompleteStream.subscribe(
+      () => {
+        this.OnCompleteEvent.emit();
+      }
+    );
+    this.guidedTourService.onTourSkippedStream.subscribe(
+      () => {
+        this.OnSkippedEvent.emit();
+      }
+    );
+    this.guidedTourService.onStepClosedActionStream.subscribe(
+      (step: TourStep) => {
+        this.OnStepClosedEvent.emit(step);
+      }
+    );
+    this.guidedTourService.onStepOpenedActionStream.subscribe(
+      (step: TourStep) => {
+        this.OnStepOpenedEvent.emit(step);
       }
     );
     this.guideBotEventService.GetBotToggledEvent().subscribe(

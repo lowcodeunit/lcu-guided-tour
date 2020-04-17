@@ -6,6 +6,7 @@ import { GuidedTourService } from '../../services/guided-tour.service';
 import { WindowRefService } from '../../services/windowref.service';
 import { TourStep } from '../../models/guided-tour/tour-step.model';
 import { OrientationTypes } from '../../models/guided-tour/orientation-types.enum';
+import { kebabCase } from 'lodash';
 
 @Component({
     selector: 'lcu-guided-tour',
@@ -25,11 +26,12 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     @Input() public progressIndicatorLocation?: ProgressIndicatorLocation = ProgressIndicatorLocation.InsideNextButton;
     @Input() public progressIndicator?: TemplateRef<any> = undefined;
     @ViewChild('tourStep', { static: false }) public tourStep: ElementRef;
-    public highlightPadding = 4;
+    public KebabCase = kebabCase;
     public currentTourStep: TourStep = null;
-    public selectedElementRect: DOMRect = null;
+    public highlightPadding = 4;
     public isOrbShowing = false;
     public progressIndicatorLocations = ProgressIndicatorLocation;
+    public selectedElementRect: DOMRect = null;
 
     private resizeSubscription: Subscription;
     private scrollSubscription: Subscription;
@@ -38,7 +40,9 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         public guidedTourService: GuidedTourService,
         private windowRef: WindowRefService,
         @Inject(DOCUMENT) private dom: any
-    ) { }
+    ) {
+      console.log('kebabCase test: ', this.KebabCase(OrientationTypes.BottomRight));
+    }
 
     private get maxWidthAdjustmentForTourStep(): number {
         return this.tourStepWidth - this.minimalTourStepWidth;

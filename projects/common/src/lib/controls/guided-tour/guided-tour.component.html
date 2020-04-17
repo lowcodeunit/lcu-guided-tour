@@ -1,6 +1,6 @@
 <div *ngIf="currentTourStep && selectedElementRect && isOrbShowing"
   (mouseenter)="handleOrb()"
-  class="tour-orb tour-{{ currentTourStep.Orientation }}"
+  class="tour-orb tour-{{ KebabCase(currentTourStep.Orientation) }}"
   [style.top.px]="orbTopPosition"
   [style.left.px]="orbLeftPosition"
   [style.transform]="orbTransform">
@@ -21,7 +21,7 @@
 
 <div *ngIf="currentTourStep && !isOrbShowing">
   <div #tourStep *ngIf="currentTourStep"
-    class="tour-step tour-{{ currentTourStep.Orientation }}"
+    class="tour-step tour-{{ KebabCase(currentTourStep.Orientation) }}"
     [ngClass]="{'page-tour-step': !currentTourStep.Selector}"
     [style.top.px]="(currentTourStep.Selector && selectedElementRect ? topPosition : null)"
     [style.left.px]="(currentTourStep.Selector && selectedElementRect ? leftPosition : null)"

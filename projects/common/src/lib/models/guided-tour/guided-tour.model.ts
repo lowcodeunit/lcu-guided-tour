@@ -2,6 +2,8 @@ import { TourStep } from './tour-step.model';
 import { ResizeDialog } from './resize-dialog.model';
 
 export class GuidedTour {
+  /** Lookup for tour */
+  public Lookup: string;
   /** Identifier for tour */
   public ID: string;
   /** Use orb to start tour */

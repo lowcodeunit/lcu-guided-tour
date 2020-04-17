@@ -78,7 +78,7 @@ export class AppComponent implements OnInit {
     this.guidedTour.Context.subscribe((state: GuidedTourManagementState) => {
       this.State = state;
 
-
+      console.log(state);
     });
   }
 

@@ -10,9 +10,9 @@ import {
   GuideBotSubItem,
   GuideBotEventService,
   GuidedTourManagementStateContext,
+  GuidedTourManagementState
 } from '@lowcodeunit/lcu-guided-tour-common';
 import { AppEventService } from './app-event.service';
-import { GuidedTourManagementState } from './../../../common/src/lib/state/guided-tour-management.state';
 
 @Component({
   selector: 'lcu-root',

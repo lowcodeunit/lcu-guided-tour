@@ -82,10 +82,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  protected stateChanged() {
-    console.log(this.State);
-  }
-
   public OnComplete(): void {
     console.log('Tour is Complete!');
   }
@@ -288,5 +284,9 @@ export class AppComponent implements OnInit {
 
   private toggleChat(): void {
     this.guideBotEventService.EmitChatToggledEvent();
+  }
+
+  protected stateChanged() {
+    console.log(this.State);
   }
 }

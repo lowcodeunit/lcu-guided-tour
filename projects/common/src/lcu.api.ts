@@ -14,3 +14,5 @@ export * from './lib/models/guided-tour/tour-step.model';
 export * from './lib/services/guide-bot-event.service';
 export * from './lib/services/guided-tour.service';
 export * from './lib/services/windowref.service';
+export * from './lib/state/guided-tour-management-state.context';
+export * from './lib/state/guided-tour-management.state';

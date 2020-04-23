@@ -7,9 +7,9 @@ import { AppEventService } from '../../app-event.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public BotPadding: number;
+  public BotPadding: number = 5;
   public BotPositions: any[];
-  public BotScale: number;
+  public BotScale: number = 1;
   public BoundsContainers: string[];
   public CurrentContainer: string;
   public CurrentPosition: any;

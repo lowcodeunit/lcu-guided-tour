@@ -45,9 +45,9 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('guide', { static: false }) public guide: ElementRef;
 
   constructor(
-    private guideBotEventService: GuideBotEventService,
-    private guidedTourService: GuidedTourService,
-    private renderer: Renderer2
+    protected guideBotEventService: GuideBotEventService,
+    protected guidedTourService: GuidedTourService,
+    protected renderer: Renderer2
   ) {
     this.TourStartedEvent = new EventEmitter<boolean>();
     this.guidedTourService.isTourOpenStream.subscribe(
@@ -112,7 +112,7 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
     this.anchorBotToSelector();
   }
 
-  private anchorBotToSelector(): void {
+  protected anchorBotToSelector(): void {
     console.log('BOT ------ anchorBotToSelector()');
     if (!this.IsTourOpen) {
       setTimeout(() => {
@@ -131,7 +131,7 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  private calculateBotTourPosition(): void {
+  protected calculateBotTourPosition(): void {
     console.log('BOT ------ calculateBotTourPosition()');
     setTimeout(() => {
       this.renderer.removeClass(this.guide.nativeElement, 'play');
@@ -147,7 +147,7 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
     }, 100);
   }
 
-  private findBoundingElementRect() {
+  protected findBoundingElementRect() {
     const element = document.querySelector(this.BoundingElementSelector);
     if (element) {
       this.boundingElementRect = element.getBoundingClientRect() as DOMRect;
@@ -157,13 +157,13 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  private triggerBotBounceAnim(): void {
+  protected triggerBotBounceAnim(): void {
     this.renderer.removeClass(this.bounce.nativeElement, 'play');
     void this.bounce.nativeElement.offsetWidth; // Resets the animation properly (i.e. Magic)
     this.renderer.addClass(this.bounce.nativeElement, 'play');
   }
 
-  private setBotScale() {
+  protected setBotScale() {
     const parent: any = this.renderer.parentNode(this.bounce.nativeElement);
     const scale: number = (this.IsTourOpen || this.ShowBotSubItems) ? 1 : this.BotScale;
     console.log('BOT ------  setBotScale()', scale);
@@ -178,7 +178,7 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  private setScreenPosition(x: number = this.BotPadding, y: number = this.BotPadding): void {
+  protected setScreenPosition(x: number = this.BotPadding, y: number = this.BotPadding): void {
 
     // TODO: We might be able to use this with the Tour async problem
     // this.renderer.listen(this.guide.nativeElement, 'transitionend', () => { console.log('WOW!!!! YOU GET THE TRANSITIONEND EVENT!!!!!!!!!!!!!!!'); });

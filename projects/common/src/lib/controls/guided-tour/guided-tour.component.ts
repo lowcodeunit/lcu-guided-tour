@@ -38,17 +38,17 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
 
     constructor(
         public guidedTourService: GuidedTourService,
-        private windowRef: WindowRefService,
-        @Inject(DOCUMENT) private dom: any
+        protected windowRef: WindowRefService,
+        @Inject(DOCUMENT) protected dom: any
     ) {
       console.log('kebabCase test: ', this.KebabCase(OrientationTypes.BottomRight));
     }
 
-    private get maxWidthAdjustmentForTourStep(): number {
+    protected get maxWidthAdjustmentForTourStep(): number {
         return this.tourStepWidth - this.minimalTourStepWidth;
     }
 
-    private get widthAdjustmentForScreenBound(): number {
+    protected get widthAdjustmentForScreenBound(): number {
         if (!this.tourStep) {
             return 0;
         }
@@ -155,7 +155,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    private isTourOnScreen(): boolean {
+    protected isTourOnScreen(): boolean {
         console.log('isTourOnScreen()');
         return this.tourStep
             && this.elementInViewport(this.dom.querySelector(this.currentTourStep.Selector))
@@ -163,7 +163,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     // Modified from https://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
-    private elementInViewport(element: HTMLElement): boolean {
+    protected elementInViewport(element: HTMLElement): boolean {
         let top = element.offsetTop;
         const height = element.offsetHeight;
 
@@ -209,7 +209,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    private isBottom(): boolean {
+    protected isBottom(): boolean {
         return this.currentTourStep.Orientation
             && (this.currentTourStep.Orientation === OrientationTypes.Bottom
             || this.currentTourStep.Orientation === OrientationTypes.BottomLeft
@@ -241,7 +241,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         return this.selectedElementRect.top;
     }
 
-    private get calculatedLeftPosition(): number {
+    protected get calculatedLeftPosition(): number {
         const paddingAdjustment = this.getHighlightPadding();
 
         if (
@@ -372,7 +372,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         return 0;
     }
 
-    private getHighlightPadding(): number {
+    protected getHighlightPadding(): number {
         let paddingAdjustment = this.currentTourStep.UseHighlightPadding ? this.highlightPadding : 0;
         if (this.currentTourStep.HighlightPadding) {
             paddingAdjustment = this.currentTourStep.HighlightPadding;
@@ -381,7 +381,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     // This calculates a value to add or subtract so the step should not be off screen.
-    private getStepScreenAdjustment(): number {
+    protected getStepScreenAdjustment(): number {
         if (
             this.currentTourStep.Orientation === OrientationTypes.Left
             || this.currentTourStep.Orientation === OrientationTypes.Right

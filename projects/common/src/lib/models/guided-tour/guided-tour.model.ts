@@ -6,6 +6,8 @@ export class GuidedTour {
   public Lookup: string;
   /** Identifier for tour */
   public ID: string;
+  /** If this is a user's first time going through a specific tour */
+  public IsFirstTimeViewing: boolean;
   /** Use orb to start tour */
   public UseOrb?: boolean;
   /** Steps fo the tour */

@@ -3,7 +3,6 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { ThemeColorPickerService } from '@lcu/common';
 import {
   GuidedTourService,
-  GuidedTour,
   TourStep,
   OrientationTypes,
   GuideBotScreenPosition,
@@ -23,8 +22,7 @@ export class AppComponent implements OnInit {
   public BotBoundingContainer: string = '#boundingBox';
   public BotPadding: number = 5;
   public BotScale: number = 1;
-  public BotScreenPosition: GuideBotScreenPosition =
-    GuideBotScreenPosition.BottomLeft;
+  public BotScreenPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
   public BotSubItems: GuideBotSubItem[];
   public EnableChat: boolean = true;
   public EnableFirstTimePopup: boolean = true;
@@ -34,41 +32,38 @@ export class AppComponent implements OnInit {
   public Title = 'LCU-Guided-Tour';
 
   constructor(
-    private appEventService: AppEventService,
-    private guideBotEventService: GuideBotEventService,
-    private guidedTourService: GuidedTourService,
-    private themeService: ThemeColorPickerService,
-    protected guidedTour: GuidedTourManagementStateContext
+    protected appEventService: AppEventService,
+    protected guideBotEventService: GuideBotEventService,
+    protected guidedTour: GuidedTourManagementStateContext,
+    protected guidedTourService: GuidedTourService,
+    protected themeService: ThemeColorPickerService
   ) {
     this.BotSubItems = this.setBotSubItems();
-    // this.DemoTour = {
-    //   ID: 'demo-tour',
-    //   UseOrb: false,
-    //   Steps: this.setupTourSteps(),
-    // };
-    this.appEventService
-      .GetPositionChangedEvent()
-      .subscribe((position: GuideBotScreenPosition) => {
+    this.appEventService.GetPositionChangedEvent().subscribe(
+      (position: GuideBotScreenPosition) => {
         this.BotScreenPosition = position;
-      });
-    this.appEventService
-      .GetBoundsContainerChangedEvent()
-      .subscribe((container: string) => {
+      }
+    );
+    this.appEventService.GetBoundsContainerChangedEvent().subscribe(
+      (container: string) => {
         this.BotBoundingContainer = container;
-      });
-    this.appEventService
-      .GetBotPaddingChangedEvent()
-      .subscribe((padding: number) => {
+      }
+    );
+    this.appEventService.GetBotPaddingChangedEvent().subscribe(
+      (padding: number) => {
         this.BotPadding = padding;
-      });
-    this.appEventService
-      .GetBotScaleChangedEvent()
-      .subscribe((scale: number) => {
+      }
+    );
+    this.appEventService.GetBotScaleChangedEvent().subscribe(
+      (scale: number) => {
         this.BotScale = scale;
-      });
-    this.appEventService.GetStartTourEvent().subscribe(() => {
-      this.startTour();
-    });
+      }
+    );
+    this.appEventService.GetStartTourEvent().subscribe(
+      () => {
+        this.startTour();
+      }
+    );
   }
 
   public ngOnInit(): void {
@@ -173,11 +168,11 @@ export class AppComponent implements OnInit {
   }
 
   /** GUIDED TOUR */
-  private startTour(): void {
+  protected startTour(): void {
     this.guidedTourService.startTour(this.State.CurrentTour);
   }
 
-  private setupTourSteps(): TourStep[] {
+  protected setupTourSteps(): TourStep[] {
     return [
       {
         Title: 'LCU-Guided-Tour',
@@ -256,18 +251,11 @@ export class AppComponent implements OnInit {
         render the next view.`,
         Orientation: OrientationTypes.BottomLeft,
         ActionDelay: 500,
-      },
-      // {
-      //   Title: 'Start Tour',
-      //   Subtitle: 'Guided Tour',
-      //   Selector: '.mat-stroked-button:first-of-type',
-      //   Content: `Whenever you want to start the tour again, you can press this button or the 'tour' button on Thinky!`,
-      //   Orientation: OrientationTypes.BottomLeft
-      // }
+      }
     ];
   }
 
-  private setBotSubItems(): GuideBotSubItem[] {
+  protected setBotSubItems(): GuideBotSubItem[] {
     return [
       new GuideBotSubItem({
         label: 'Start Tour',
@@ -282,7 +270,7 @@ export class AppComponent implements OnInit {
     ];
   }
 
-  private toggleChat(): void {
+  protected toggleChat(): void {
     this.guideBotEventService.EmitChatToggledEvent();
   }
 

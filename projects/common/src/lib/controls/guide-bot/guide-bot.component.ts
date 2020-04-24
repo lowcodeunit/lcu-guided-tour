@@ -5,6 +5,8 @@ import { GuidedTourService } from '../../services/guided-tour.service';
 import { GuideBotSubItem } from '../../models/guide-bot/guide-bot-sub-item.model';
 import { GuidedTour } from '../../models/guided-tour/guided-tour.model';
 import { TourStep } from '../../models/guided-tour/tour-step.model';
+import { GuidedTourManagementStateContext } from '../../state/guided-tour-management-state.context';
+import { GuidedTourManagementState } from '../../state/guided-tour-management.state';
 
 @Component({
   selector: 'lcu-guide-bot',
@@ -13,8 +15,7 @@ import { TourStep } from '../../models/guided-tour/tour-step.model';
 })
 export class GuideBotComponent implements OnInit {
   public IsChatOpen: boolean = false;
-
-  private readonly FIRST_TIME_KEY: string = 'first-time-user';
+  public State: GuidedTourManagementState;
 
   @Input('bot-padding') public BotPadding: number = 5;
   @Input('bot-scale') public BotScale: number = 1;
@@ -31,16 +32,10 @@ export class GuideBotComponent implements OnInit {
   @Output('on-step-opened') public OnStepOpenedEvent: EventEmitter<TourStep> = new EventEmitter<TourStep>();
 
   constructor(
-    private guideBotEventService: GuideBotEventService,
-    private guidedTourService: GuidedTourService
+    protected guideBotEventService: GuideBotEventService,
+    protected guidedTourService: GuidedTourService,
+    protected guidedTourState: GuidedTourManagementStateContext
   ) {
-    this.guidedTourService.isTourOpenStream.subscribe(
-      (isTourOpen: boolean) => {
-        if (this.FirstTimePopupEnabled && !isTourOpen) {
-          this.setFirstTimeKey(false);
-        }
-      }
-    );
     this.guidedTourService.onTourCompleteStream.subscribe(
       () => {
         this.OnCompleteEvent.emit();
@@ -69,9 +64,11 @@ export class GuideBotComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (this.FirstTimePopupEnabled) {
-      this.firstTimeSetup();
-    }
+    this.guidedTourState.Context.subscribe((state: GuidedTourManagementState) => {
+      this.State = state;
+
+      this.stateChanged();
+    });
   }
 
   public OnTourStarted(isStarted: boolean): void {
@@ -80,31 +77,28 @@ export class GuideBotComponent implements OnInit {
     }
   }
 
-  /**
-   * Sets up Thinky to popup with Tour on first time loading app
-   * TODO: We need to use a State for this
-   */
-  private firstTimeSetup() {
-    if (this.isFirstTimeUser()) {
-      this.setFirstTimeKey(true);
-
-      setTimeout(() => {
-        this.OnTourStarted(true);
-      }, 2000);
+  protected stateChanged(): void {
+    if (this.FirstTimePopupEnabled && this.State.CurrentTour) {
+      this.firstTimeSetup();
     }
   }
 
-  private isFirstTimeUser(): boolean {
-    return localStorage.getItem(this.FIRST_TIME_KEY)
-        && localStorage.getItem(this.FIRST_TIME_KEY) === 'false'
-         ? false : true;
+  /**
+   * Sets up Thinky to popup with Tour on first time loading app
+   */
+  protected firstTimeSetup() {
+    if (this.isFirstTimeUser()) {
+      setTimeout(() => {
+        this.OnTourStarted(true);
+      }, 1000);
+    }
   }
 
-  private setFirstTimeKey(isFirstTime: boolean) {
-    localStorage.setItem(this.FIRST_TIME_KEY, String(isFirstTime));
+  protected isFirstTimeUser(): boolean {
+    return this.State.CurrentTour.IsFirstTimeViewing;
   }
 
-  private setDefaultBotSubItems(): GuideBotSubItem[] {
+  protected setDefaultBotSubItems(): GuideBotSubItem[] {
     return [
       new GuideBotSubItem({ label: 'Start Tour', icon: 'all_out', action: () => this.OnTourStarted(true) }),
       new GuideBotSubItem({ label: 'Toggle Chat', icon: 'chat_bubble_outline', action: () => this.toggleChat() }),
@@ -112,7 +106,7 @@ export class GuideBotComponent implements OnInit {
     ];
   }
 
-  private toggleChat(): void {
+  protected toggleChat(): void {
     this.guideBotEventService.EmitChatToggledEvent();
   }
 }

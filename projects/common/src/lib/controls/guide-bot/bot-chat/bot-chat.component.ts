@@ -24,9 +24,9 @@ export class GuideBotChatComponent implements OnInit {
   @ViewChild('customMsg', { static: false }) public customMsg: ElementRef;
 
   constructor(
-    private guideBotEventService: GuideBotEventService,
-    private guidedTourService: GuidedTourService,
-    private renderer: Renderer2
+    protected guideBotEventService: GuideBotEventService,
+    protected guidedTourService: GuidedTourService,
+    protected renderer: Renderer2
   ) {
     this.IsChatVisible = true;
     this.QuestionFormControl = new FormControl('');
@@ -80,7 +80,7 @@ export class GuideBotChatComponent implements OnInit {
     }, 100);
   }
 
-  private anchorChatToBotLogo(milliSeconds: number = 0): void {
+  protected anchorChatToBotLogo(milliSeconds: number = 0): void {
     console.log('CHAT ----- anchorChatToBotLogo()');
     setTimeout(() => {
       if (this.ChatEnabled && this.IsChatVisible) {
@@ -110,7 +110,7 @@ export class GuideBotChatComponent implements OnInit {
   /**
    * Little Easter Egg :D
    */
-  private customMessage(): void {
+  protected customMessage(): void {
     console.log('CHAT ----- customMessage()', this.customMsgs);
     this.PublishMessage(``);
     const img = this.renderer.createElement('img');
@@ -124,7 +124,7 @@ export class GuideBotChatComponent implements OnInit {
     }, 500);
   }
 
-  private parseMessage(message: string): void {
+  protected parseMessage(message: string): void {
     const msg = message.toLowerCase();
     if (msg.includes('kim') && msg.includes('actor')) {
       setTimeout(() => {

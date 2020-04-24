@@ -2,14 +2,16 @@ import { OrientationConfiguration } from './orientation-configuration.model';
 import { OrientationTypes } from './orientation-types.enum';
 
 export class TourStep {
+  /** Identifier for step */
+  public ID?: string;
+  /** Tour step text */
+  public Content: string;
   /** Selector for element that will be highlighted */
   public Selector?: string;
   /** Tour title text */
   public Title?: string;
   /** Tour subtitle text */
   public Subtitle?: string;
-  /** Tour step text */
-  public Content: string;
   /** Where the tour step will appear next to the selected element */
   public Orientation?: OrientationTypes;
   /** Where the tour step will appear next to the selected element */

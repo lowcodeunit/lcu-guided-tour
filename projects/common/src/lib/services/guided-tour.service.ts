@@ -4,15 +4,20 @@ import { Observable, Subject, fromEvent } from 'rxjs';
 import { cloneDeep } from 'lodash';
 import { DOCUMENT } from '@angular/common';
 import { WindowRefService } from './windowref.service';
-import { TourStep } from '../models/tour-step.model';
-import { GuidedTour } from '../models/guided-tour.model';
-import { OrientationConfiguration, Orientation } from '../models/orientation.model';
+import { TourStep } from '../models/guided-tour/tour-step.model';
+import { GuidedTour } from '../models/guided-tour/guided-tour.model';
+import { OrientationConfiguration } from '../models/guided-tour/orientation-configuration.model';
+import { OrientationTypes } from '../models/guided-tour/orientation-types.enum';
 
 @Injectable()
 export class GuidedTourService {
     public guidedTourCurrentStepStream: Observable<TourStep>;
     public guidedTourOrbShowingStream: Observable<boolean>;
     public isTourOpenStream: Observable<boolean>;
+    public onTourCompleteStream: Observable<any>;
+    public onTourSkippedStream: Observable<any>;
+    public onStepClosedActionStream: Observable<TourStep>;
+    public onStepOpenedActionStream: Observable<TourStep>;
 
     private _guidedTourCurrentStepSubject = new Subject<TourStep>();
     private _guidedTourOrbShowingSubject = new Subject<boolean>();
@@ -23,6 +28,11 @@ export class GuidedTourService {
     private _onLastStep = true;
     private _onResizeMessage = false;
 
+    private _onTourComplete = new Subject<any>();
+    private _onTourSkipped = new Subject<any>();
+    private _onStepClosedAction = new Subject<TourStep>();
+    private _onStepOpenedAction = new Subject<TourStep>();
+
     constructor(
         public errorHandler: ErrorHandler,
         private windowRef: WindowRefService,
@@ -31,14 +41,18 @@ export class GuidedTourService {
         this.guidedTourCurrentStepStream = this._guidedTourCurrentStepSubject.asObservable();
         this.guidedTourOrbShowingStream = this._guidedTourOrbShowingSubject.asObservable();
         this.isTourOpenStream = this._isTourOpenSubject.asObservable();
+        this.onTourCompleteStream = this._onTourComplete.asObservable();
+        this.onTourSkippedStream = this._onTourSkipped.asObservable();
+        this.onStepClosedActionStream = this._onStepClosedAction.asObservable();
+        this.onStepOpenedActionStream = this._onStepOpenedAction.asObservable();
 
         fromEvent(this.windowRef.nativeWindow, 'resize').pipe(debounceTime(200)).subscribe(() => {
             if (this._currentTour && this._currentTourStepIndex > -1) {
-                if (this._currentTour.minimumScreenSize && this._currentTour.minimumScreenSize >= this.windowRef.nativeWindow.innerWidth) {
+                if (this._currentTour.MinimumScreenSize && this._currentTour.MinimumScreenSize >= this.windowRef.nativeWindow.innerWidth) {
                     this._onResizeMessage = true;
-                    const dialog = this._currentTour.resizeDialog || {
-                        title: 'Please resize',
-                        content: 'You have resized the tour to a size that is too small to continue. Please resize the browser to a larger size to continue the tour or close the tour.'
+                    const dialog = this._currentTour.ResizeDialog || {
+                        Title: 'Please resize',
+                        Content: 'You have resized the tour to a size that is too small to continue. Please resize the browser to a larger size to continue the tour or close the tour.'
                     };
 
                     this._guidedTourCurrentStepSubject.next(dialog);
@@ -51,69 +65,48 @@ export class GuidedTourService {
     }
 
     public nextStep(): void {
-        if (this._currentTour.steps[this._currentTourStepIndex].closeAction) {
-            this._currentTour.steps[this._currentTourStepIndex].closeAction();
-        }
-        if (this._currentTour.steps[this._currentTourStepIndex + 1]) {
+        this._onStepClosedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
+        if (this._currentTour.Steps[this._currentTourStepIndex + 1]) {
             this._currentTourStepIndex++;
             this._setFirstAndLast();
-            if (this._currentTour.steps[this._currentTourStepIndex].action) {
-                this._currentTour.steps[this._currentTourStepIndex].action();
-                // Usually an action is opening something so we need to give it time to render.
-                setTimeout(() => {
-                    if (this._checkSelectorValidity()) {
-                        this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
-                    } else {
-                        this.nextStep();
-                    }
-                });
-            } else {
-                if (this._checkSelectorValidity()) {
-                    this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
-                } else {
-                    this.nextStep();
-                }
-            }
+
+
+            this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
+            // Usually an action is opening something so we need to give it time to render.
+            setTimeout(() => {
+              if (this._checkSelectorValidity()) {
+                  this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
+              } else {
+                  this.nextStep();
+              }
+          }, this._currentTour.Steps[this._currentTourStepIndex].ActionDelay);
         } else {
-            if (this._currentTour.completeCallback) {
-                this._currentTour.completeCallback();
-            }
+            this._onTourComplete.next();
             this.resetTour();
         }
     }
 
     public backStep(): void {
-        if (this._currentTour.steps[this._currentTourStepIndex].closeAction) {
-            this._currentTour.steps[this._currentTourStepIndex].closeAction();
-        }
-        if (this._currentTour.steps[this._currentTourStepIndex - 1]) {
+        this._onStepClosedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
+        if (this._currentTour.Steps[this._currentTourStepIndex - 1]) {
             this._currentTourStepIndex--;
             this._setFirstAndLast();
-            if (this._currentTour.steps[this._currentTourStepIndex].action) {
-                this._currentTour.steps[this._currentTourStepIndex].action();
-                setTimeout(() => {
-                    if (this._checkSelectorValidity()) {
-                        this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
-                    } else {
-                        this.backStep();
-                    }
-                });
-            } else {
+
+            this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
+            setTimeout(() => {
                 if (this._checkSelectorValidity()) {
                     this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
                 } else {
                     this.backStep();
                 }
-            }
+            }, this._currentTour.Steps[this._currentTourStepIndex].ActionDelay);
         } else {
             this.resetTour();
         }
     }
 
     public skipTour(): void {
-        if (this._currentTour.skipCallback) {
-            this._currentTour.skipCallback(this._currentTourStepIndex);
-        }
+        this._onTourSkipped.next();
         this.resetTour();
     }
 
@@ -129,22 +122,20 @@ export class GuidedTourService {
     public startTour(tour: GuidedTour): void {
         console.log('TOUR ----- startTour()');
         this._currentTour = cloneDeep(tour);
-        this._currentTour.steps = this._currentTour.steps.filter((step: TourStep) => !step.skipStep);
+        this._currentTour.Steps = this._currentTour.Steps.filter((step: TourStep) => !step.SkipStep);
         this._currentTourStepIndex = 0;
         this._setFirstAndLast();
-        this._guidedTourOrbShowingSubject.next(this._currentTour.useOrb);
+        this._guidedTourOrbShowingSubject.next(this._currentTour.UseOrb);
         this._isTourOpenSubject.next(true);
         if (
-            this._currentTour.steps.length > 0
-            && (!this._currentTour.minimumScreenSize
-                || (this.windowRef.nativeWindow.innerWidth >= this._currentTour.minimumScreenSize))
+            this._currentTour.Steps.length > 0
+            && (!this._currentTour.MinimumScreenSize
+                || (this.windowRef.nativeWindow.innerWidth >= this._currentTour.MinimumScreenSize))
         ) {
-            if (!this._currentTour.useOrb) {
+            if (!this._currentTour.UseOrb) {
                 this.dom.body.classList.add('tour-open');
             }
-            if (this._currentTour.steps[this._currentTourStepIndex].action) {
-                this._currentTour.steps[this._currentTourStepIndex].action();
-            }
+            this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
             if (this._checkSelectorValidity()) {
                 this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
             } else {
@@ -159,17 +150,18 @@ export class GuidedTourService {
     }
 
     private _setFirstAndLast(): void {
-        this._onLastStep = (this._currentTour.steps.length - 1) === this._currentTourStepIndex;
+        this._onLastStep = (this._currentTour.Steps.length - 1) === this._currentTourStepIndex;
         this._onFirstStep = this._currentTourStepIndex === 0;
     }
 
     private _checkSelectorValidity(): boolean {
-        if (this._currentTour.steps[this._currentTourStepIndex].selector) {
-            const selectedElement = this.dom.querySelector(this._currentTour.steps[this._currentTourStepIndex].selector);
+        if (this._currentTour.Steps[this._currentTourStepIndex].Selector) {
+            const selectedElement = this.dom.querySelector(this._currentTour.Steps[this._currentTourStepIndex].Selector);
             if (!selectedElement) {
                 this.errorHandler.handleError(
                     // If error handler is configured this should not block the browser.
-                    new Error(`Error finding selector ${this._currentTour.steps[this._currentTourStepIndex].selector} on step ${this._currentTourStepIndex + 1} during guided tour: ${this._currentTour.tourId}`)
+                    new Error(`Error finding selector ${this._currentTour.Steps[this._currentTourStepIndex].Selector}
+                      on step ${this._currentTourStepIndex + 1} during guided tour: ${this._currentTour.ID}`)
                 );
                 return false;
             }
@@ -194,44 +186,43 @@ export class GuidedTourService {
     }
 
     public get currentTourStepCount(): number {
-        return this._currentTour && this._currentTour.steps ? this._currentTour.steps.length : 0;
+        return this._currentTour && this._currentTour.Steps ? this._currentTour.Steps.length : 0;
     }
 
     public get preventBackdropFromAdvancing(): boolean {
-        return this._currentTour && this._currentTour.preventBackdropFromAdvancing;
+        return this._currentTour && this._currentTour.PreventBackdropFromAdvancing;
     }
 
     private getPreparedTourStep(index: number): TourStep {
-        return this.setTourOrientation(this._currentTour.steps[index]);
+        return this.setTourOrientation(this._currentTour.Steps[index]);
     }
 
     private setTourOrientation(step: TourStep): TourStep {
         const convertedStep = cloneDeep(step);
         if (
-            convertedStep.orientation
-            && !(typeof convertedStep.orientation === 'string')
-            && (convertedStep.orientation as OrientationConfiguration[]).length
+            convertedStep.OrientationConfiguration
+            && convertedStep.OrientationConfiguration.length
         ) {
-            (convertedStep.orientation as OrientationConfiguration[]).sort((a: OrientationConfiguration, b: OrientationConfiguration) => {
-                if (!b.maximumSize) {
+            convertedStep.OrientationConfiguration.sort((a: OrientationConfiguration, b: OrientationConfiguration) => {
+                if (!b.MaximumSize) {
                     return 1;
                 }
-                if (!a.maximumSize) {
+                if (!a.MaximumSize) {
                     return -1;
                 }
-                return b.maximumSize - a.maximumSize;
+                return b.MaximumSize - a.MaximumSize;
             });
 
-            let currentOrientation: Orientation = Orientation.Top;
-            (convertedStep.orientation as OrientationConfiguration[]).forEach(
-                (orientationConfig: OrientationConfiguration) => {
-                    if (!orientationConfig.maximumSize || this.windowRef.nativeWindow.innerWidth <= orientationConfig.maximumSize) {
-                        currentOrientation = orientationConfig.orientationDirection;
-                    }
+            let currentOrientation: OrientationTypes = OrientationTypes.Top;
+            convertedStep.OrientationConfiguration.forEach(
+              (orientationConfig: OrientationConfiguration) => {
+                if (!orientationConfig.MaximumSize || this.windowRef.nativeWindow.innerWidth <= orientationConfig.MaximumSize) {
+                    currentOrientation = orientationConfig.OrientationDirection;
                 }
+              }
             );
 
-            convertedStep.orientation = currentOrientation;
+            convertedStep.Orientation = currentOrientation;
         }
         return convertedStep;
     }

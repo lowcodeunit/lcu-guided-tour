@@ -9,30 +9,29 @@ import { GuideBotLogoComponent } from './controls/guide-bot/bot-logo/bot-logo.co
 import { GuidedTourService } from './services/guided-tour.service';
 import { WindowRefService } from './services/windowref.service';
 import { GuideBotEventService } from './services/guide-bot-event.service';
+import { GuidedTourManagementStateContext } from './state/guided-tour-management-state.context';
 
 @NgModule({
   declarations: [
     GuidedTourComponent,
     GuideBotComponent,
     GuideBotChatComponent,
-    GuideBotLogoComponent
+    GuideBotLogoComponent,
   ],
   imports: [
     FathymSharedModule,
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    MaterialModule
+    MaterialModule,
   ],
-  providers: [
-    WindowRefService
-  ],
+  providers: [WindowRefService],
   exports: [
     GuidedTourComponent,
     GuideBotComponent,
     GuideBotChatComponent,
-    GuideBotLogoComponent
-  ]
+    GuideBotLogoComponent,
+  ],
 })
 export class LcuGuidedTourModule {
   static forRoot(): ModuleWithProviders<LcuGuidedTourModule> {
@@ -41,8 +40,9 @@ export class LcuGuidedTourModule {
       providers: [
         ErrorHandler,
         GuidedTourService,
-        GuideBotEventService
-      ]
+        GuideBotEventService,
+        GuidedTourManagementStateContext,
+      ],
     };
   }
 }

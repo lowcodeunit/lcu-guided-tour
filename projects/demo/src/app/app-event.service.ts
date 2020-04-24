@@ -6,15 +6,19 @@ import { GuideBotScreenPosition } from '@lowcodeunit/lcu-guided-tour-common';
 })
 export class AppEventService {
   private botPaddingChangedEvent: EventEmitter<number>;
+  private botScaleChangedEvent: EventEmitter<number>;
   private boundsContainerChangedEvent: EventEmitter<string>;
   private positionChangedEvent: EventEmitter<GuideBotScreenPosition>;
   private startTourEvent: EventEmitter<any>;
+  private tabIndexEvent: EventEmitter<number>;
 
   constructor() {
     this.botPaddingChangedEvent = new EventEmitter<number>();
+    this.botScaleChangedEvent = new EventEmitter<number>();
     this.boundsContainerChangedEvent = new EventEmitter<string>();
     this.positionChangedEvent = new EventEmitter<GuideBotScreenPosition>();
     this.startTourEvent = new EventEmitter<any>();
+    this.tabIndexEvent = new EventEmitter<number>();
   }
 
   public EmitBotPaddingChangedEvent(padding: number): void {
@@ -23,6 +27,14 @@ export class AppEventService {
 
   public GetBotPaddingChangedEvent(): EventEmitter<number> {
     return this.botPaddingChangedEvent;
+  }
+
+  public EmitBotScaleChangedEvent(scale: number): void {
+    this.botScaleChangedEvent.emit(scale);
+  }
+
+  public GetBotScaleChangedEvent(): EventEmitter<number> {
+    return this.botScaleChangedEvent;
   }
 
   public EmitBoundsContainerChangedEvent(container: string): void {
@@ -47,5 +59,13 @@ export class AppEventService {
 
   public GetStartTourEvent(): EventEmitter<any> {
     return this.startTourEvent;
+  }
+
+  public EmitTabIndexEvent(tabIndex: number): void {
+    this.tabIndexEvent.emit(tabIndex);
+  }
+
+  public GetTabIndexEvent(): EventEmitter<number> {
+    return this.tabIndexEvent;
   }
 }

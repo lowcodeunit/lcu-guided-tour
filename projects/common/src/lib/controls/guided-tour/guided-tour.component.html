@@ -1,6 +1,6 @@
 <div *ngIf="currentTourStep && selectedElementRect && isOrbShowing"
   (mouseenter)="handleOrb()"
-  class="tour-orb tour-{{ currentTourStep.orientation }}"
+  class="tour-orb tour-{{ KebabCase(currentTourStep.Orientation) }}"
   [style.top.px]="orbTopPosition"
   [style.left.px]="orbLeftPosition"
   [style.transform]="orbTransform">
@@ -21,13 +21,13 @@
 
 <div *ngIf="currentTourStep && !isOrbShowing">
   <div #tourStep *ngIf="currentTourStep"
-    class="tour-step tour-{{ currentTourStep.orientation }}"
-    [ngClass]="{'page-tour-step': !currentTourStep.selector}"
-    [style.top.px]="(currentTourStep.selector && selectedElementRect ? topPosition : null)"
-    [style.left.px]="(currentTourStep.selector && selectedElementRect ? leftPosition : null)"
-    [style.width.px]="(currentTourStep.selector && selectedElementRect ? calculatedTourStepWidth : null)"
-    [style.transform]="(currentTourStep.selector && selectedElementRect ? transform : null)">
-    <div *ngIf="currentTourStep.selector" class="tour-arrow"></div>
+    class="tour-step tour-{{ KebabCase(currentTourStep.Orientation) }}"
+    [ngClass]="{'page-tour-step': !currentTourStep.Selector}"
+    [style.top.px]="(currentTourStep.Selector && selectedElementRect ? topPosition : null)"
+    [style.left.px]="(currentTourStep.Selector && selectedElementRect ? leftPosition : null)"
+    [style.width.px]="(currentTourStep.Selector && selectedElementRect ? calculatedTourStepWidth : null)"
+    [style.transform]="(currentTourStep.Selector && selectedElementRect ? transform : null)">
+    <div *ngIf="currentTourStep.Selector" class="tour-arrow"></div>
 
     <mat-card class="tour-block">
       <div *ngIf="progressIndicatorLocation === progressIndicatorLocations.TopOfTourBlock
@@ -38,18 +38,20 @@
       </div>
 
 
-      <mat-card-header *ngIf="currentTourStep.title && currentTourStep.selector">
-        <mat-card-title>{{ currentTourStep.title }}</mat-card-title>
-      </mat-card-header>
-
-      <mat-card-header *ngIf="currentTourStep.title && !currentTourStep.selector">
-        <mat-card-title>{{ currentTourStep.title }}</mat-card-title>
+      <mat-card-header *ngIf="currentTourStep.Title">
+        <div mat-card-avatar class="tour-logo"></div>
+        <div class="custom-header">
+          <div class="tour-progress">
+            <span *ngFor="let item of [].constructor(guidedTourService.currentTourStepCount); let i = index;"
+              [ngClass]="{'filled': i < guidedTourService.currentTourStepDisplay}"></span>
+          </div>
+          <mat-card-title>{{ currentTourStep.Title }}</mat-card-title>
+          <mat-card-subtitle>{{ currentTourStep.Subtitle }}</mat-card-subtitle>
+        </div>
       </mat-card-header>
 
       <mat-card-content class="tour-content">
-        <p>
-          {{ currentTourStep.content }}
-        </p>
+        <p [innerHTML]="currentTourStep.Content"></p>
       </mat-card-content>
 
       <div fxLayout="row" fxLayoutAlign="space-between">

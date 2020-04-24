@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChildren, ViewChild, QueryList, ElementRef, Renderer2, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ChatMessage, MessageType } from '../../../models/chat-message.model';
+import { ChatMessage, MessageType } from '../../../models/guide-bot/chat-message.model';
 import { GuideBotEventService } from '../../../services/guide-bot-event.service';
+import { GuidedTourService } from '../../../services/guided-tour.service';
 
 @Component({
   selector: 'lcu-guide-bot-chat',
@@ -24,6 +25,7 @@ export class GuideBotChatComponent implements OnInit {
 
   constructor(
     private guideBotEventService: GuideBotEventService,
+    private guidedTourService: GuidedTourService,
     private renderer: Renderer2
   ) {
     this.IsChatVisible = true;
@@ -33,6 +35,11 @@ export class GuideBotChatComponent implements OnInit {
       new ChatMessage({ message: `Looks like you're new here!` }),
       new ChatMessage({ message: `Click the Tour button on the left to start the Tour.` })
     ];
+    this.guidedTourService.isTourOpenStream.subscribe(
+      (isTourOpen: boolean) => {
+        this.IsChatVisible = !isTourOpen;
+      }
+    );
     this.guideBotEventService.GetChatToggledEvent().subscribe(
       () => {
         console.log('CHAT ----- GetChatToggledEvent()', !this.IsChatVisible);

@@ -9,9 +9,11 @@ import { AppEventService } from '../../app-event.service';
 export class HomeComponent implements OnInit {
   public BotPadding: number = 5;
   public BotPositions: any[];
+  public BotScale: number = 1;
   public BoundsContainers: string[];
   public CurrentContainer: string;
   public CurrentPosition: any;
+  public SelectedTabIndex: number = 0;
 
   constructor(
     private appEventService: AppEventService
@@ -24,6 +26,11 @@ export class HomeComponent implements OnInit {
     ];
     this.CurrentPosition = this.BotPositions[0];
     this.CurrentContainer = this.BoundsContainers[0];
+    this.appEventService.GetTabIndexEvent().subscribe(
+      (tabIndex: number) => {
+        this.SelectedTabIndex = tabIndex;
+      }
+    );
   }
 
   public ngOnInit(): void { }
@@ -38,6 +45,10 @@ export class HomeComponent implements OnInit {
 
   public OnBotPaddingChange(): void {
     this.appEventService.EmitBotPaddingChangedEvent(this.BotPadding);
+  }
+
+  public OnBotScaleChange(): void {
+    this.appEventService.EmitBotScaleChangedEvent(this.BotScale);
   }
 
   public OnStartTour(): void {

@@ -59,6 +59,88 @@ body.tour-open {
           @include tour-triangle(left, $bg-color);
         }
       }
+
+      .tour-block {
+        padding: 15px;
+
+        .tour-content {
+          margin-top: 5px;
+          min-height: 30px;
+
+          b {
+            color: mat-color($primary);
+          }
+        }
+
+        .tour-logo {
+          height: 95px;
+          width: 95px;
+          margin: -10px 0px 0px -10px;
+          background: rgba(0, 0, 0, 0.15);
+          box-shadow: inset 0px 0px 20px 10px rgba(0, 0, 0, 0.25);
+
+          // glow
+          // box-shadow: 0 0 10px 1px mat-color($primary);
+        }
+
+        .mat-card-header-text {
+          margin: 0;
+        }
+
+        .custom-header {
+          display: flex;
+          flex-direction: column;
+          margin-left: 10px;
+
+          .mat-card-subtitle {
+            margin-bottom: 0;
+          }
+
+          .tour-progress {
+            display: flex;
+            margin-bottom: 15px;
+            justify-content: flex-start;
+            position: relative;
+
+            span {
+              background: rgba(mat-color($primary), 0.1);
+              box-shadow: inset 0px 0px 3px 1px rgba(0, 0, 0, 0.25);
+              border-radius: 50%;
+              border: 1px solid rgba(255, 255, 255, 0.12);
+              height: 10px;
+              margin-right: 13px;
+              transition: 1s;
+              width: 10px;
+
+              &.filled {
+                background: mat-color($primary);
+                box-shadow: none;
+                transition: 1s;
+
+                &:after {
+                  content: ' ';
+                  background: mat-color($primary);
+                  height: 2px;
+                }
+              }
+
+              &:after {
+                content: ' ';
+                background: rgba($fg-color, 0.12);
+                width: 10px;
+                height: 1px;
+                position: absolute;
+                margin-left: 12px;
+                top: 5px;
+              }
+
+              &:last-child:after {
+                content: none;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

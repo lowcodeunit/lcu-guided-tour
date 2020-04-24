@@ -33,10 +33,16 @@
 
   <lcu-guide-bot
     [bot-padding]="BotPadding"
+    [bot-scale]="BotScale"
     [bot-screen-position]="BotScreenPosition"
     [bot-sub-items]="BotSubItems"
     [bounding-element-selector]="BotBoundingContainer"
     [enable-chat]="EnableChat"
-    [tour]="DemoTour">
+    [enable-first-time-popup]="EnableFirstTimePopup"
+    [tour]="State.CurrentTour"
+    (on-complete)="OnComplete()"
+    (on-skipped)="OnSkipped()"
+    (on-step-closed)="OnStepClosed($event)"
+    (on-step-opened)="OnStepOpened($event)">
   </lcu-guide-bot>
 </div>

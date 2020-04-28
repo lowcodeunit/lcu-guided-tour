@@ -13,7 +13,9 @@ export class HomeComponent implements OnInit {
   public BoundsContainers: string[];
   public CurrentContainer: string;
   public CurrentPosition: any;
+  public CurrentTourLookup: string;
   public SelectedTabIndex: number = 0;
+  public Tours: string[];
 
   constructor(
     private appEventService: AppEventService
@@ -23,6 +25,9 @@ export class HomeComponent implements OnInit {
     ];
     this.BoundsContainers = [
       'body', '.lcu-content', '#boundingBox'
+    ];
+    this.Tours = [
+      'demo-tour', 'limited-trial-tour'
     ];
     this.CurrentPosition = this.BotPositions[0];
     this.CurrentContainer = this.BoundsContainers[0];
@@ -43,16 +48,20 @@ export class HomeComponent implements OnInit {
     this.appEventService.EmitBoundsContainerChangedEvent(this.CurrentContainer);
   }
 
-  public OnBotPaddingChange(): void {
+  public OnBotPaddingChanged(): void {
     this.appEventService.EmitBotPaddingChangedEvent(this.BotPadding);
   }
 
-  public OnBotScaleChange(): void {
+  public OnBotScaleChanged(): void {
     this.appEventService.EmitBotScaleChangedEvent(this.BotScale);
   }
 
   public OnStartTour(): void {
     this.appEventService.EmitStartTourEvent();
+  }
+
+  public OnTourChanged(): void {
+    this.appEventService.EmitTourChangedEvent(this.CurrentTourLookup);
   }
 
 }

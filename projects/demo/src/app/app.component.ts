@@ -64,6 +64,11 @@ export class AppComponent implements OnInit {
         this.startTour();
       }
     );
+    this.appEventService.GetTourChangedEvent().subscribe(
+      (tourLookup: string) => {
+        this.guidedTour.SetActiveTour(tourLookup);
+      }
+    );
   }
 
   public ngOnInit(): void {

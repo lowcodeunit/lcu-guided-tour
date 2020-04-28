@@ -22,6 +22,15 @@ export class GuidedTourManagementStateContext extends StateContext<GuidedTourMan
     });
   }
 
+  public SetActiveTour(lookup: string): void {
+    this.Execute({
+      Arguments: {
+        Lookup: lookup
+      },
+      Type: 'SetActiveTour'
+    });
+  }
+
   //  Helpers
   protected defaultValue() {
     return { Loading: true } as GuidedTourManagementState;

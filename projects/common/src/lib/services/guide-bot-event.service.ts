@@ -7,11 +7,13 @@ export class GuideBotEventService {
   private botMovedEvent: EventEmitter<any>;
   private botToggledEvent: EventEmitter<boolean>;
   private chatToggledEvent: EventEmitter<boolean>;
+  private chatTourStartedEvent: EventEmitter<string>;
 
   constructor() {
     this.botMovedEvent = new EventEmitter<any>();
     this.botToggledEvent = new EventEmitter<boolean>();
     this.chatToggledEvent = new EventEmitter<boolean>();
+    this.chatTourStartedEvent = new EventEmitter<string>();
   }
 
   public EmitBotMovedEvent(): void {
@@ -36,5 +38,13 @@ export class GuideBotEventService {
 
   public GetChatToggledEvent(): EventEmitter<boolean> {
     return this.chatToggledEvent;
+  }
+
+  public EmitChatTourStartedEvent(lookup: string): void {
+    this.chatTourStartedEvent.emit(lookup);
+  }
+
+  public GetChatTourStartedEvent(): EventEmitter<string> {
+    return this.chatTourStartedEvent;
   }
 }

@@ -9,7 +9,8 @@ import {
   GuideBotSubItem,
   GuideBotEventService,
   GuidedTourManagementStateContext,
-  GuidedTourManagementState
+  GuidedTourManagementState,
+  ChatTourButton
 } from '@lowcodeunit/lcu-guided-tour-common';
 import { AppEventService } from './app-event.service';
 
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
   public ThemeClass: BehaviorSubject<string>;
   public Themes: Array<any>;
   public Title = 'LCU-Guided-Tour';
+  public TourButtons: ChatTourButton[];
 
   constructor(
     protected appEventService: AppEventService,
@@ -39,6 +41,7 @@ export class AppComponent implements OnInit {
     protected themeService: ThemeColorPickerService
   ) {
     this.BotSubItems = this.setBotSubItems();
+    this.TourButtons = this.setTourButtons();
     this.appEventService.GetPositionChangedEvent().subscribe(
       (position: GuideBotScreenPosition) => {
         this.BotScreenPosition = position;
@@ -175,6 +178,13 @@ export class AppComponent implements OnInit {
   /** GUIDED TOUR */
   protected startTour(): void {
     this.guidedTourService.startTour(this.State.CurrentTour);
+  }
+
+  protected setTourButtons(): ChatTourButton[] {
+    return [
+      { Label: 'Demo', Lookup: 'demo-tour' },
+      { Label: 'Limited Trial', Lookup: 'limited-trial-tour' }
+    ];
   }
 
   protected setupTourSteps(): TourStep[] {

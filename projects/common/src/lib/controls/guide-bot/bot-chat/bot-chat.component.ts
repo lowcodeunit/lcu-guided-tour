@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { ChatMessage, MessageType } from '../../../models/guide-bot/chat-message.model';
 import { GuideBotEventService } from '../../../services/guide-bot-event.service';
 import { GuidedTourService } from '../../../services/guided-tour.service';
+import { ChatTourButton } from '../../../models/guide-bot/chat-tour-button.model';
 
 @Component({
   selector: 'lcu-guide-bot-chat',
@@ -17,6 +18,7 @@ export class GuideBotChatComponent implements OnInit {
   public ScrollHeight: number = null;
 
   @Input('enable-chat') public ChatEnabled: boolean;
+  @Input('tour-buttons') public TourButtons: ChatTourButton[];
 
   @ViewChildren('customMsg') public customMsgs: QueryList<ElementRef>;
   @ViewChild('chat', { static: false }) public chat: ElementRef;
@@ -32,8 +34,8 @@ export class GuideBotChatComponent implements OnInit {
     this.QuestionFormControl = new FormControl('');
     this.BotMessages = [
       new ChatMessage({ message: `Hi! I'm Thinky and I'm here to help.`}),
-      new ChatMessage({ message: `Looks like you're new here!` }),
-      new ChatMessage({ message: `Click the Tour button on the left to start the Tour.` })
+      new ChatMessage({ message: `For a guided experience on this app, click on the desired button below.` }),
+      new ChatMessage({ message: `Otherwise, type your specific question!`})
     ];
     this.guidedTourService.isTourOpenStream.subscribe(
       (isTourOpen: boolean) => {
@@ -78,6 +80,10 @@ export class GuideBotChatComponent implements OnInit {
     setTimeout(() => {
       this.ScrollHeight = this.messageContainer.nativeElement.scrollHeight;
     }, 100);
+  }
+
+  public StartTourByLookup(lookup: string) {
+    this.guideBotEventService.EmitChatTourStartedEvent(lookup);
   }
 
   protected anchorChatToBotLogo(milliSeconds: number = 0): void {

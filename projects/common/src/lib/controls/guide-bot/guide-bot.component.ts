@@ -7,6 +7,7 @@ import { GuidedTour } from '../../models/guided-tour/guided-tour.model';
 import { TourStep } from '../../models/guided-tour/tour-step.model';
 import { GuidedTourManagementStateContext } from '../../state/guided-tour-management-state.context';
 import { GuidedTourManagementState } from '../../state/guided-tour-management.state';
+import { ChatTourButton } from '../../models/guide-bot/chat-tour-button.model';
 
 @Component({
   selector: 'lcu-guide-bot',
@@ -25,6 +26,7 @@ export class GuideBotComponent implements OnInit {
   @Input('enable-chat') public ChatEnabled: boolean = false;
   @Input('enable-first-time-popup') public FirstTimePopupEnabled: boolean = false;
   @Input('tour') public Tour: GuidedTour;
+  @Input('tour-buttons') public TourButtons: ChatTourButton[] = [];
 
   @Output('on-complete') public OnCompleteEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output('on-skipped') public OnSkippedEvent: EventEmitter<any> = new EventEmitter<any>();
@@ -59,6 +61,12 @@ export class GuideBotComponent implements OnInit {
     this.guideBotEventService.GetBotToggledEvent().subscribe(
       (isBotOpen: boolean) => {
         this.IsChatOpen = isBotOpen ? true : false;
+      }
+    );
+    this.guideBotEventService.GetChatTourStartedEvent().subscribe(
+      (lookup: string) => {
+        const selectedTour: GuidedTour = this.State.Tours.find((tour: GuidedTour) => tour.Lookup === lookup);
+        this.guidedTourService.startTour(selectedTour);
       }
     );
   }

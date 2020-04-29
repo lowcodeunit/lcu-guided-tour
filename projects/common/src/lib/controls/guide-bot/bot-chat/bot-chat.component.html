@@ -4,9 +4,7 @@
     <div fxFlex="1 1 100%" fxLayout="column">
       <div #messageContainer [scrollTop]="ScrollHeight" fxFlex fxLayout="column" class="thinky-messages">
         <div class="message"*ngFor="let msg of BotMessages" [ngClass]="{'thinky-message': msg.type === 'BOT', 'user-message': msg.type === 'USER', '': msg.type === 'CUSTOM'}" >
-          <div #customMsg>
-            {{ msg.message }}
-          </div>
+          <div #customMsg [innerHTML]="msg.message"></div>
         </div>
         <div class="typing-indicator message thinky-message" *ngIf="IsBotThinking">
           <span></span><span></span><span></span>
@@ -20,6 +18,13 @@
       <mat-form-field class="chat-form-field" appearance="outline">
         <input matInput [formControl]="QuestionFormControl" placeholder="Type your question..." autocomplete="off" (keyup.enter)="OnMessageEntered()">
       </mat-form-field>
+    </div>
+    <div class="thinky-buttons" fxLayout="column" *ngIf="TourButtons">
+      <div fxLayout="row">
+        <button mat-stroked-button color="primary" *ngFor="let tour of TourButtons" (click)="StartTourByLookup(tour.Lookup)">
+          {{ tour.Label }}
+        </button>
+      </div>
     </div>
   </div>
 </div>

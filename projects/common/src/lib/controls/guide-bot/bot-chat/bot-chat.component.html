@@ -21,7 +21,7 @@
     </div>
     <div class="thinky-buttons" fxLayout="column" *ngIf="TourButtons">
       <div fxLayout="row">
-        <button mat-stroked-button color="primary" *ngFor="let tour of TourButtons" (click)="StartTourByLookup(tour.Lookup)">
+        <button mat-stroked-button color="primary" *ngFor="let tour of TourButtons" (click)="StartTourByLookup(tour)">
           {{ tour.Label }}
         </button>
       </div>

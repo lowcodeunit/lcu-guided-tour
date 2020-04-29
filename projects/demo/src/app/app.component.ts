@@ -182,7 +182,7 @@ export class AppComponent implements OnInit {
 
   protected setTourButtons(): ChatTourButton[] {
     return [
-      { Label: 'Demo', Lookup: 'demo-tour' },
+      { Label: 'Demo', Lookup: 'demo-tour', OpenAction: () => console.log('GOT THE ACTION!!!') },
       { Label: 'Limited Trial', Lookup: 'limited-trial-tour' }
     ];
   }

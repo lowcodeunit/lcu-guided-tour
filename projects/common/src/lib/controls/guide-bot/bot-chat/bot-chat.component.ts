@@ -82,8 +82,11 @@ export class GuideBotChatComponent implements OnInit {
     }, 100);
   }
 
-  public StartTourByLookup(lookup: string) {
-    this.guideBotEventService.EmitChatTourStartedEvent(lookup);
+  public StartTourByLookup(tourButton: ChatTourButton) {
+    this.guideBotEventService.EmitChatTourStartedEvent(tourButton.Lookup);
+    if (tourButton.OpenAction) {
+      tourButton.OpenAction();
+    }
   }
 
   protected anchorChatToBotLogo(milliSeconds: number = 0): void {

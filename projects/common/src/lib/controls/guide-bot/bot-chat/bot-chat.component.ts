@@ -33,7 +33,7 @@ export class GuideBotChatComponent implements OnInit {
     this.IsChatVisible = true;
     this.QuestionFormControl = new FormControl('');
     this.BotMessages = [
-      new ChatMessage({ message: `Hi! I'm Thinky and I'm here to help.`}),
+      new ChatMessage({ message: `Hi! I'm Thinky™ and I'm here to help.`}),
       new ChatMessage({ message: `For a guided experience on this app, click on the desired button below.` }),
       new ChatMessage({ message: `Otherwise, type your specific question!`})
     ];
@@ -44,14 +44,12 @@ export class GuideBotChatComponent implements OnInit {
     );
     this.guideBotEventService.GetChatToggledEvent().subscribe(
       () => {
-        console.log('CHAT ----- GetChatToggledEvent()', !this.IsChatVisible);
         this.IsChatVisible = !this.IsChatVisible;
         this.anchorChatToBotLogo();
       }
     );
     this.guideBotEventService.GetBotMovedEvent().subscribe(
       () => {
-        console.log('CHAT ----- GetBotMovedEvent()');
         this.anchorChatToBotLogo(600);
       }
     );
@@ -90,7 +88,6 @@ export class GuideBotChatComponent implements OnInit {
   }
 
   protected anchorChatToBotLogo(milliSeconds: number = 0): void {
-    console.log('CHAT ----- anchorChatToBotLogo()');
     setTimeout(() => {
       if (this.ChatEnabled && this.IsChatVisible) {
         const selectedDomItem = document.querySelector('.thinky-guide');
@@ -120,7 +117,6 @@ export class GuideBotChatComponent implements OnInit {
    * Little Easter Egg :D
    */
   protected customMessage(): void {
-    console.log('CHAT ----- customMessage()', this.customMsgs);
     this.PublishMessage(``);
     const img = this.renderer.createElement('img');
     this.renderer.setAttribute(img, 'height', '100');

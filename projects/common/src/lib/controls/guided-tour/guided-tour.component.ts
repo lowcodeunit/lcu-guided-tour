@@ -32,6 +32,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     public isOrbShowing = false;
     public progressIndicatorLocations = ProgressIndicatorLocation;
     public selectedElementRect: DOMRect = null;
+    public LoadingNextStep: boolean = false;
 
     private resizeSubscription: Subscription;
     private scrollSubscription: Subscription;
@@ -40,9 +41,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         public guidedTourService: GuidedTourService,
         protected windowRef: WindowRefService,
         @Inject(DOCUMENT) protected dom: any
-    ) {
-      console.log('kebabCase test: ', this.KebabCase(OrientationTypes.BottomRight));
-    }
+    ) { }
 
     protected get maxWidthAdjustmentForTourStep(): number {
         return this.tourStepWidth - this.minimalTourStepWidth;
@@ -86,6 +85,15 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
             this.isOrbShowing = value;
         });
 
+        this.guidedTourService.LoadingTourStepStream.subscribe((isLoading: boolean) => {
+          this.LoadingNextStep = isLoading;
+        });
+
+        this.guidedTourService.WaitUntilSelectorFoundStream.subscribe((isDoneWaiting: boolean) => {
+          // console.warn('ngAfterViewInit() - WaitUntilSelectorFoundStream', isDoneWaiting);
+          this.guidedTourService.PrepareNextStep(isDoneWaiting);
+        });
+
         this.resizeSubscription = fromEvent(this.windowRef.nativeWindow, 'resize').subscribe(() => {
             this.updateStepLocation();
         });
@@ -101,7 +109,6 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     public scrollToAndSetElement(): void {
-        console.log('scrollToAndSetElement()');
         this.updateStepLocation();
         // Allow things to render to scroll to the correct location
         setTimeout(() => {
@@ -156,7 +163,6 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     protected isTourOnScreen(): boolean {
-        console.log('isTourOnScreen()');
         return this.tourStep
             && this.elementInViewport(this.dom.querySelector(this.currentTourStep.Selector))
             && this.elementInViewport(this.tourStep.nativeElement);
@@ -196,7 +202,6 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     public updateStepLocation(): void {
-        console.log('updateStepLocation()');
         if (this.currentTourStep && this.currentTourStep.Selector) {
             const selectedElement = this.dom.querySelector(this.currentTourStep.Selector);
             if (selectedElement && typeof selectedElement.getBoundingClientRect === 'function') {

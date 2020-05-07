@@ -72,7 +72,6 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   public ngOnChanges(changes: SimpleChanges): void {
     const isFirstChange = Object.values(changes).some((change: SimpleChange) => change.isFirstChange());
     if (!isFirstChange) {
-      console.log('BOT ------ ngOnChanges: ', changes);
       this.findBoundingElementRect();
       this.logoInitialWidth = this.guide.nativeElement.offsetWidth;
       this.setBotScale();
@@ -81,7 +80,6 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public ngAfterViewInit(): void {
-    console.log('BOT ------ ngAfterViewInit()', this.BoundingElementSelector);
     this.setBotScale();
     this.logoInitialWidth = this.guide.nativeElement.offsetWidth;
     setTimeout(() => { // setTimeout queues this task to run later in the thread. Prevents trying to find the element before it's rendered.
@@ -113,7 +111,6 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   protected anchorBotToSelector(): void {
-    console.log('BOT ------ anchorBotToSelector()');
     if (!this.IsTourOpen) {
       setTimeout(() => {
         this.triggerBotBounceAnim();
@@ -132,7 +129,6 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   protected calculateBotTourPosition(): void {
-    console.log('BOT ------ calculateBotTourPosition()');
     setTimeout(() => {
       this.renderer.removeClass(this.guide.nativeElement, 'play');
       const selectedTourItem = document.querySelector('.tour-logo');
@@ -166,7 +162,6 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   protected setBotScale() {
     const parent: any = this.renderer.parentNode(this.bounce.nativeElement);
     const scale: number = (this.IsTourOpen || this.ShowBotSubItems) ? 1 : this.BotScale;
-    console.log('BOT ------  setBotScale()', scale);
 
     this.renderer.setStyle(parent, 'transform', `scale(${scale})`);
     this.renderer.setStyle(parent, 'margin', `calc(-37px * (1 - ${scale}))`);
@@ -179,12 +174,6 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   protected setScreenPosition(x: number = this.BotPadding, y: number = this.BotPadding): void {
-
-    // TODO: We might be able to use this with the Tour async problem
-    // this.renderer.listen(this.guide.nativeElement, 'transitionend', () => { console.log('WOW!!!! YOU GET THE TRANSITIONEND EVENT!!!!!!!!!!!!!!!'); });
-
-
-    console.log('BOT ------ setScreenPosition()');
     if (this.boundingElementRect) {
       let pos1 = x ? x : this.BotPadding;
       let pos2 = y ? y : this.BotPadding;

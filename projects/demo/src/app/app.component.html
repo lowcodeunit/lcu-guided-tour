@@ -41,8 +41,8 @@
     [enable-first-time-popup]="EnableFirstTimePopup"
     [tour]="State.CurrentTour"
     [tour-buttons]="TourButtons"
-    (on-complete)="OnComplete()"
-    (on-skipped)="OnSkipped()"
+    (on-complete)="OnComplete($event)"
+    (on-skipped)="OnSkipped($event)"
     (on-step-closed)="OnStepClosed($event)"
     (on-step-opened)="OnStepOpened($event)">
   </lcu-guide-bot>

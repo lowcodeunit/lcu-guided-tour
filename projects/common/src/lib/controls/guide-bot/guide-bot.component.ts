@@ -28,8 +28,8 @@ export class GuideBotComponent implements OnInit {
   @Input('tour') public Tour: GuidedTour;
   @Input('tour-buttons') public TourButtons: ChatTourButton[] = [];
 
-  @Output('on-complete') public OnCompleteEvent: EventEmitter<any> = new EventEmitter<any>();
-  @Output('on-skipped') public OnSkippedEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output('on-complete') public OnCompleteEvent: EventEmitter<GuidedTour> = new EventEmitter<GuidedTour>();
+  @Output('on-skipped') public OnSkippedEvent: EventEmitter<GuidedTour> = new EventEmitter<GuidedTour>();
   @Output('on-step-closed') public OnStepClosedEvent: EventEmitter<TourStep> = new EventEmitter<TourStep>();
   @Output('on-step-opened') public OnStepOpenedEvent: EventEmitter<TourStep> = new EventEmitter<TourStep>();
 
@@ -39,13 +39,13 @@ export class GuideBotComponent implements OnInit {
     protected guidedTourState: GuidedTourManagementStateContext
   ) {
     this.guidedTourService.onTourCompleteStream.subscribe(
-      () => {
-        this.OnCompleteEvent.emit();
+      (tour: GuidedTour) => {
+        this.OnCompleteEvent.emit(tour);
       }
     );
     this.guidedTourService.onTourSkippedStream.subscribe(
-      () => {
-        this.OnSkippedEvent.emit();
+      (tour: GuidedTour) => {
+        this.OnSkippedEvent.emit(tour);
       }
     );
     this.guidedTourService.onStepClosedActionStream.subscribe(

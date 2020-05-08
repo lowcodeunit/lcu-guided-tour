@@ -32,8 +32,8 @@ export class GuidedTourService {
     private _onLastStep = true;
     private _onResizeMessage = false;
 
-    private _onTourComplete = new Subject<any>();
-    private _onTourSkipped = new Subject<any>();
+    private _onTourComplete = new Subject<GuidedTour>();
+    private _onTourSkipped = new Subject<GuidedTour>();
     private _onStepClosedAction = new Subject<TourStep>();
     private _onStepOpenedAction = new Subject<TourStep>();
 
@@ -77,7 +77,7 @@ export class GuidedTourService {
       if (this._currentTour.Steps[this._currentTourStepIndex + 1]) {
         this.processStep();
       } else {
-        this._onTourComplete.next();
+        this._onTourComplete.next(this._currentTour);
         this.resetTour();
       }
     }
@@ -178,7 +178,7 @@ export class GuidedTourService {
     }
 
     public skipTour(): void {
-        this._onTourSkipped.next();
+        this._onTourSkipped.next(this._currentTour);
         this.resetTour();
     }
 

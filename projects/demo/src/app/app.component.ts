@@ -89,12 +89,12 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public OnComplete(): void {
-    console.log('Tour is Complete!');
+  public OnComplete(tour: GuidedTour): void {
+    console.log('Tour is Complete!', tour);
   }
 
-  public OnSkipped(): void {
-    console.log('Skipping the tour.');
+  public OnSkipped(tour: GuidedTour): void {
+    console.log('Skipping the tour.', tour);
   }
 
   public OnStepClosed(step: TourStep): void {

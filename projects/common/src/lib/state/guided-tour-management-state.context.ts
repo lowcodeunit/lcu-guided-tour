@@ -37,7 +37,7 @@ export class GuidedTourManagementStateContext extends StateContext<GuidedTourMan
   }
 
   protected loadStateKey(): string {
-    return 'main';
+    return 'tours';
   }
 
   protected loadStateName(): string {

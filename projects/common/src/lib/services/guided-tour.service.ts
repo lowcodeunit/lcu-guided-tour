@@ -8,6 +8,7 @@ import { TourStep } from '../models/guided-tour/tour-step.model';
 import { GuidedTour } from '../models/guided-tour/guided-tour.model';
 import { OrientationConfiguration } from '../models/guided-tour/orientation-configuration.model';
 import { OrientationTypes } from '../models/guided-tour/orientation-types.enum';
+import { GuidedTourStepRecord } from '../models/guided-tour/guided-tour-step-record.model';
 
 @Injectable()
 export class GuidedTourService {
@@ -31,6 +32,7 @@ export class GuidedTourService {
     private _onFirstStep = true;
     private _onLastStep = true;
     private _onResizeMessage = false;
+    private _onTourOpen = false;
 
     private _onTourComplete = new Subject<GuidedTour>();
     private _onTourSkipped = new Subject<GuidedTour>();
@@ -187,13 +189,14 @@ export class GuidedTourService {
         this.dom.body.classList.remove('tour-open');
         this._currentTour = null;
         this._currentTourStepIndex = 0;
+        this._onTourOpen = false;
         this._guidedTourCurrentStepSubject.next(null);
     }
 
     public startTour(tour: GuidedTour): void {
         this._currentTour = cloneDeep(tour);
         this._currentTour.Steps = this._currentTour.Steps.filter((step: TourStep) => !step.SkipStep);
-        this._currentTourStepIndex = 0;
+        this._onTourOpen = true;
         this._setFirstAndLast();
         this._guidedTourOrbShowingSubject.next(this._currentTour.UseOrb);
         this._isTourOpenSubject.next(true);
@@ -208,6 +211,20 @@ export class GuidedTourService {
             this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
             this.WaitUntilSelectorFound();
         }
+    }
+
+    public SetCurrentStepIndex(tourHistory: { [tourLookup: string]: GuidedTourStepRecord }, tour: GuidedTour): void {
+      let currentIndex: number = 0;
+
+      if (tourHistory && tourHistory[tour.Lookup]) {
+        const lastIndex = tourHistory[tour.Lookup].StepHistory.length - 1;
+
+        currentIndex = tour.Steps.findIndex((step: TourStep) => {
+          return step.Lookup === tourHistory[tour.Lookup].StepHistory[lastIndex];
+        });
+      }
+
+      this._currentTourStepIndex = currentIndex;
     }
 
     public activateOrb(): void {
@@ -245,6 +262,10 @@ export class GuidedTourService {
 
     public get onResizeMessage(): boolean {
         return this._onResizeMessage;
+    }
+
+    public get onTourOpen(): boolean {
+        return this._onTourOpen;
     }
 
     public get currentTourStepDisplay(): number {

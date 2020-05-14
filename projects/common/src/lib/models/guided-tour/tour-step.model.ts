@@ -4,6 +4,8 @@ import { OrientationTypes } from './orientation-types.enum';
 export class TourStep {
   /** Identifier for step */
   public ID?: string;
+  /** Lookup for step */
+  public Lookup?: string;
   /** Tour step text */
   public Content: string;
   /** Selector for element that will be highlighted */

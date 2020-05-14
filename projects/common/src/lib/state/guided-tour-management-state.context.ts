@@ -13,19 +13,21 @@ export class GuidedTourManagementStateContext extends StateContext<GuidedTourMan
   }
 
   // API Methods
-  public GetTourById(id: number): void {
+  public RecordStep(tourLookup: string, currentStepLookup: string, isComplete: boolean): void {
     this.Execute({
       Arguments: {
-          TourId: id
+        CurrentStep: currentStepLookup,
+        IsComplete: isComplete,
+        TourLookup: tourLookup
       },
-      Type: 'get-tour-by-id'
+      Type: 'RecordStep'
     });
   }
 
-  public SetActiveTour(lookup: string): void {
+  public SetActiveTour(tourLookup: string): void {
     this.Execute({
       Arguments: {
-        Lookup: lookup
+        Lookup: tourLookup
       },
       Type: 'SetActiveTour'
     });

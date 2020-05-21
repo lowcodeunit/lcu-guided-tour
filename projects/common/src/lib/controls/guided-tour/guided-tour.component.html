@@ -39,7 +39,9 @@
 
 
       <mat-card-header *ngIf="currentTourStep.Title">
-        <div mat-card-avatar class="tour-logo"></div>
+        <div mat-card-avatar class="tour-logo">
+          <mat-spinner *ngIf="LoadingNextStep" color="primary" diameter="105"></mat-spinner>
+        </div>
         <div class="custom-header">
           <div class="tour-progress">
             <span *ngFor="let item of [].constructor(guidedTourService.currentTourStepCount); let i = index;"
@@ -60,7 +62,7 @@
           {{ skipText }}
         </button>
 
-        <div fxLayout="row"  class="tour-buttons">
+        <div fxLayout="row" class="tour-buttons">
           <button mat-stroked-button *ngIf="!guidedTourService.onFirstStep && !guidedTourService.onResizeMessage"
             (click)="guidedTourService.backStep()">
             {{ backText }}

@@ -3,16 +3,17 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { ThemeColorPickerService } from '@lcu/common';
 import {
   GuidedTourService,
-  GuidedTour,
   TourStep,
   OrientationTypes,
   GuideBotScreenPosition,
   GuideBotSubItem,
   GuideBotEventService,
   GuidedTourManagementStateContext,
-  GuidedTourManagementState
+  GuidedTourManagementState,
+  ChatTourButton
 } from '@lowcodeunit/lcu-guided-tour-common';
 import { AppEventService } from './app-event.service';
+import { GuidedTour } from 'projects/common/src/lcu.api';
 
 @Component({
   selector: 'lcu-root',
@@ -23,8 +24,7 @@ export class AppComponent implements OnInit {
   public BotBoundingContainer: string = '#boundingBox';
   public BotPadding: number = 5;
   public BotScale: number = 1;
-  public BotScreenPosition: GuideBotScreenPosition =
-    GuideBotScreenPosition.BottomLeft;
+  public BotScreenPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
   public BotSubItems: GuideBotSubItem[];
   public EnableChat: boolean = true;
   public EnableFirstTimePopup: boolean = true;
@@ -32,43 +32,50 @@ export class AppComponent implements OnInit {
   public ThemeClass: BehaviorSubject<string>;
   public Themes: Array<any>;
   public Title = 'LCU-Guided-Tour';
+  public TourButtons: ChatTourButton[];
+
+  public TestTour: GuidedTour; // Just for testing locally (without state)
 
   constructor(
-    private appEventService: AppEventService,
-    private guideBotEventService: GuideBotEventService,
-    private guidedTourService: GuidedTourService,
-    private themeService: ThemeColorPickerService,
-    protected guidedTour: GuidedTourManagementStateContext
+    protected appEventService: AppEventService,
+    protected guideBotEventService: GuideBotEventService,
+    protected guidedTour: GuidedTourManagementStateContext,
+    protected guidedTourService: GuidedTourService,
+    protected themeService: ThemeColorPickerService
   ) {
     this.BotSubItems = this.setBotSubItems();
-    // this.DemoTour = {
-    //   ID: 'demo-tour',
-    //   UseOrb: false,
-    //   Steps: this.setupTourSteps(),
-    // };
-    this.appEventService
-      .GetPositionChangedEvent()
-      .subscribe((position: GuideBotScreenPosition) => {
+    this.TourButtons = this.setTourButtons();
+    this.TestTour = this.setupTestTour();
+    this.appEventService.GetPositionChangedEvent().subscribe(
+      (position: GuideBotScreenPosition) => {
         this.BotScreenPosition = position;
-      });
-    this.appEventService
-      .GetBoundsContainerChangedEvent()
-      .subscribe((container: string) => {
+      }
+    );
+    this.appEventService.GetBoundsContainerChangedEvent().subscribe(
+      (container: string) => {
         this.BotBoundingContainer = container;
-      });
-    this.appEventService
-      .GetBotPaddingChangedEvent()
-      .subscribe((padding: number) => {
+      }
+    );
+    this.appEventService.GetBotPaddingChangedEvent().subscribe(
+      (padding: number) => {
         this.BotPadding = padding;
-      });
-    this.appEventService
-      .GetBotScaleChangedEvent()
-      .subscribe((scale: number) => {
+      }
+    );
+    this.appEventService.GetBotScaleChangedEvent().subscribe(
+      (scale: number) => {
         this.BotScale = scale;
-      });
-    this.appEventService.GetStartTourEvent().subscribe(() => {
-      this.startTour();
-    });
+      }
+    );
+    this.appEventService.GetStartTourEvent().subscribe(
+      () => {
+        this.startTour();
+      }
+    );
+    this.appEventService.GetTourChangedEvent().subscribe(
+      (tourLookup: string) => {
+        this.guidedTour.SetActiveTour(tourLookup);
+      }
+    );
   }
 
   public ngOnInit(): void {
@@ -82,23 +89,27 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public OnComplete(): void {
-    console.log('Tour is Complete!');
+  public OnComplete(tour: GuidedTour): void {
+    console.log('Tour is Complete!', tour);
   }
 
-  public OnSkipped(): void {
-    console.log('Skipping the tour.');
+  public OnSkipped(tour: GuidedTour): void {
+    console.log('Skipping the tour.', tour);
   }
 
   public OnStepClosed(step: TourStep): void {
+    console.log('OnStepClosed(): ', step);
     if (step.Selector === '#boxLogoForm') {
       this.appEventService.EmitTabIndexEvent(0);
     }
   }
 
   public OnStepOpened(step: TourStep): void {
+    console.log('OnStepOpened(): ', step);
     if (step.Selector === '#boxLogoForm') {
-      this.appEventService.EmitTabIndexEvent(1);
+      setTimeout(() => {
+        this.appEventService.EmitTabIndexEvent(1);
+      }, 1600);
     }
   }
 
@@ -173,101 +184,113 @@ export class AppComponent implements OnInit {
   }
 
   /** GUIDED TOUR */
-  private startTour(): void {
+  protected startTour(): void {
     this.guidedTourService.startTour(this.State.CurrentTour);
   }
 
-  private setupTourSteps(): TourStep[] {
+  protected setTourButtons(): ChatTourButton[] {
     return [
-      {
-        Title: 'LCU-Guided-Tour',
-        Subtitle: 'Guided Tour',
-        Content: `Welcome to the LCU-Guided-Tour library! This library provides the functionality to do your own guided tour
-        of an application. <br/><br/> Click the <b>Next</b> button to get started with an example Tour!`,
-      },
-      {
-        Title: 'Title',
-        Subtitle: 'Guided Tour',
-        Selector: '#guidedTourHeader',
-        Content: `With the LCU-Guided-Tour, you can select anything that is on the screen that has a valid CSS selector.
-        For example, you can select this title, which as an id of <b>#guidedTourHeader</b>. <br/><br/>
-        Valid selectors are as follows:
-        <ul>
-          <li>.class</li>
-          <li>#id</li>
-          <li>element</li>
-        </ul>`,
-        Orientation: OrientationTypes.Bottom,
-      },
-      {
-        Title: 'First Paragraph',
-        Subtitle: 'Guided Tour',
-        Selector: 'p',
-        Content: `Here, we are selecting the first paragraph element on the screen with <b>p</b>.`,
-        Orientation: OrientationTypes.BottomRight,
-      },
-      {
-        Title: 'Second Paragraph',
-        Subtitle: 'Guided Tour',
-        Selector: '#p2',
-        Content: `Now we are selecting the second paragraph, that has an id of <b>#p2</b>, in which we are targeting.`,
-        Orientation: OrientationTypes.Top,
-      },
-      {
-        Title: 'Complex Selectors',
-        Subtitle: 'Guided Tour',
-        Selector: '.section:nth-of-type(2) .mat-radio-button:nth-child(3)',
-        Content: `You can even target more specific, complex elements, by using various built-in CSS selectors. In
-        this case, we are targeting the third radio item in the second section with the selector of: <br/>
-        <b>.section:nth-of-type(2) .mat-radio-button:nth-child(3)</b>`,
-        Orientation: OrientationTypes.Right,
-      },
-      {
-        Title: 'Modifiers',
-        Subtitle: 'Guided Tour',
-        Selector: '#formBox',
-        Content: `As for the bot, you can modify certain properties of it in order to customize it to your needs.
-        Here we can change the position it lives on the screen, the container it should position itself in, as well
-        as the amount of padding we would like to have between the bot and the container.`,
-        Orientation: OrientationTypes.Right,
-      },
-      {
-        Title: 'Bounding Container',
-        Subtitle: 'Guided Tour',
-        Selector: '#boundingBox',
-        Content: `As an example, you can set the Bot to be positioned inside this box by setting the container to
-        the <b>#boundingBox</b> selector.`,
-        Orientation: OrientationTypes.Left,
-      },
-      {
-        Title: 'Assigning Actions',
-        Subtitle: 'Guided Tour',
-        Selector: '.mat-tab-label:nth-of-type(2)',
-        Content: `You can assign each step an action as well, in case you want to run logic before or after a step is displayed.
-        Click <b>Next</b> to see this in action!`,
-        Orientation: OrientationTypes.BottomLeft,
-      },
-      {
-        Title: 'Tab Movement',
-        Subtitle: 'Guided Tour',
-        Selector: '#boxLogoForm',
-        Content: `As you can see, this tab was selected so that the Tour could continue after the DOM has rendered a different view.
-        You can also use the <b>actionDelay</b> property to specify a time delay before showing the next step, in order to properly
-        render the next view.`,
-        Orientation: OrientationTypes.BottomLeft,
-        ActionDelay: 500,
-      },
-      // {
-      //   Title: 'Start Tour',
-      //   Subtitle: 'Guided Tour',
-      //   Selector: '.mat-stroked-button:first-of-type',
-      //   Content: `Whenever you want to start the tour again, you can press this button or the 'tour' button on Thinky!`,
-      //   Orientation: OrientationTypes.BottomLeft
-      // }
+      { Label: 'Demo', Lookup: 'demo-tour', OpenAction: () => console.log('GOT THE ACTION!!!') },
+      { Label: 'Limited Trial', Lookup: 'limited-trial-tour' }
     ];
   }
 
-  private setBotSubItems(): GuideBotSubItem[] {
+  protected setupTestTour(): GuidedTour {
+    return {
+      ID: '12345',
+      Lookup: 'test-tour',
+      UseOrb: false,
+      Steps: [
+        {
+          Title: 'LCU-Guided-Tour',
+          Subtitle: 'Guided Tour',
+          Content: `Welcome to the LCU-Guided-Tour library! This library provides the functionality to do your own guided tour
+          of an application. <br/><br/> Click the <b>Next</b> button to get started with an example Tour!`
+        },
+        {
+          Title: 'Title',
+          Subtitle: 'Guided Tour',
+          Selector: '#guidedTourHeader',
+          Content: `With the LCU-Guided-Tour, you can select anything that is on the screen that has a valid CSS selector.
+          For example, you can select this title, which as an id of <b>#guidedTourHeader</b>. <br/><br/>
+          Valid selectors are as follows:
+          <ul>
+            <li>.class</li>
+            <li>#id</li>
+            <li>element</li>
+          </ul>`,
+          Orientation: OrientationTypes.Bottom
+        },
+        {
+          Title: 'First Paragraph',
+          Subtitle: 'Guided Tour',
+          Selector: 'p',
+          Content: `Here, we are selecting the first paragraph element on the screen with <b>p</b>.`,
+          Orientation: OrientationTypes.BottomRight
+        },
+        // {
+        //   Title: 'Second Paragraph',
+        //   Subtitle: 'Guided Tour',
+        //   Selector: '#p2',
+        //   Content: `Now we are selecting the second paragraph, that has an id of <b>#p2</b>, in which we are targeting.`,
+        //   Orientation: OrientationTypes.Top
+        // },
+        {
+          Title: 'Complex Selectors',
+          Subtitle: 'Guided Tour',
+          Selector: '.section:nth-of-type(2) .mat-radio-button:nth-child(3)',
+          Content: `You can even target more specific, complex elements, by using various built-in CSS selectors. In
+          this case, we are targeting the third radio item in the second section with the selector of: <br/>
+          <b>.section:nth-of-type(2) .mat-radio-button:nth-child(3)</b>`,
+          Orientation: OrientationTypes.Right
+        },
+        {
+          Title: 'Modifiers',
+          Subtitle: 'Guided Tour',
+          Selector: '#formBox',
+          Content: `As for the bot, you can modify certain properties of it in order to customize it to your needs.
+          Here we can change the position it lives on the screen, the container it should position itself in, as well
+          as the amount of padding we would like to have between the bot and the container.`,
+          Orientation: OrientationTypes.Right
+        },
+        {
+          Title: 'Bounding Container',
+          Subtitle: 'Guided Tour',
+          Selector: '#boundingBox',
+          Content: `As an example, you can set the Bot to be positioned inside this box by setting the container to
+          the <b>#boundingBox</b> selector.`,
+          Orientation: OrientationTypes.Left
+        },
+        {
+          Title: 'Assigning Actions',
+          Subtitle: 'Guided Tour',
+          Selector: '.mat-tab-label:nth-of-type(2)',
+          Content: `You can assign each step an action as well, in case you want to run logic before or after a step is displayed.
+          Click <b>Next</b> to see this in action!`,
+          Orientation: OrientationTypes.BottomLeft
+        },
+        {
+          Title: 'Tab Movement',
+          Subtitle: 'Guided Tour',
+          Selector: '#boxLogoForm',
+          Content: `As you can see, this tab was selected so that the Tour could continue after the DOM has rendered a different view.
+          You can also use the <b>actionDelay</b> property to specify a time delay before showing the next step, in order to properly
+          render the next view.`,
+          Orientation: OrientationTypes.BottomLeft
+        },
+        {
+          Title: 'Restart Tour',
+          Subtitle: 'Guided Tour',
+          Selector: '#startTourBtn',
+          Content: `Whenever you want to start the tour again, you can always press this button to invoke the tour to start again!
+          This can be implented anywhere in your application that has access to the Guided Tour Service.`,
+          Orientation: OrientationTypes.BottomRight
+        }
+      ]
+    };
+  }
+
+  protected setBotSubItems(): GuideBotSubItem[] {
     return [
       new GuideBotSubItem({
         label: 'Start Tour',
@@ -282,7 +305,7 @@ export class AppComponent implements OnInit {
     ];
   }
 
-  private toggleChat(): void {
+  protected toggleChat(): void {
     this.guideBotEventService.EmitChatToggledEvent();
   }
 

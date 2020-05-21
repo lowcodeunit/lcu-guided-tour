@@ -11,6 +11,7 @@ export class AppEventService {
   private positionChangedEvent: EventEmitter<GuideBotScreenPosition>;
   private startTourEvent: EventEmitter<any>;
   private tabIndexEvent: EventEmitter<number>;
+  private tourChangedEvent: EventEmitter<string>;
 
   constructor() {
     this.botPaddingChangedEvent = new EventEmitter<number>();
@@ -19,6 +20,7 @@ export class AppEventService {
     this.positionChangedEvent = new EventEmitter<GuideBotScreenPosition>();
     this.startTourEvent = new EventEmitter<any>();
     this.tabIndexEvent = new EventEmitter<number>();
+    this.tourChangedEvent = new EventEmitter<string>();
   }
 
   public EmitBotPaddingChangedEvent(padding: number): void {
@@ -67,5 +69,13 @@ export class AppEventService {
 
   public GetTabIndexEvent(): EventEmitter<number> {
     return this.tabIndexEvent;
+  }
+
+  public EmitTourChangedEvent(tourLookup: string): void {
+    this.tourChangedEvent.emit(tourLookup);
+  }
+
+  public GetTourChangedEvent(): EventEmitter<string> {
+    return this.tourChangedEvent;
   }
 }

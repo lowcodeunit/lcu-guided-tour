@@ -1,6 +1,6 @@
 import { debounceTime } from 'rxjs/internal/operators';
 import { ErrorHandler, Inject, Injectable } from '@angular/core';
-import { Observable, Subject, fromEvent } from 'rxjs';
+import { Observable, Subject, fromEvent, timer } from 'rxjs';
 import { cloneDeep } from 'lodash';
 import { DOCUMENT } from '@angular/common';
 import { WindowRefService } from './windowref.service';
@@ -8,6 +8,7 @@ import { TourStep } from '../models/guided-tour/tour-step.model';
 import { GuidedTour } from '../models/guided-tour/guided-tour.model';
 import { OrientationConfiguration } from '../models/guided-tour/orientation-configuration.model';
 import { OrientationTypes } from '../models/guided-tour/orientation-types.enum';
+import { GuidedTourStepRecord } from '../models/guided-tour/guided-tour-step-record.model';
 
 @Injectable()
 export class GuidedTourService {
@@ -18,18 +19,23 @@ export class GuidedTourService {
     public onTourSkippedStream: Observable<any>;
     public onStepClosedActionStream: Observable<TourStep>;
     public onStepOpenedActionStream: Observable<TourStep>;
+    public LoadingTourStepStream: Observable<boolean>;
+    public WaitUntilSelectorFoundStream: Observable<boolean>;
 
     private _guidedTourCurrentStepSubject = new Subject<TourStep>();
     private _guidedTourOrbShowingSubject = new Subject<boolean>();
     private _isTourOpenSubject = new Subject<boolean>();
+    private _loadingTourStepStream = new Subject<boolean>();
+    private _waitUntilSelectorFoundSubject = new Subject<boolean>();
     private _currentTourStepIndex = 0;
     private _currentTour: GuidedTour = null;
     private _onFirstStep = true;
     private _onLastStep = true;
     private _onResizeMessage = false;
+    private _onTourOpen = false;
 
-    private _onTourComplete = new Subject<any>();
-    private _onTourSkipped = new Subject<any>();
+    private _onTourComplete = new Subject<GuidedTour>();
+    private _onTourSkipped = new Subject<GuidedTour>();
     private _onStepClosedAction = new Subject<TourStep>();
     private _onStepOpenedAction = new Subject<TourStep>();
 
@@ -45,6 +51,8 @@ export class GuidedTourService {
         this.onTourSkippedStream = this._onTourSkipped.asObservable();
         this.onStepClosedActionStream = this._onStepClosedAction.asObservable();
         this.onStepOpenedActionStream = this._onStepOpenedAction.asObservable();
+        this.LoadingTourStepStream = this._loadingTourStepStream.asObservable();
+        this.WaitUntilSelectorFoundStream = this._waitUntilSelectorFoundSubject.asObservable();
 
         fromEvent(this.windowRef.nativeWindow, 'resize').pipe(debounceTime(200)).subscribe(() => {
             if (this._currentTour && this._currentTourStepIndex > -1) {
@@ -65,65 +73,130 @@ export class GuidedTourService {
     }
 
     public nextStep(): void {
-        this._onStepClosedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
-        if (this._currentTour.Steps[this._currentTourStepIndex + 1]) {
-            this._currentTourStepIndex++;
-            this._setFirstAndLast();
+      this._loadingTourStepStream.next(true);
+      this._onStepClosedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
 
-
-            this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
-            // Usually an action is opening something so we need to give it time to render.
-            setTimeout(() => {
-              if (this._checkSelectorValidity()) {
-                  this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
-              } else {
-                  this.nextStep();
-              }
-          }, this._currentTour.Steps[this._currentTourStepIndex].ActionDelay);
-        } else {
-            this._onTourComplete.next();
-            this.resetTour();
-        }
+      if (this._currentTour.Steps[this._currentTourStepIndex + 1]) {
+        this.processStep();
+      } else {
+        this._onTourComplete.next(this._currentTour);
+        this.resetTour();
+      }
     }
 
     public backStep(): void {
+        this._loadingTourStepStream.next(true);
         this._onStepClosedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
-        if (this._currentTour.Steps[this._currentTourStepIndex - 1]) {
-            this._currentTourStepIndex--;
-            this._setFirstAndLast();
 
-            this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
-            setTimeout(() => {
-                if (this._checkSelectorValidity()) {
-                    this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
-                } else {
-                    this.backStep();
-                }
-            }, this._currentTour.Steps[this._currentTourStepIndex].ActionDelay);
-        } else {
-            this.resetTour();
+        if (this._currentTour.Steps[this._currentTourStepIndex - 1]) {
+          this.processStep(true);
+        }
+        else {
+          this.resetTour();
         }
     }
 
+    protected processStep(isBack: boolean = false): void {
+      isBack ? this._currentTourStepIndex-- : this._currentTourStepIndex++;
+      console.log('processStep() currentStep: ', this._currentTourStepIndex);
+      this._setFirstAndLast();
+
+      this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
+      this.WaitUntilSelectorFound();
+    }
+
+    public PrepareNextStep(isFound: boolean, isBack?: boolean): void {
+      if (isFound) {
+        this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
+      } else {
+        isBack ? this.backStep() : this.nextStep();
+      }
+      this._loadingTourStepStream.next(false);
+    }
+
+
+    public WaitUntilSelectorFound(): void {
+      // console.log('WaitUntilSelectorFound() called...');
+      if (this._currentTour.Steps[this._currentTourStepIndex].Selector) {
+        let timeElapsed = 0;
+        const timeInt = 100;
+        const maxTimeElapsed = 10000;
+
+        const visiblePoller$ = timer(0, timeInt).subscribe(
+          (_: any) => {
+            // console.log('WaitUntilSelectorFound() timeElapsed is: ', timeElapsed);
+            timeElapsed += timeInt;
+
+            const selectedElement = this.dom.querySelector(this._currentTour.Steps[this._currentTourStepIndex].Selector);
+
+            if (selectedElement) {
+              // console.warn('WaitUntilSelectorFound() WE FOUND THE ELEMENT!');
+              this.checkIfElementIsMoving(selectedElement);
+              visiblePoller$.unsubscribe();
+            } else if (!selectedElement && timeElapsed >= maxTimeElapsed) {
+              // console.error('WaitUntilSelectorFound() WE COULD NOT FIND THE ELEMENT :(');
+              this._waitUntilSelectorFoundSubject.next(false);
+              visiblePoller$.unsubscribe();
+              this.errorHandler.handleError(
+                // If error handler is configured this should not block the browser.
+                new Error(`Error finding selector ${this._currentTour.Steps[this._currentTourStepIndex].Selector}
+                  on step ${this._currentTourStepIndex + 1} during guided tour: ${this._currentTour.ID}`)
+              );
+            }
+          }
+        );
+      } else {
+        this.PrepareNextStep(true);
+      }
+    }
+
+    protected checkIfElementIsMoving(el: any): void {
+      let timeElapsed = 0;
+      const timeInt = 50;
+      const maxTimeElapsed = 5000;
+
+      let offLeft = el.getBoundingClientRect().left;
+      let offTop = el.getBoundingClientRect().top;
+
+      const poller$ = timer(50, timeInt).subscribe(
+        (_: any) => {
+          timeElapsed += timeInt;
+
+          if (el.getBoundingClientRect().left !== offLeft || el.getBoundingClientRect().top !== offTop) {
+            offLeft = el.getBoundingClientRect().left;
+            offTop = el.getBoundingClientRect().top;
+          } else {
+            this._waitUntilSelectorFoundSubject.next(true);
+            poller$.unsubscribe();
+          }
+
+          if (timeElapsed >= maxTimeElapsed) {
+            // console.error(`checkIfElementIsMoving() poller$ TIME HAS ELAPSED!`);
+            this._waitUntilSelectorFoundSubject.next(false);
+            poller$.unsubscribe();
+          }
+        }
+      );
+    }
+
     public skipTour(): void {
-        this._onTourSkipped.next();
+        this._onTourSkipped.next(this._currentTour);
         this.resetTour();
     }
 
     public resetTour(): void {
-        console.log('TOUR ----- resetTour()');
         this._isTourOpenSubject.next(false);
         this.dom.body.classList.remove('tour-open');
         this._currentTour = null;
         this._currentTourStepIndex = 0;
+        this._onTourOpen = false;
         this._guidedTourCurrentStepSubject.next(null);
     }
 
     public startTour(tour: GuidedTour): void {
-        console.log('TOUR ----- startTour()');
         this._currentTour = cloneDeep(tour);
         this._currentTour.Steps = this._currentTour.Steps.filter((step: TourStep) => !step.SkipStep);
-        this._currentTourStepIndex = 0;
+        this._onTourOpen = true;
         this._setFirstAndLast();
         this._guidedTourOrbShowingSubject.next(this._currentTour.UseOrb);
         this._isTourOpenSubject.next(true);
@@ -136,12 +209,22 @@ export class GuidedTourService {
                 this.dom.body.classList.add('tour-open');
             }
             this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
-            if (this._checkSelectorValidity()) {
-                this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
-            } else {
-                this.nextStep();
-            }
+            this.WaitUntilSelectorFound();
         }
+    }
+
+    public SetCurrentStepIndex(tourHistory: { [tourLookup: string]: GuidedTourStepRecord }, tour: GuidedTour): void {
+      let currentIndex: number = 0;
+
+      if (tourHistory && tourHistory[tour.Lookup]) {
+        const lastIndex = tourHistory[tour.Lookup].StepHistory.length - 1;
+
+        currentIndex = tour.Steps.findIndex((step: TourStep) => {
+          return step.Lookup === tourHistory[tour.Lookup].StepHistory[lastIndex];
+        });
+      }
+
+      this._currentTourStepIndex = currentIndex;
     }
 
     public activateOrb(): void {
@@ -179,6 +262,10 @@ export class GuidedTourService {
 
     public get onResizeMessage(): boolean {
         return this._onResizeMessage;
+    }
+
+    public get onTourOpen(): boolean {
+        return this._onTourOpen;
     }
 
     public get currentTourStepDisplay(): number {

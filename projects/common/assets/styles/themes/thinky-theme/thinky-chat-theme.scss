@@ -73,6 +73,22 @@
           }
         }
       }
+
+      .thinky-buttons {
+        margin-top: 5px;
+
+        button {
+          font-size: .7em;
+          height: 25px;
+          line-height: 25px;
+          margin-right: 3px;
+          padding: 0 5px;
+
+          &:last-of-type {
+            margin-right: 0;
+          }
+        }
+      }
     }
   }
 

@@ -11,7 +11,8 @@
 
     <div fxLayout="row">
       <p id="p2">
-        Click on Thinky below to view our demo. Or click here: <button mat-stroked-button color="primary" (click)="OnStartTour()">Start Tour</button>
+        Click on Thinky below to view our demo. Or click here:
+        <button mat-stroked-button id="startTourBtn" color="primary" (click)="OnStartTour()">Start Tour</button>
       </p>
     </div>
 
@@ -42,7 +43,7 @@
               <h4>Bot Padding:</h4>
               <mat-form-field class="example-form-field">
                 <mat-label>Bot Padding</mat-label>
-                <input matInput type="number" [(ngModel)]="BotPadding" (change)="OnBotPaddingChange()">
+                <input matInput type="number" [(ngModel)]="BotPadding" (change)="OnBotPaddingChanged()">
               </mat-form-field>
             </div>
           </div>
@@ -65,7 +66,7 @@
               <h4>Bot Scale:</h4>
               <mat-form-field class="example-form-field">
                 <mat-label>Bot Scale</mat-label>
-                <input matInput type="number" min=".1" max="1" step=".1" [(ngModel)]="BotScale" (change)="OnBotScaleChange()">
+                <input matInput type="number" min=".1" max="1" step=".1" [(ngModel)]="BotScale" (change)="OnBotScaleChanged()">
               </mat-form-field>.
             </div>
           </div>
@@ -76,7 +77,19 @@
       </mat-tab>
 
       <mat-tab label="Misc">
-        Coming Eventually, Maybe...
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <div id="boxMiscForm" fxLayout="column" fxFlex="0 0 18%">
+            <div class="section">
+              <h4>Current Tour:</h4>
+              <mat-radio-group fxLayout="column" aria-label="Select Current Tour" [(ngModel)]="CurrentTourLookup" (change)="OnTourChanged()">
+                <mat-radio-button *ngFor="let tour of Tours" [value]="tour">{{ tour }}</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="0 0 80%">
+
+          </div>
+        </div>
       </mat-tab>
 
     </mat-tab-group>

@@ -13,12 +13,23 @@ export class GuidedTourManagementStateContext extends StateContext<GuidedTourMan
   }
 
   // API Methods
-  public GetTourById(id: number): void {
+  public RecordStep(tourLookup: string, currentStepLookup: string, isComplete: boolean): void {
     this.Execute({
       Arguments: {
-          TourId: id
+        CurrentStep: currentStepLookup,
+        IsComplete: isComplete,
+        TourLookup: tourLookup
       },
-      Type: 'get-tour-by-id'
+      Type: 'RecordStep'
+    });
+  }
+
+  public SetActiveTour(tourLookup: string): void {
+    this.Execute({
+      Arguments: {
+        Lookup: tourLookup
+      },
+      Type: 'SetActiveTour'
     });
   }
 
@@ -28,7 +39,7 @@ export class GuidedTourManagementStateContext extends StateContext<GuidedTourMan
   }
 
   protected loadStateKey(): string {
-    return 'main';
+    return 'tours';
   }
 
   protected loadStateName(): string {

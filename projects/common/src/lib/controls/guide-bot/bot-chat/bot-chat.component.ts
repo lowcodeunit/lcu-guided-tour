@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { ChatMessage, MessageType } from '../../../models/guide-bot/chat-message.model';
 import { GuideBotEventService } from '../../../services/guide-bot-event.service';
 import { GuidedTourService } from '../../../services/guided-tour.service';
+import { ChatTourButton } from '../../../models/guide-bot/chat-tour-button.model';
 
 @Component({
   selector: 'lcu-guide-bot-chat',
@@ -17,6 +18,7 @@ export class GuideBotChatComponent implements OnInit {
   public ScrollHeight: number = null;
 
   @Input('enable-chat') public ChatEnabled: boolean;
+  @Input('tour-buttons') public TourButtons: ChatTourButton[];
 
   @ViewChildren('customMsg') public customMsgs: QueryList<ElementRef>;
   @ViewChild('chat', { static: false }) public chat: ElementRef;
@@ -24,16 +26,16 @@ export class GuideBotChatComponent implements OnInit {
   @ViewChild('customMsg', { static: false }) public customMsg: ElementRef;
 
   constructor(
-    private guideBotEventService: GuideBotEventService,
-    private guidedTourService: GuidedTourService,
-    private renderer: Renderer2
+    protected guideBotEventService: GuideBotEventService,
+    protected guidedTourService: GuidedTourService,
+    protected renderer: Renderer2
   ) {
     this.IsChatVisible = true;
     this.QuestionFormControl = new FormControl('');
     this.BotMessages = [
-      new ChatMessage({ message: `Hi! I'm Thinky and I'm here to help.`}),
-      new ChatMessage({ message: `Looks like you're new here!` }),
-      new ChatMessage({ message: `Click the Tour button on the left to start the Tour.` })
+      new ChatMessage({ message: `Hi! I'm Thinky™ and I'm here to help.`}),
+      new ChatMessage({ message: `For a guided experience on this app, click on the desired button below.` }),
+      new ChatMessage({ message: `Otherwise, type your specific question!`})
     ];
     this.guidedTourService.isTourOpenStream.subscribe(
       (isTourOpen: boolean) => {
@@ -42,14 +44,12 @@ export class GuideBotChatComponent implements OnInit {
     );
     this.guideBotEventService.GetChatToggledEvent().subscribe(
       () => {
-        console.log('CHAT ----- GetChatToggledEvent()', !this.IsChatVisible);
         this.IsChatVisible = !this.IsChatVisible;
         this.anchorChatToBotLogo();
       }
     );
     this.guideBotEventService.GetBotMovedEvent().subscribe(
       () => {
-        console.log('CHAT ----- GetBotMovedEvent()');
         this.anchorChatToBotLogo(600);
       }
     );
@@ -80,8 +80,14 @@ export class GuideBotChatComponent implements OnInit {
     }, 100);
   }
 
-  private anchorChatToBotLogo(milliSeconds: number = 0): void {
-    console.log('CHAT ----- anchorChatToBotLogo()');
+  public StartTourByLookup(tourButton: ChatTourButton) {
+    this.guideBotEventService.EmitChatTourStartedEvent(tourButton.Lookup);
+    if (tourButton.OpenAction) {
+      tourButton.OpenAction();
+    }
+  }
+
+  protected anchorChatToBotLogo(milliSeconds: number = 0): void {
     setTimeout(() => {
       if (this.ChatEnabled && this.IsChatVisible) {
         const selectedDomItem = document.querySelector('.thinky-guide');
@@ -110,8 +116,7 @@ export class GuideBotChatComponent implements OnInit {
   /**
    * Little Easter Egg :D
    */
-  private customMessage(): void {
-    console.log('CHAT ----- customMessage()', this.customMsgs);
+  protected customMessage(): void {
     this.PublishMessage(``);
     const img = this.renderer.createElement('img');
     this.renderer.setAttribute(img, 'height', '100');
@@ -124,7 +129,7 @@ export class GuideBotChatComponent implements OnInit {
     }, 500);
   }
 
-  private parseMessage(message: string): void {
+  protected parseMessage(message: string): void {
     const msg = message.toLowerCase();
     if (msg.includes('kim') && msg.includes('actor')) {
       setTimeout(() => {

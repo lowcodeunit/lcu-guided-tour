@@ -32,23 +32,22 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     public isOrbShowing = false;
     public progressIndicatorLocations = ProgressIndicatorLocation;
     public selectedElementRect: DOMRect = null;
+    public LoadingNextStep: boolean = false;
 
     private resizeSubscription: Subscription;
     private scrollSubscription: Subscription;
 
     constructor(
         public guidedTourService: GuidedTourService,
-        private windowRef: WindowRefService,
-        @Inject(DOCUMENT) private dom: any
-    ) {
-      console.log('kebabCase test: ', this.KebabCase(OrientationTypes.BottomRight));
-    }
+        protected windowRef: WindowRefService,
+        @Inject(DOCUMENT) protected dom: any
+    ) { }
 
-    private get maxWidthAdjustmentForTourStep(): number {
+    protected get maxWidthAdjustmentForTourStep(): number {
         return this.tourStepWidth - this.minimalTourStepWidth;
     }
 
-    private get widthAdjustmentForScreenBound(): number {
+    protected get widthAdjustmentForScreenBound(): number {
         if (!this.tourStep) {
             return 0;
         }
@@ -86,6 +85,15 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
             this.isOrbShowing = value;
         });
 
+        this.guidedTourService.LoadingTourStepStream.subscribe((isLoading: boolean) => {
+          this.LoadingNextStep = isLoading;
+        });
+
+        this.guidedTourService.WaitUntilSelectorFoundStream.subscribe((isDoneWaiting: boolean) => {
+          // console.warn('ngAfterViewInit() - WaitUntilSelectorFoundStream', isDoneWaiting);
+          this.guidedTourService.PrepareNextStep(isDoneWaiting);
+        });
+
         this.resizeSubscription = fromEvent(this.windowRef.nativeWindow, 'resize').subscribe(() => {
             this.updateStepLocation();
         });
@@ -101,7 +109,6 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     public scrollToAndSetElement(): void {
-        console.log('scrollToAndSetElement()');
         this.updateStepLocation();
         // Allow things to render to scroll to the correct location
         setTimeout(() => {
@@ -155,15 +162,14 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    private isTourOnScreen(): boolean {
-        console.log('isTourOnScreen()');
+    protected isTourOnScreen(): boolean {
         return this.tourStep
             && this.elementInViewport(this.dom.querySelector(this.currentTourStep.Selector))
             && this.elementInViewport(this.tourStep.nativeElement);
     }
 
     // Modified from https://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
-    private elementInViewport(element: HTMLElement): boolean {
+    protected elementInViewport(element: HTMLElement): boolean {
         let top = element.offsetTop;
         const height = element.offsetHeight;
 
@@ -196,7 +202,6 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     public updateStepLocation(): void {
-        console.log('updateStepLocation()');
         if (this.currentTourStep && this.currentTourStep.Selector) {
             const selectedElement = this.dom.querySelector(this.currentTourStep.Selector);
             if (selectedElement && typeof selectedElement.getBoundingClientRect === 'function') {
@@ -209,7 +214,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    private isBottom(): boolean {
+    protected isBottom(): boolean {
         return this.currentTourStep.Orientation
             && (this.currentTourStep.Orientation === OrientationTypes.Bottom
             || this.currentTourStep.Orientation === OrientationTypes.BottomLeft
@@ -241,7 +246,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         return this.selectedElementRect.top;
     }
 
-    private get calculatedLeftPosition(): number {
+    protected get calculatedLeftPosition(): number {
         const paddingAdjustment = this.getHighlightPadding();
 
         if (
@@ -372,7 +377,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         return 0;
     }
 
-    private getHighlightPadding(): number {
+    protected getHighlightPadding(): number {
         let paddingAdjustment = this.currentTourStep.UseHighlightPadding ? this.highlightPadding : 0;
         if (this.currentTourStep.HighlightPadding) {
             paddingAdjustment = this.currentTourStep.HighlightPadding;
@@ -381,7 +386,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     // This calculates a value to add or subtract so the step should not be off screen.
-    private getStepScreenAdjustment(): number {
+    protected getStepScreenAdjustment(): number {
         if (
             this.currentTourStep.Orientation === OrientationTypes.Left
             || this.currentTourStep.Orientation === OrientationTypes.Right

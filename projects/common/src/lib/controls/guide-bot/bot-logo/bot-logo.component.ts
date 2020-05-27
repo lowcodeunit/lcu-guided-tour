@@ -51,8 +51,8 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   ) {
     this.TourStartedEvent = new EventEmitter<boolean>();
     this.guidedTourService.isTourOpenStream.subscribe(
-      (isTourOpen: boolean) => {
-        this.IsTourOpen = isTourOpen;
+      (tourLookup) => {
+        this.IsTourOpen = tourLookup ? true : false;
         this.setBotScale();
       }
     );

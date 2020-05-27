@@ -14,7 +14,7 @@ import { GuidedTourStepRecord } from '../models/guided-tour/guided-tour-step-rec
 export class GuidedTourService {
     public guidedTourCurrentStepStream: Observable<TourStep>;
     public guidedTourOrbShowingStream: Observable<boolean>;
-    public isTourOpenStream: Observable<boolean>;
+    public isTourOpenStream: Observable<string>;
     public onTourCompleteStream: Observable<any>;
     public onTourSkippedStream: Observable<any>;
     public onStepClosedActionStream: Observable<TourStep>;
@@ -24,7 +24,7 @@ export class GuidedTourService {
 
     private _guidedTourCurrentStepSubject = new Subject<TourStep>();
     private _guidedTourOrbShowingSubject = new Subject<boolean>();
-    private _isTourOpenSubject = new Subject<boolean>();
+    private _isTourOpenSubject = new Subject<string>();
     private _loadingTourStepStream = new Subject<boolean>();
     private _waitUntilSelectorFoundSubject = new Subject<boolean>();
     private _currentTourStepIndex = 0;
@@ -185,7 +185,7 @@ export class GuidedTourService {
     }
 
     public resetTour(): void {
-        this._isTourOpenSubject.next(false);
+        this._isTourOpenSubject.next(null);
         this.dom.body.classList.remove('tour-open');
         this._currentTour = null;
         this._currentTourStepIndex = 0;
@@ -199,7 +199,7 @@ export class GuidedTourService {
         this._onTourOpen = true;
         this._setFirstAndLast();
         this._guidedTourOrbShowingSubject.next(this._currentTour.UseOrb);
-        this._isTourOpenSubject.next(true);
+        this._isTourOpenSubject.next(tour.Lookup);
         if (
             this._currentTour.Steps.length > 0
             && (!this._currentTour.MinimumScreenSize

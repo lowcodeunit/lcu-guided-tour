@@ -39,9 +39,12 @@ export class GuideBotComponent implements OnInit {
     protected guidedTourState: GuidedTourManagementStateContext
   ) {
     this.guidedTourService.isTourOpenStream.subscribe(
-      (isTourOpen: boolean) => {
-        if (isTourOpen) {
-          console.warn('TOUR IS OPENED!');
+      (tourLookup: string) => {
+        if (tourLookup) {
+          console.log('Opening tour: ', tourLookup);
+          if (this.State?.CurrentTour.Lookup !== tourLookup) {
+            this.guidedTourState.SetActiveTour(tourLookup);
+          }
           /**
            * Turns on functionality to continue where the user left off.
            * TODO: This needs to be handled better. We need an elegant way to handle when the step is
@@ -84,10 +87,8 @@ export class GuideBotComponent implements OnInit {
 
     this.guideBotEventService.GetChatTourStartedEvent().subscribe(
       (lookup: string) => {
-        this.guidedTourState.SetActiveTour(lookup);
-        setTimeout(() => {
-          this.guidedTourService.startTour(this.State.CurrentTour);
-        }, 1500);
+        const selectedTour = this.State.Tours.find((tour: GuidedTour) => tour.Lookup === lookup);
+        this.guidedTourService.startTour(selectedTour);
       }
     );
   }

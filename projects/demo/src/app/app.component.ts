@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
   constructor(
     protected appEventService: AppEventService,
     protected guideBotEventService: GuideBotEventService,
-    protected guidedTour: GuidedTourManagementStateContext,
+    protected guidedTourState: GuidedTourManagementStateContext,
     protected guidedTourService: GuidedTourService,
     protected themeService: ThemeColorPickerService
   ) {
@@ -73,7 +73,7 @@ export class AppComponent implements OnInit {
     );
     this.appEventService.GetTourChangedEvent().subscribe(
       (tourLookup: string) => {
-        this.guidedTour.SetActiveTour(tourLookup);
+        this.guidedTourState.SetActiveTour(tourLookup);
       }
     );
   }
@@ -82,7 +82,7 @@ export class AppComponent implements OnInit {
     this.resetTheme();
     this.setThemes();
 
-    this.guidedTour.Context.subscribe((state: GuidedTourManagementState) => {
+    this.guidedTourState.Context.subscribe((state: GuidedTourManagementState) => {
       this.State = state;
 
       this.stateChanged();
@@ -302,14 +302,24 @@ export class AppComponent implements OnInit {
         icon: 'chat_bubble_outline',
         action: () => this.toggleChat(),
       }),
+      new GuideBotSubItem({
+        label: 'Reset State',
+        icon: 'replay',
+        action: () => this.resetStateData(),
+      })
     ];
+  }
+
+  protected resetStateData(): void {
+    console.log('resetStateData()');
+    this.guidedTourState.Reset();
+  }
+
+  protected stateChanged(): void {
+    console.log(this.State);
   }
 
   protected toggleChat(): void {
     this.guideBotEventService.EmitChatToggledEvent();
-  }
-
-  protected stateChanged() {
-    console.log(this.State);
   }
 }

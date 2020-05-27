@@ -42,6 +42,7 @@ export class GuideBotComponent implements OnInit {
       (isTourOpen: boolean) => {
         if (isTourOpen) {
           console.warn('TOUR IS OPENED!');
+           // Turns on functionality to continue where the user left off.
           this.guidedTourService.SetCurrentStepIndex(this.State.StepRecords, this.State.CurrentTour);
         }
       }

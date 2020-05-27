@@ -208,6 +208,9 @@ export class GuidedTourService {
             if (!this._currentTour.UseOrb) {
                 this.dom.body.classList.add('tour-open');
             }
+            if (this._currentTourStepIndex > 0) {
+              this._onStepClosedAction.next(this._currentTour.Steps[this._currentTourStepIndex - 1]);
+            }
             this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
             this.WaitUntilSelectorFound();
         }

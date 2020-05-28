@@ -148,7 +148,10 @@ export class GuideBotComponent implements OnInit {
     return [
       new GuideBotSubItem({ label: 'Start Tour', icon: 'all_out', action: () => this.OnTourStarted(true) }),
       new GuideBotSubItem({ label: 'Toggle Chat', icon: 'chat_bubble_outline', action: () => this.toggleChat() }),
-      new GuideBotSubItem({ label: 'About Thinky', icon: 'info_outline', action: () => { console.log('Thinky is cool.'); } })
+      new GuideBotSubItem({ label: 'About Thinky', icon: 'info_outline', action: () => {
+          window.open('https://fathym.com/2019/08/08/a-new-look-how-we-created-a-refreshed-brand-for-fathym/', '_blank');
+        }
+      })
     ];
   }
 

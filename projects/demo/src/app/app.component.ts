@@ -311,7 +311,6 @@ export class AppComponent implements OnInit {
   }
 
   protected resetStateData(): void {
-    console.log('resetStateData()');
     this.guidedTourState.Reset();
   }
 

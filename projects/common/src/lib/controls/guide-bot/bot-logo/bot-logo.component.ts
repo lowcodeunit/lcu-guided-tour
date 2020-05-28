@@ -117,8 +117,13 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
         this.renderer.removeClass(this.guide.nativeElement, 'play');
 
         if (this.ShowBotSubItems) {
+          let time: number = 0.5;
           for (const child of this.bubbles.nativeElement.children) {
             this.renderer.addClass(child, 'play-bubble');
+            this.renderer.setStyle(child, 'transition', `top .5s cubic-bezier(0.175, 0.885, 0.320, 1.275) ${time}s,
+                                                         opacity .8s ease-in ${time}s,
+                                                         width .2s ease-in .1s`);
+            time += 0.3;
           }
           this.renderer.addClass(this.guide.nativeElement, 'play');
         }
@@ -179,9 +184,9 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
       let pos2 = y ? y : this.BotPadding;
       const logoMaxSize: number = 95; // Size of logo at full scale(1). TODO: Make more dynamic in future
       const logoDimension: number = this.ShowBotSubItems ? logoMaxSize : this.logoInitialWidth;
-      const logoContainerHeight: number = 220;
+      const logoContainerHeight: number = document.querySelector('.thinky-guide').getBoundingClientRect().height;
       if (this.ShowBotSubItems) {
-        pos1 += logoContainerHeight;
+        pos1 += logoContainerHeight ? logoContainerHeight : 220;
       } else {
         pos1 += logoDimension;
       }

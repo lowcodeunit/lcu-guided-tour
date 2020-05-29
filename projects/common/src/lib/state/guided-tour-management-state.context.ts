@@ -24,6 +24,15 @@ export class GuidedTourManagementStateContext extends StateContext<GuidedTourMan
     });
   }
 
+  public Reset(): void {
+    this.Execute({
+      Arguments: {
+
+      },
+      Type: 'Reset'
+    });
+  }
+
   public SetActiveTour(tourLookup: string): void {
     this.Execute({
       Arguments: {

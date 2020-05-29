@@ -38,8 +38,8 @@ export class GuideBotChatComponent implements OnInit {
       new ChatMessage({ message: `Otherwise, type your specific question!`})
     ];
     this.guidedTourService.isTourOpenStream.subscribe(
-      (isTourOpen: boolean) => {
-        this.IsChatVisible = !isTourOpen;
+      (tourLookup: string) => {
+        this.IsChatVisible = tourLookup ? false : true;
       }
     );
     this.guideBotEventService.GetChatToggledEvent().subscribe(

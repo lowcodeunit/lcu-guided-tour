@@ -39,10 +39,17 @@ export class GuideBotComponent implements OnInit {
     protected guidedTourState: GuidedTourManagementStateContext
   ) {
     this.guidedTourService.isTourOpenStream.subscribe(
-      (isTourOpen: boolean) => {
-        if (isTourOpen) {
-          console.warn('TOUR IS OPENED!');
-          this.guidedTourService.SetCurrentStepIndex(this.State.StepRecords, this.State.CurrentTour);
+      (tourLookup: string) => {
+        if (tourLookup) {
+          if (this.State?.CurrentTour.Lookup !== tourLookup) {
+            this.guidedTourState.SetActiveTour(tourLookup);
+          }
+          /**
+           * Turns on functionality to continue where the user left off.
+           * TODO: This needs to be handled better. We need an elegant way to handle when the step is
+           * waiting for the selected element to render on the screen
+           */
+          // this.guidedTourService.SetCurrentStepIndex(this.State.StepRecords, this.State.CurrentTour);
         }
       }
     );
@@ -79,10 +86,8 @@ export class GuideBotComponent implements OnInit {
 
     this.guideBotEventService.GetChatTourStartedEvent().subscribe(
       (lookup: string) => {
-        this.guidedTourState.SetActiveTour(lookup);
-        setTimeout(() => {
-          this.guidedTourService.startTour(this.State.CurrentTour);
-        }, 1500);
+        const selectedTour = this.State.Tours.find((tour: GuidedTour) => tour.Lookup === lookup);
+        this.guidedTourService.startTour(selectedTour);
       }
     );
   }
@@ -102,7 +107,6 @@ export class GuideBotComponent implements OnInit {
   }
 
   protected stateChanged(): void {
-    console.warn('guide-bot stateChanged()');
     if (this.State.CurrentTour) {
       this.firstTimeSetup();
     }
@@ -127,12 +131,10 @@ export class GuideBotComponent implements OnInit {
     if (this.State.CompletedTourLookups) {
       isFirstTimeUser = !this.State.CompletedTourLookups[this.State.CurrentTour.Lookup];
     }
-    console.warn('isFirstTimeUser() returning: ', isFirstTimeUser);
     return isFirstTimeUser;
   }
 
   protected recordStep(stepLookup: string, isComplete: boolean = false): void {
-    console.warn('Recording current step: ', stepLookup);
     if (stepLookup) {
       this.guidedTourState.RecordStep(this.State.CurrentTour.Lookup, stepLookup, isComplete);
     }
@@ -142,7 +144,10 @@ export class GuideBotComponent implements OnInit {
     return [
       new GuideBotSubItem({ label: 'Start Tour', icon: 'all_out', action: () => this.OnTourStarted(true) }),
       new GuideBotSubItem({ label: 'Toggle Chat', icon: 'chat_bubble_outline', action: () => this.toggleChat() }),
-      new GuideBotSubItem({ label: 'About Thinky', icon: 'info_outline', action: () => { console.log('Thinky is cool.'); } })
+      new GuideBotSubItem({ label: 'About Thinky', icon: 'info_outline', action: () => {
+          window.open('https://fathym.com/2019/08/08/a-new-look-how-we-created-a-refreshed-brand-for-fathym/', '_blank');
+        }
+      })
     ];
   }
 

@@ -98,7 +98,7 @@ export class GuidedTourService {
 
     protected processStep(isBack: boolean = false): void {
       isBack ? this._currentTourStepIndex-- : this._currentTourStepIndex++;
-      console.log('processStep() currentStep: ', this._currentTourStepIndex);
+      // console.log('processStep() currentStep: ', this._currentTourStepIndex);
       this._setFirstAndLast();
 
       this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);

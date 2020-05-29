@@ -41,7 +41,6 @@ export class GuideBotComponent implements OnInit {
     this.guidedTourService.isTourOpenStream.subscribe(
       (tourLookup: string) => {
         if (tourLookup) {
-          console.log('Opening tour: ', tourLookup);
           if (this.State?.CurrentTour.Lookup !== tourLookup) {
             this.guidedTourState.SetActiveTour(tourLookup);
           }
@@ -108,7 +107,6 @@ export class GuideBotComponent implements OnInit {
   }
 
   protected stateChanged(): void {
-    console.warn('guide-bot stateChanged()');
     if (this.State.CurrentTour) {
       this.firstTimeSetup();
     }
@@ -133,12 +131,10 @@ export class GuideBotComponent implements OnInit {
     if (this.State.CompletedTourLookups) {
       isFirstTimeUser = !this.State.CompletedTourLookups[this.State.CurrentTour.Lookup];
     }
-    console.warn('isFirstTimeUser() returning: ', isFirstTimeUser);
     return isFirstTimeUser;
   }
 
   protected recordStep(stepLookup: string, isComplete: boolean = false): void {
-    console.warn('Recording current step: ', stepLookup);
     if (stepLookup) {
       this.guidedTourState.RecordStep(this.State.CurrentTour.Lookup, stepLookup, isComplete);
     }

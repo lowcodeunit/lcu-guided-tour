@@ -99,17 +99,31 @@ export class AppComponent implements OnInit {
 
   public OnStepClosed(step: TourStep): void {
     console.log('OnStepClosed(): ', step);
-    if (step.Selector === '#boxLogoForm') {
-      this.appEventService.EmitTabIndexEvent(0);
-    }
   }
 
   public OnStepOpened(step: TourStep): void {
     console.log('OnStepOpened(): ', step);
-    if (step.Selector === '#boxLogoForm') {
-      setTimeout(() => {
-        this.appEventService.EmitTabIndexEvent(1);
-      }, 1600);
+  }
+
+  public OnStepChanged(step: TourStep): void {
+    console.log(`OnStepChanged() for Step: ${step.Lookup}`);
+
+    switch (step.Lookup) {
+      case 'see':
+        setTimeout(() => {
+          this.appEventService.EmitTabIndexEvent(1);
+        }, 1600);
+        break;
+
+      case 'complete':
+        setTimeout(() => {
+          this.appEventService.EmitTabIndexEvent(2);
+        }, 1600);
+        break;
+
+      default:
+        this.appEventService.EmitTabIndexEvent(0);
+        break;
     }
   }
 

@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
   public BotScale: number = 1;
   public BotScreenPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
   public BotSubItems: GuideBotSubItem[];
+  public CurrentTour: GuidedTour;
   public EnableChat: boolean = true;
   public EnableFirstTimePopup: boolean = true;
   public State: GuidedTourManagementState;
@@ -67,8 +68,8 @@ export class AppComponent implements OnInit {
       }
     );
     this.appEventService.GetStartTourEvent().subscribe(
-      () => {
-        this.startTour();
+      (lookup: string) => {
+        this.startTour(lookup);
       }
     );
     this.appEventService.GetTourChangedEvent().subscribe(
@@ -90,26 +91,35 @@ export class AppComponent implements OnInit {
   }
 
   public OnComplete(tour: GuidedTour): void {
-    console.log('Tour is Complete!', tour);
-  }
-
-  public OnSkipped(tour: GuidedTour): void {
-    console.log('Skipping the tour.', tour);
-  }
-
-  public OnStepClosed(step: TourStep): void {
-    console.log('OnStepClosed(): ', step);
-    if (step.Selector === '#boxLogoForm') {
+    console.log(`The Tour: '${tour.Lookup}' is Complete!`);
+    if (tour.Lookup === 'demo-tour') {
       this.appEventService.EmitTabIndexEvent(0);
     }
   }
 
-  public OnStepOpened(step: TourStep): void {
-    console.log('OnStepOpened(): ', step);
-    if (step.Selector === '#boxLogoForm') {
-      setTimeout(() => {
-        this.appEventService.EmitTabIndexEvent(1);
-      }, 1600);
+  public OnSkipped(tour: GuidedTour): void {
+    console.log(`The Tour: '${tour.Lookup}' has been skipped.`);
+  }
+
+  public OnStepChanged(step: TourStep): void {
+    console.log(`OnStepChanged() for Step: ${step.Lookup}`);
+
+    switch (step.Lookup) {
+      case 'see':
+        setTimeout(() => {
+          this.appEventService.EmitTabIndexEvent(1);
+        }, 1600);
+        break;
+
+      case 'complete':
+        setTimeout(() => {
+          this.appEventService.EmitTabIndexEvent(2);
+        }, 1600);
+        break;
+
+      default:
+        this.appEventService.EmitTabIndexEvent(0);
+        break;
     }
   }
 
@@ -184,8 +194,9 @@ export class AppComponent implements OnInit {
   }
 
   /** GUIDED TOUR */
-  protected startTour(): void {
-    this.guidedTourService.startTour(this.State.CurrentTour);
+  protected startTour(lookup?: string): void {
+    this.CurrentTour = lookup ? this.State.Tours.find((t) => t.Lookup === lookup) : this.State.CurrentTour;
+    this.guidedTourService.startTour(this.CurrentTour);
   }
 
   protected setTourButtons(): ChatTourButton[] {
@@ -315,7 +326,7 @@ export class AppComponent implements OnInit {
   }
 
   protected stateChanged(): void {
-    console.log(this.State);
+    console.log('GUIDED TOUR STATE: ', this.State);
   }
 
   protected toggleChat(): void {

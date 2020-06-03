@@ -30,8 +30,7 @@ export class GuideBotComponent implements OnInit {
 
   @Output('on-complete') public OnCompleteEvent: EventEmitter<GuidedTour> = new EventEmitter<GuidedTour>();
   @Output('on-skipped') public OnSkippedEvent: EventEmitter<GuidedTour> = new EventEmitter<GuidedTour>();
-  @Output('on-step-closed') public OnStepClosedEvent: EventEmitter<TourStep> = new EventEmitter<TourStep>();
-  @Output('on-step-opened') public OnStepOpenedEvent: EventEmitter<TourStep> = new EventEmitter<TourStep>();
+  @Output('on-step-changed') public OnStepChangedEvent: EventEmitter<TourStep> = new EventEmitter<TourStep>();
 
   constructor(
     protected guideBotEventService: GuideBotEventService,
@@ -67,14 +66,9 @@ export class GuideBotComponent implements OnInit {
         this.recordStep(stepLookup, true);
       }
     );
-    this.guidedTourService.onStepClosedActionStream.subscribe(
+    this.guidedTourService.onStepChangedActionStream.subscribe(
       (step: TourStep) => {
-        this.OnStepClosedEvent.emit(step);
-      }
-    );
-    this.guidedTourService.onStepOpenedActionStream.subscribe(
-      (step: TourStep) => {
-        this.OnStepOpenedEvent.emit(step);
+        this.OnStepChangedEvent.emit(step);
         this.recordStep(step.Lookup);
       }
     );

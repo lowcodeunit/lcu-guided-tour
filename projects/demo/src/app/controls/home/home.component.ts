@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
   }
 
   public OnStartTour(): void {
-    this.appEventService.EmitStartTourEvent();
+    this.appEventService.EmitStartTourEvent('demo-tour');
   }
 
   public OnTourChanged(): void {

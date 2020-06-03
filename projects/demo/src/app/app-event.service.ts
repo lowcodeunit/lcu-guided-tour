@@ -55,8 +55,8 @@ export class AppEventService {
     return this.positionChangedEvent;
   }
 
-  public EmitStartTourEvent(): void {
-    this.startTourEvent.emit();
+  public EmitStartTourEvent(lookup?: string): void {
+    this.startTourEvent.emit(lookup);
   }
 
   public GetStartTourEvent(): EventEmitter<any> {

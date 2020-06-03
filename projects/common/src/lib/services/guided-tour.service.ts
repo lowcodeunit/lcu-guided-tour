@@ -17,8 +17,6 @@ export class GuidedTourService {
     public isTourOpenStream: Observable<string>;
     public onTourCompleteStream: Observable<any>;
     public onTourSkippedStream: Observable<any>;
-    public onStepClosedActionStream: Observable<TourStep>;
-    public onStepOpenedActionStream: Observable<TourStep>;
     public onStepChangedActionStream: Observable<TourStep>;
     public LoadingTourStepStream: Observable<boolean>;
     public WaitUntilSelectorFoundStream: Observable<boolean>;
@@ -37,8 +35,6 @@ export class GuidedTourService {
 
     private _onTourComplete = new Subject<GuidedTour>();
     private _onTourSkipped = new Subject<GuidedTour>();
-    private _onStepClosedAction = new Subject<TourStep>();
-    private _onStepOpenedAction = new Subject<TourStep>();
     private _onStepChangedAction = new Subject<TourStep>();
 
     constructor(
@@ -51,8 +47,6 @@ export class GuidedTourService {
         this.isTourOpenStream = this._isTourOpenSubject.asObservable();
         this.onTourCompleteStream = this._onTourComplete.asObservable();
         this.onTourSkippedStream = this._onTourSkipped.asObservable();
-        this.onStepClosedActionStream = this._onStepClosedAction.asObservable();
-        this.onStepOpenedActionStream = this._onStepOpenedAction.asObservable();
         this.onStepChangedActionStream = this._onStepChangedAction.asObservable();
         this.LoadingTourStepStream = this._loadingTourStepStream.asObservable();
         this.WaitUntilSelectorFoundStream = this._waitUntilSelectorFoundSubject.asObservable();
@@ -77,7 +71,6 @@ export class GuidedTourService {
 
     public nextStep(): void {
       this._loadingTourStepStream.next(true);
-      // this._onStepClosedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
 
       if (this._currentTour.Steps[this._currentTourStepIndex + 1]) {
         this.processStep();
@@ -89,7 +82,6 @@ export class GuidedTourService {
 
     public backStep(): void {
         this._loadingTourStepStream.next(true);
-        // this._onStepClosedAction.next(this._currentTour.Steps[this._currentTourStepIndex - 1]);
 
         if (this._currentTour.Steps[this._currentTourStepIndex - 1]) {
           this.processStep(true);
@@ -101,10 +93,8 @@ export class GuidedTourService {
 
     protected processStep(isBack: boolean = false): void {
       isBack ? this._currentTourStepIndex-- : this._currentTourStepIndex++;
-      // console.log('processStep() currentStep: ', this._currentTourStepIndex);
       this._setFirstAndLast();
 
-      // this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
       this._onStepChangedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
       this.WaitUntilSelectorFound();
     }
@@ -120,7 +110,6 @@ export class GuidedTourService {
 
 
     public WaitUntilSelectorFound(): void {
-      // console.log('WaitUntilSelectorFound() called...');
       if (this._currentTour.Steps[this._currentTourStepIndex].Selector) {
         let timeElapsed = 0;
         const timeInt = 100;
@@ -128,23 +117,19 @@ export class GuidedTourService {
 
         const visiblePoller$ = timer(0, timeInt).subscribe(
           (_: any) => {
-            // console.log('WaitUntilSelectorFound() timeElapsed is: ', timeElapsed);
             timeElapsed += timeInt;
 
             const selectedElement = this.dom.querySelector(this._currentTour.Steps[this._currentTourStepIndex].Selector);
 
             if (selectedElement) {
-              // console.warn('WaitUntilSelectorFound() WE FOUND THE ELEMENT!');
               this.checkIfElementIsMoving(selectedElement);
               visiblePoller$.unsubscribe();
             } else if (!selectedElement && timeElapsed >= maxTimeElapsed) {
-              // console.error('WaitUntilSelectorFound() WE COULD NOT FIND THE ELEMENT :(');
               this._waitUntilSelectorFoundSubject.next(false);
               visiblePoller$.unsubscribe();
               this.errorHandler.handleError(
-                // If error handler is configured this should not block the browser.
                 new Error(`Error finding selector ${this._currentTour.Steps[this._currentTourStepIndex].Selector}
-                  on step ${this._currentTourStepIndex + 1} during guided tour: ${this._currentTour.ID}`)
+                  on step: '${this._currentTour.Steps[this._currentTourStepIndex].Lookup}', during guided tour: '${this._currentTour.Lookup}'`)
               );
             }
           }
@@ -212,7 +197,6 @@ export class GuidedTourService {
             if (!this._currentTour.UseOrb) {
                 this.dom.body.classList.add('tour-open');
             }
-            // this._onStepOpenedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
             this._onStepChangedAction.next(this._currentTour.Steps[this._currentTourStepIndex]);
             this.WaitUntilSelectorFound();
         }

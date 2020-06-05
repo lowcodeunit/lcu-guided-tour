@@ -110,7 +110,9 @@ export class GuidedTourService {
 
 
     public WaitUntilSelectorFound(): void {
-      if (this._currentTour.Steps[this._currentTourStepIndex].Selector) {
+      const selector = this._currentTour.Steps[this._currentTourStepIndex].Selector;
+      const lookup = this._currentTour.Steps[this._currentTourStepIndex].Lookup;
+      if (selector) {
         let timeElapsed = 0;
         const timeInt = 100;
         const maxTimeElapsed = 10000;
@@ -119,7 +121,7 @@ export class GuidedTourService {
           (_: any) => {
             timeElapsed += timeInt;
 
-            const selectedElement = this.dom.querySelector(this._currentTour.Steps[this._currentTourStepIndex].Selector);
+            const selectedElement = this.dom.querySelector(selector);
 
             if (selectedElement) {
               this.checkIfElementIsMoving(selectedElement);
@@ -128,8 +130,7 @@ export class GuidedTourService {
               this._waitUntilSelectorFoundSubject.next(false);
               visiblePoller$.unsubscribe();
               this.errorHandler.handleError(
-                new Error(`Error finding selector ${this._currentTour.Steps[this._currentTourStepIndex].Selector}
-                  on step: '${this._currentTour.Steps[this._currentTourStepIndex].Lookup}', during guided tour: '${this._currentTour.Lookup}'`)
+                new Error(`Error finding selector ${selector} on step: '${lookup}', during guided tour: '${this._currentTour.Lookup}'`)
               );
             }
           }

@@ -29,7 +29,7 @@
     [style.transform]="(currentTourStep.Selector && selectedElementRect ? transform : null)">
     <div *ngIf="currentTourStep.Selector" class="tour-arrow"></div>
 
-    <mat-card class="tour-block">
+    <mat-card class="tour-block card-shadow">
       <div *ngIf="progressIndicatorLocation === progressIndicatorLocations.TopOfTourBlock
         && !guidedTourService.onResizeMessage"
         class="tour-progress-indicator">

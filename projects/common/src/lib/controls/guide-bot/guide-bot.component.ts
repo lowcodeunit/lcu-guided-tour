@@ -129,7 +129,7 @@ export class GuideBotComponent implements OnInit {
   }
 
   protected recordStep(stepLookup: string, isComplete: boolean = false): void {
-    if (stepLookup) {
+    if (stepLookup && this.State.CurrentTour) {
       this.guidedTourState.RecordStep(this.State.CurrentTour.Lookup, stepLookup, isComplete);
     }
   }

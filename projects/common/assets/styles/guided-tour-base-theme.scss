@@ -61,6 +61,27 @@ body.tour-open {
         }
       }
 
+      &.step-error {
+        .tour-block {
+          .mat-card-title, .tour-content b {
+            color: mat-color($warn) !important;
+          }
+
+          .tour-content a {
+            color: mat-color($primary) !important;
+          }
+
+          .tour-logo {
+            box-shadow: 0 0 10px 2px mat-color($warn), inset 0px 0px 20px 10px rgba(0, 0, 0, 0.25) !important;
+          }
+
+          &.card-shadow {
+            box-shadow: 0 0 7px 1px rgba(mat-color($warn), 0.75) !important;
+          }
+
+        }
+      }
+
       .tour-block {
         padding: 15px;
 
@@ -132,6 +153,10 @@ body.tour-open {
                   background: mat-color($primary);
                   height: 2px;
                 }
+              }
+
+              &.error-filled {
+                background: mat-color($warn) !important;
               }
 
               &:after {

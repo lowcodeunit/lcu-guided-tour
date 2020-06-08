@@ -33,6 +33,8 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     public progressIndicatorLocations = ProgressIndicatorLocation;
     public selectedElementRect: DOMRect = null;
     public LoadingNextStep: boolean = false;
+    public IsStepError: boolean = false;
+    public ErrorStepIndices: number[] = [];
 
     private resizeSubscription: Subscription;
     private scrollSubscription: Subscription;
@@ -69,15 +71,28 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     public ngAfterViewInit(): void {
         this.guidedTourService.guidedTourCurrentStepStream.subscribe((step: TourStep) => {
             this.currentTourStep = step;
-            if (step && step.Selector) {
+            if (step) {
+              if (step.Selector) {
                 const selectedElement = this.dom.querySelector(step.Selector);
                 if (selectedElement) {
                     this.scrollToAndSetElement();
                 } else {
                     this.selectedElementRect = null;
                 }
-            } else {
-                this.selectedElementRect = null;
+              } else {
+                  this.selectedElementRect = null;
+              }
+
+              if (step.Lookup === 'step-error') {
+                this.IsStepError = true;
+                this.ErrorStepIndices.push(this.guidedTourService.currentTourStepDisplay - 1);
+              } else {
+                this.IsStepError = false;
+                const removeIndex = this.ErrorStepIndices.indexOf(this.guidedTourService.currentTourStepDisplay - 1);
+                if (removeIndex !== -1) {
+                  this.ErrorStepIndices.splice(removeIndex, 1);
+                }
+              }
             }
         });
 

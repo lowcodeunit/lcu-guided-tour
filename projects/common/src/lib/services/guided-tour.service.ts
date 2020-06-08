@@ -103,7 +103,7 @@ export class GuidedTourService {
       if (isFound) {
         this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
       } else {
-        isBack ? this.backStep() : this.nextStep();
+        this._guidedTourCurrentStepSubject.next(this.getErrorTourStep(this._currentTour.Steps[this._currentTourStepIndex].Selector));
       }
       this._loadingTourStepStream.next(false);
     }
@@ -272,6 +272,23 @@ export class GuidedTourService {
 
     private getPreparedTourStep(index: number): TourStep {
         return this.setTourOrientation(this._currentTour.Steps[index]);
+    }
+
+    private getErrorTourStep(missingSelector: string): TourStep {
+      const errorStep: TourStep = {
+        Lookup: 'step-error',
+        Content: `Ooops. It appears that this tour has encountered an issue. Thinky could not find the element named <b>${missingSelector}</b>
+        anywhere on the screen. Here are some possible reasons:
+        <ul>
+          <li>The element Thinky is looking for isn't on the screen</li>
+          <li>The targeted element didn't render in time, possibly indicating a loss of network connectivity, or a problem with the application</li>
+          <li>Something else happened! Visit <a href="https://support.fathym.com" target="_blank">https://support.fathym.com</a>
+              for additional documentation and support</li>
+        </ul>`,
+        Title: 'Error',
+        Subtitle: 'Error Finding Step',
+      }
+      return this.setTourOrientation(errorStep);
     }
 
     private setTourOrientation(step: TourStep): TourStep {

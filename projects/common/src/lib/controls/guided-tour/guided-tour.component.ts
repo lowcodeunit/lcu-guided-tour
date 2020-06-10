@@ -32,6 +32,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     public isOrbShowing = false;
     public progressIndicatorLocations = ProgressIndicatorLocation;
     public selectedElementRect: DOMRect = null;
+    public CurrentSelectedElement: any;
     public LoadingNextStep: boolean = false;
     public IsStepError: boolean = false;
     public ErrorStepIndices: number[] = [];
@@ -73,8 +74,13 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
             this.currentTourStep = step;
             if (step) {
               if (step.Selector) {
-                const selectedElement = this.dom.querySelector(step.Selector);
-                if (selectedElement) {
+                if (step.IframeSelector) {
+                    this.CurrentSelectedElement = this.guidedTourService.findElementInIframe(step.IframeSelector, step.Selector);
+                } else {
+                    this.CurrentSelectedElement = this.dom.querySelector(step.Selector);
+                }
+
+                if (this.CurrentSelectedElement) {
                     this.scrollToAndSetElement();
                 } else {
                     this.selectedElementRect = null;
@@ -124,51 +130,51 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     public scrollToAndSetElement(): void {
-        this.updateStepLocation();
-        // Allow things to render to scroll to the correct location
-        setTimeout(() => {
-            if (!this.isOrbShowing && !this.isTourOnScreen()) {
-                if (this.selectedElementRect && this.isBottom()) {
-                    // Scroll so the element is on the top of the screen.
-                    const topPos = ((this.windowRef.nativeWindow.scrollY + this.selectedElementRect.top) - this.topOfPageAdjustment)
-                        - (this.currentTourStep.ScrollAdjustment ? this.currentTourStep.ScrollAdjustment : 0)
-                        + this.getStepScreenAdjustment();
-                    try {
-                        this.windowRef.nativeWindow.scrollTo({
-                            left: null,
-                            top: topPos,
-                            behavior: 'smooth'
-                        });
-                    } catch (err) {
-                        if (err instanceof TypeError) {
-                            this.windowRef.nativeWindow.scroll(0, topPos);
-                        } else {
-                            throw err;
-                        }
-                    }
-                } else {
-                    // Scroll so the element is on the bottom of the screen.
-                    const topPos = (this.windowRef.nativeWindow.scrollY + this.selectedElementRect.top + this.selectedElementRect.height)
-                        - this.windowRef.nativeWindow.innerHeight
-                        + (this.currentTourStep.ScrollAdjustment ? this.currentTourStep.ScrollAdjustment : 0)
-                        - this.getStepScreenAdjustment();
-                    try {
-                        this.windowRef.nativeWindow.scrollTo({
-                            left: null,
-                            top: topPos,
-                            behavior: 'smooth'
-                        });
-                    } catch (err) {
-                        if (err instanceof TypeError) {
-                            this.windowRef.nativeWindow.scroll(0, topPos);
-                        } else {
-                            throw err;
-                        }
-                    }
-                }
-            }
-        });
-    }
+      this.updateStepLocation();
+      // Allow things to render to scroll to the correct location
+      setTimeout(() => {
+          if (!this.isOrbShowing && !this.isTourOnScreen()) {
+              if (this.selectedElementRect && this.isBottom()) {
+                  // Scroll so the element is on the top of the screen.
+                  const topPos = ((this.windowRef.nativeWindow.scrollY + this.selectedElementRect.top) - this.topOfPageAdjustment)
+                      - (this.currentTourStep.ScrollAdjustment ? this.currentTourStep.ScrollAdjustment : 0)
+                      + this.getStepScreenAdjustment();
+                  try {
+                      this.windowRef.nativeWindow.scrollTo({
+                          left: null,
+                          top: topPos,
+                          behavior: 'smooth'
+                      });
+                  } catch (err) {
+                      if (err instanceof TypeError) {
+                          this.windowRef.nativeWindow.scroll(0, topPos);
+                      } else {
+                          throw err;
+                      }
+                  }
+              } else {
+                  // Scroll so the element is on the bottom of the screen.
+                  const topPos = (this.windowRef.nativeWindow.scrollY + this.selectedElementRect.top + this.selectedElementRect.height)
+                      - this.windowRef.nativeWindow.innerHeight
+                      + (this.currentTourStep.ScrollAdjustment ? this.currentTourStep.ScrollAdjustment : 0)
+                      - this.getStepScreenAdjustment();
+                  try {
+                      this.windowRef.nativeWindow.scrollTo({
+                          left: null,
+                          top: topPos,
+                          behavior: 'smooth'
+                      });
+                  } catch (err) {
+                      if (err instanceof TypeError) {
+                          this.windowRef.nativeWindow.scroll(0, topPos);
+                      } else {
+                          throw err;
+                      }
+                  }
+              }
+          }
+      });
+  }
 
     public handleOrb(): void {
         this.guidedTourService.activateOrb();
@@ -179,7 +185,7 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
 
     protected isTourOnScreen(): boolean {
         return this.tourStep
-            && this.elementInViewport(this.dom.querySelector(this.currentTourStep.Selector))
+            && this.elementInViewport(this.CurrentSelectedElement)
             && this.elementInViewport(this.tourStep.nativeElement);
     }
 
@@ -218,15 +224,42 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
 
     public updateStepLocation(): void {
         if (this.currentTourStep && this.currentTourStep.Selector) {
-            const selectedElement = this.dom.querySelector(this.currentTourStep.Selector);
-            if (selectedElement && typeof selectedElement.getBoundingClientRect === 'function') {
-                this.selectedElementRect = (selectedElement.getBoundingClientRect() as DOMRect);
+            if (this.currentTourStep.IframeSelector) {
+              this.selectedElementRect = this.calcElementRect(this.CurrentSelectedElement, this.currentTourStep.IframeSelector);
             } else {
-                this.selectedElementRect = null;
+              this.selectedElementRect = this.calcElementRect(this.CurrentSelectedElement);
             }
         } else {
             this.selectedElementRect = null;
         }
+    }
+
+    protected calcElementRect(element: any, IframeSelector?: string): any {
+      let totalTop: number = 0;
+      let totalLeft: number = 0;
+      let totalRight: number = 0;
+      let height: number = 0;
+      let width: number = 0;
+
+      const iframe = this.dom.querySelector(IframeSelector);
+
+      if (iframe && typeof iframe.getBoundingClientRect === 'function') {
+        const iframeRect = (iframe.getBoundingClientRect() as DOMRect);
+        totalTop += iframeRect.top;
+        totalLeft += iframeRect.left;
+        totalRight += iframeRect.right;
+      }
+
+      if (element && typeof element.getBoundingClientRect === 'function') {
+        const elementRect = (element.getBoundingClientRect() as DOMRect);
+        totalTop += elementRect.top;
+        totalLeft += elementRect.left;
+        totalRight += elementRect.right;
+        height = elementRect.height;
+        width = elementRect.width;
+      }
+
+      return new DOMRect(totalLeft, totalTop, width, height);
     }
 
     protected isBottom(): boolean {
@@ -237,57 +270,57 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     public get topPosition(): number {
-        const paddingAdjustment = this.getHighlightPadding();
+      const paddingAdjustment = this.getHighlightPadding();
 
-        if (this.isBottom()) {
-            return this.selectedElementRect.top + this.selectedElementRect.height + paddingAdjustment;
-        }
+      if (this.isBottom()) {
+          return this.selectedElementRect.top + this.selectedElementRect.height + paddingAdjustment;
+      }
 
-        return this.selectedElementRect.top - this.getHighlightPadding();
-    }
+      return this.selectedElementRect.top - this.getHighlightPadding();
+  }
 
-    public get orbTopPosition(): number {
-        if (this.isBottom()) {
-            return this.selectedElementRect.top + this.selectedElementRect.height;
-        }
+  public get orbTopPosition(): number {
+      if (this.isBottom()) {
+          return this.selectedElementRect.top + this.selectedElementRect.height;
+      }
 
-        if (
-            this.currentTourStep.Orientation === OrientationTypes.Right
-            || this.currentTourStep.Orientation === OrientationTypes.Left
-        ) {
-            return (this.selectedElementRect.top + (this.selectedElementRect.height / 2));
-        }
+      if (
+          this.currentTourStep.Orientation === OrientationTypes.Right
+          || this.currentTourStep.Orientation === OrientationTypes.Left
+      ) {
+          return (this.selectedElementRect.top + (this.selectedElementRect.height / 2));
+      }
 
-        return this.selectedElementRect.top;
-    }
+      return this.selectedElementRect.top;
+  }
 
     protected get calculatedLeftPosition(): number {
-        const paddingAdjustment = this.getHighlightPadding();
+      const paddingAdjustment = this.getHighlightPadding();
 
-        if (
-            this.currentTourStep.Orientation === OrientationTypes.TopRight
-            || this.currentTourStep.Orientation === OrientationTypes.BottomRight
-        ) {
-            return (this.selectedElementRect.right - this.tourStepWidth);
-        }
+      if (
+          this.currentTourStep.Orientation === OrientationTypes.TopRight
+          || this.currentTourStep.Orientation === OrientationTypes.BottomRight
+      ) {
+          return (this.selectedElementRect.right - this.tourStepWidth);
+      }
 
-        if (
-            this.currentTourStep.Orientation === OrientationTypes.TopLeft
-            || this.currentTourStep.Orientation === OrientationTypes.BottomLeft
-        ) {
-            return (this.selectedElementRect.left);
-        }
+      if (
+          this.currentTourStep.Orientation === OrientationTypes.TopLeft
+          || this.currentTourStep.Orientation === OrientationTypes.BottomLeft
+      ) {
+          return (this.selectedElementRect.left);
+      }
 
-        if (this.currentTourStep.Orientation === OrientationTypes.Left) {
-            return this.selectedElementRect.left - this.tourStepWidth - paddingAdjustment;
-        }
+      if (this.currentTourStep.Orientation === OrientationTypes.Left) {
+          return this.selectedElementRect.left - this.tourStepWidth - paddingAdjustment;
+      }
 
-        if (this.currentTourStep.Orientation === OrientationTypes.Right) {
-            return (this.selectedElementRect.left + this.selectedElementRect.width + paddingAdjustment);
-        }
+      if (this.currentTourStep.Orientation === OrientationTypes.Right) {
+          return (this.selectedElementRect.left + this.selectedElementRect.width + paddingAdjustment);
+      }
 
-        return (this.selectedElementRect.right - (this.selectedElementRect.width / 2) - (this.tourStepWidth / 2));
-    }
+      return (this.selectedElementRect.right - (this.selectedElementRect.width / 2) - (this.tourStepWidth / 2));
+  }
 
     public get leftPosition(): number {
         if (this.calculatedLeftPosition >= 0) {
@@ -299,30 +332,30 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
     }
 
     public get orbLeftPosition(): number {
-        if (
-            this.currentTourStep.Orientation === OrientationTypes.TopRight
-            || this.currentTourStep.Orientation === OrientationTypes.BottomRight
-        ) {
-            return this.selectedElementRect.right;
-        }
+      if (
+          this.currentTourStep.Orientation === OrientationTypes.TopRight
+          || this.currentTourStep.Orientation === OrientationTypes.BottomRight
+      ) {
+          return this.selectedElementRect.right;
+      }
 
-        if (
-            this.currentTourStep.Orientation === OrientationTypes.TopLeft
-            || this.currentTourStep.Orientation === OrientationTypes.BottomLeft
-        ) {
-            return this.selectedElementRect.left;
-        }
+      if (
+          this.currentTourStep.Orientation === OrientationTypes.TopLeft
+          || this.currentTourStep.Orientation === OrientationTypes.BottomLeft
+      ) {
+          return this.selectedElementRect.left;
+      }
 
-        if (this.currentTourStep.Orientation === OrientationTypes.Left) {
-            return this.selectedElementRect.left;
-        }
+      if (this.currentTourStep.Orientation === OrientationTypes.Left) {
+          return this.selectedElementRect.left;
+      }
 
-        if (this.currentTourStep.Orientation === OrientationTypes.Right) {
-            return (this.selectedElementRect.left + this.selectedElementRect.width);
-        }
+      if (this.currentTourStep.Orientation === OrientationTypes.Right) {
+          return (this.selectedElementRect.left + this.selectedElementRect.width);
+      }
 
-        return (this.selectedElementRect.right - (this.selectedElementRect.width / 2));
-    }
+      return (this.selectedElementRect.right - (this.selectedElementRect.width / 2));
+  }
 
     public get transform(): string {
         if (
@@ -366,28 +399,28 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
 
     public get overlayTop(): number {
         if (this.selectedElementRect) {
-            return this.selectedElementRect.top - this.getHighlightPadding();
+          return this.selectedElementRect.top - this.getHighlightPadding();
         }
         return 0;
     }
 
     public get overlayLeft(): number {
         if (this.selectedElementRect) {
-            return this.selectedElementRect.left - this.getHighlightPadding();
+          return this.selectedElementRect.left - this.getHighlightPadding();
         }
         return 0;
     }
 
     public get overlayHeight(): number {
         if (this.selectedElementRect) {
-            return this.selectedElementRect.height + (this.getHighlightPadding() * 2);
+          return this.selectedElementRect.height + (this.getHighlightPadding() * 2);
         }
         return 0;
     }
 
     public get overlayWidth(): number {
         if (this.selectedElementRect) {
-            return this.selectedElementRect.width + (this.getHighlightPadding() * 2);
+          return this.selectedElementRect.width + (this.getHighlightPadding() * 2);
         }
         return 0;
     }

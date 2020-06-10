@@ -28,4 +28,6 @@ export class TourStep {
   public UseHighlightPadding?: boolean;
   /** Adds padding around tour highlighting in pixels, this overwrites the default for this step. Is not dependent on useHighlightPadding being true */
   public HighlightPadding?: number;
+  /** If an element is within an iframe, this is the Selector for iframe, which is needed to find inner element */
+  public IframeSelector?: string;
 }

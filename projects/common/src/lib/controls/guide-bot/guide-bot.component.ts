@@ -40,7 +40,7 @@ export class GuideBotComponent implements OnInit {
     this.guidedTourService.isTourOpenStream.subscribe(
       (tourLookup: string) => {
         if (tourLookup) {
-          if (this.State?.CurrentTour.Lookup !== tourLookup) {
+          if (this.State?.CurrentTour?.Lookup !== tourLookup) {
             this.guidedTourState.SetActiveTour(tourLookup);
           }
           /**
@@ -95,7 +95,7 @@ export class GuideBotComponent implements OnInit {
   }
 
   public OnTourStarted(isStarted: boolean): void {
-    if (isStarted) {
+    if (isStarted && this.Tour) {
       this.guidedTourService.startTour(this.Tour);
     }
   }

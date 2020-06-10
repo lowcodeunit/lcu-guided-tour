@@ -82,6 +82,7 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     this.resetTheme();
     this.setThemes();
+    // this.CurrentTour = this.TestTour;
 
     this.guidedTourState.Context.subscribe((state: GuidedTourManagementState) => {
       this.State = state;
@@ -111,10 +112,16 @@ export class AppComponent implements OnInit {
         }, 1600);
         break;
 
-      case 'complete':
+      case 'iframe':
         setTimeout(() => {
           this.appEventService.EmitTabIndexEvent(2);
-        }, 1600);
+        });
+        break;
+
+      case 'err':
+        setTimeout(() => {
+          this.appEventService.EmitTabIndexEvent(2);
+        });
         break;
 
       default:
@@ -291,10 +298,21 @@ export class AppComponent implements OnInit {
           Orientation: OrientationTypes.BottomLeft
         },
         {
+          Title: 'Iframes',
+          Subtitle: 'Guided Tour',
+          Lookup: 'iframe',
+          Selector: '#iframeItem1',
+          IframeSelector: '#iframeExample',
+          Content: `The Guided Tour is also compatible with iframes! Iframes contain their own Document, so by default, you will not
+          be able to target elements within an iframe.  <br/> <br/>
+          However, if you set the <b>IframeSelector</b> property to the target iframe, then the tour will automatically find it for you!`,
+          Orientation: OrientationTypes.Top
+        },
+        {
           Title: 'Error Handling',
           Subtitle: 'Guided Tour',
           Lookup: 'err',
-          Selector: '#boxMiscForm',
+          Selector: '#someElementNotOnTheScreen',
           Content: `Here's an example of how the Guided Tour handles errors when it cannot find a element in the UI.`,
           Orientation: OrientationTypes.BottomRight
         },

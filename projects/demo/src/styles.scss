@@ -4,6 +4,7 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap");
 @import "./app/app.component.scss";
 @import "./app/controls/home/home.component.scss";
+@import "./app/controls/iframe/iframe.component.scss";
 @import "../../common/assets/styles/lcu-guided-tour.scss"; // TODO: Pull from node_modules
 
 @mixin opacity($opacity) {
@@ -38,6 +39,7 @@
   @include guided-tour($theme);
   @include lcu-component-theme($theme);
   @include home-component($theme);
+  @include iframe-component($theme);
 }
 
 @mixin primary-logo($logo, $theme, $opacity) {

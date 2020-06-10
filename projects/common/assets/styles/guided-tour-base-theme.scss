@@ -10,6 +10,7 @@ body.tour-open {
   $fg-color: mat-color(map-get($theme, foreground), text) !default;
   $tour-zindex: 1081 !default;
   $tour-orb-color: mat-color($primary) !default;
+  $tour-shadow-color: rgba(mat-color($primary), 0.75);
 
   lcu-guided-tour {
     .guided-tour-user-input-mask {
@@ -38,30 +39,55 @@ body.tour-open {
 
       &.tour-bottom, &.tour-bottom-right, &.tour-bottom-left {
         .tour-arrow::before {
-          @include tour-triangle(top, $bg-color);
+          @include tour-triangle(top, $bg-color, $tour-shadow-color);
         }
       }
 
       &.tour-top, &.tour-top-right, &.tour-top-left {
         .tour-arrow::before {
-          @include tour-triangle(bottom, $bg-color);
+          @include tour-triangle(bottom, $bg-color, $tour-shadow-color);
         }
       }
 
       &.tour-left {
         .tour-arrow::before {
-          @include tour-triangle(right, $bg-color);
+          @include tour-triangle(right, $bg-color, $tour-shadow-color);
         }
       }
 
       &.tour-right {
         .tour-arrow::before {
-          @include tour-triangle(left, $bg-color);
+          @include tour-triangle(left, $bg-color, $tour-shadow-color);
+        }
+      }
+
+      &.step-error {
+        .tour-block {
+          .mat-card-title, .tour-content b {
+            color: mat-color($warn) !important;
+          }
+
+          .tour-content a {
+            color: mat-color($primary) !important;
+          }
+
+          .tour-logo {
+            box-shadow: 0 0 10px 2px mat-color($warn), inset 0px 0px 20px 10px rgba(0, 0, 0, 0.25) !important;
+          }
+
+          &.card-shadow {
+            box-shadow: 0 0 7px 1px rgba(mat-color($warn), 0.75) !important;
+          }
+
         }
       }
 
       .tour-block {
         padding: 15px;
+
+        &.card-shadow {
+          box-shadow: 0 0 7px 1px rgba(mat-color($primary), 0.75);
+        }
 
         .tour-content {
           margin-top: 5px;
@@ -129,6 +155,10 @@ body.tour-open {
                 }
               }
 
+              &.error-filled {
+                background: mat-color($warn) !important;
+              }
+
               &:after {
                 content: ' ';
                 background: rgba($fg-color, 0.12);
@@ -150,33 +180,39 @@ body.tour-open {
   }
 }
 
-@mixin tour-triangle($direction, $color: currentColor, $size: 1rem) {
+@mixin tour-triangle($direction, $color: currentColor, $shadow-color: transparent, $size: 1rem) {
 
     @if not index(top right bottom left, $direction) {
         @error 'Direction must be either `top`, `right`, `bottom` or `left`.';
     }
 
     $opposite-direction: top;
+    $shadow-filter: drop-shadow(0px -2px 2px rgba($shadow-color, 0.75));
 
     @if $direction==top {
         $opposite-direction: bottom;
+        $shadow-filter: drop-shadow(0px -2px 2px rgba($shadow-color, 0.75));
     }
 
     @if $direction==bottom {
         $opposite-direction: top;
+        $shadow-filter: drop-shadow(0px 2px 2px rgba($shadow-color, 0.75));
     }
 
     @if $direction==right {
         $opposite-direction: left;
+        $shadow-filter: drop-shadow(2px 0px 2px rgba($shadow-color, 0.75));
     }
 
     @if $direction==left {
         $opposite-direction: right;
+        $shadow-filter: drop-shadow(-2px 0px 2px rgba($shadow-color, 0.75));
     }
 
     width: 0;
     height: 0;
     content: '';
+    filter: $shadow-filter;
     z-index: 2;
     border-#{$opposite-direction}: $size solid $color;
     $perpendicular-borders: $size solid transparent;

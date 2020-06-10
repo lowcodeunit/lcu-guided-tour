@@ -11,11 +11,12 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './controls/home/home.component';
 import { DocumentationComponent } from './controls/documentation/documentation.component';
+import { IframeComponent } from './controls/iframe/iframe.component';
 import { LcuGuidedTourModule } from '@lowcodeunit/lcu-guided-tour-common';
 import { environment } from '../environments/environment';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, DocumentationComponent],
+  declarations: [AppComponent, HomeComponent, DocumentationComponent, IframeComponent],
   imports: [
     AppRoutingModule,
     BrowserModule,

@@ -82,6 +82,7 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     this.resetTheme();
     this.setThemes();
+    // this.CurrentTour = this.TestTour;
 
     this.guidedTourState.Context.subscribe((state: GuidedTourManagementState) => {
       this.State = state;
@@ -111,10 +112,16 @@ export class AppComponent implements OnInit {
         }, 1600);
         break;
 
-      case 'complete':
+      case 'iframe':
         setTimeout(() => {
           this.appEventService.EmitTabIndexEvent(2);
-        }, 1600);
+        });
+        break;
+
+      case 'err':
+        setTimeout(() => {
+          this.appEventService.EmitTabIndexEvent(2);
+        });
         break;
 
       default:
@@ -196,7 +203,7 @@ export class AppComponent implements OnInit {
   /** GUIDED TOUR */
   protected startTour(lookup?: string): void {
     this.CurrentTour = lookup ? this.State.Tours.find((t) => t.Lookup === lookup) : this.State.CurrentTour;
-    this.guidedTourService.startTour(this.CurrentTour);
+    this.guidedTourService.startTour(this.TestTour);
   }
 
   protected setTourButtons(): ChatTourButton[] {
@@ -215,12 +222,14 @@ export class AppComponent implements OnInit {
         {
           Title: 'LCU-Guided-Tour',
           Subtitle: 'Guided Tour',
+          Lookup: 'welcome',
           Content: `Welcome to the LCU-Guided-Tour library! This library provides the functionality to do your own guided tour
           of an application. <br/><br/> Click the <b>Next</b> button to get started with an example Tour!`
         },
         {
           Title: 'Title',
           Subtitle: 'Guided Tour',
+          Lookup: 'title',
           Selector: '#guidedTourHeader',
           Content: `With the LCU-Guided-Tour, you can select anything that is on the screen that has a valid CSS selector.
           For example, you can select this title, which as an id of <b>#guidedTourHeader</b>. <br/><br/>
@@ -232,32 +241,28 @@ export class AppComponent implements OnInit {
           </ul>`,
           Orientation: OrientationTypes.Bottom
         },
-        {
-          Title: 'First Paragraph',
-          Subtitle: 'Guided Tour',
-          Selector: 'p',
-          Content: `Here, we are selecting the first paragraph element on the screen with <b>p</b>.`,
-          Orientation: OrientationTypes.BottomRight
-        },
         // {
-        //   Title: 'Second Paragraph',
+        //   Title: 'First Paragraph',
         //   Subtitle: 'Guided Tour',
-        //   Selector: '#p2',
-        //   Content: `Now we are selecting the second paragraph, that has an id of <b>#p2</b>, in which we are targeting.`,
-        //   Orientation: OrientationTypes.Top
+        //   Lookup: 'first',
+        //   Selector: 'p',
+        //   Content: `Here, we are selecting the first paragraph element on the screen with <b>p</b>.`,
+        //   Orientation: OrientationTypes.BottomRight
         // },
         {
           Title: 'Complex Selectors',
           Subtitle: 'Guided Tour',
+          Lookup: 'complex',
           Selector: '.section:nth-of-type(2) .mat-radio-button:nth-child(3)',
           Content: `You can even target more specific, complex elements, by using various built-in CSS selectors. In
           this case, we are targeting the third radio item in the second section with the selector of: <br/>
           <b>.section:nth-of-type(2) .mat-radio-button:nth-child(3)</b>`,
-          Orientation: OrientationTypes.Right
+          Orientation: OrientationTypes.TopRight
         },
         {
           Title: 'Modifiers',
           Subtitle: 'Guided Tour',
+          Lookup: 'modifiers',
           Selector: '#formBox',
           Content: `As for the bot, you can modify certain properties of it in order to customize it to your needs.
           Here we can change the position it lives on the screen, the container it should position itself in, as well
@@ -267,6 +272,7 @@ export class AppComponent implements OnInit {
         {
           Title: 'Bounding Container',
           Subtitle: 'Guided Tour',
+          Lookup: 'bounding',
           Selector: '#boundingBox',
           Content: `As an example, you can set the Bot to be positioned inside this box by setting the container to
           the <b>#boundingBox</b> selector.`,
@@ -275,6 +281,7 @@ export class AppComponent implements OnInit {
         {
           Title: 'Assigning Actions',
           Subtitle: 'Guided Tour',
+          Lookup: 'assign',
           Selector: '.mat-tab-label:nth-of-type(2)',
           Content: `You can assign each step an action as well, in case you want to run logic before or after a step is displayed.
           Click <b>Next</b> to see this in action!`,
@@ -283,6 +290,7 @@ export class AppComponent implements OnInit {
         {
           Title: 'Tab Movement',
           Subtitle: 'Guided Tour',
+          Lookup: 'see',
           Selector: '#boxLogoForm',
           Content: `As you can see, this tab was selected so that the Tour could continue after the DOM has rendered a different view.
           You can also use the <b>actionDelay</b> property to specify a time delay before showing the next step, in order to properly
@@ -290,8 +298,28 @@ export class AppComponent implements OnInit {
           Orientation: OrientationTypes.BottomLeft
         },
         {
+          Title: 'Iframes',
+          Subtitle: 'Guided Tour',
+          Lookup: 'iframe',
+          Selector: '#iframeItem1',
+          IframeSelector: '#iframeExample',
+          Content: `The Guided Tour is also compatible with iframes! Iframes contain their own Document, so by default, you will not
+          be able to target elements within an iframe.  <br/> <br/>
+          However, if you set the <b>IframeSelector</b> property to the target iframe, then the tour will automatically find it for you!`,
+          Orientation: OrientationTypes.Top
+        },
+        {
+          Title: 'Error Handling',
+          Subtitle: 'Guided Tour',
+          Lookup: 'err',
+          Selector: '#someElementNotOnTheScreen',
+          Content: `Here's an example of how the Guided Tour handles errors when it cannot find a element in the UI.`,
+          Orientation: OrientationTypes.BottomRight
+        },
+        {
           Title: 'Restart Tour',
           Subtitle: 'Guided Tour',
+          Lookup: 'restart',
           Selector: '#startTourBtn',
           Content: `Whenever you want to start the tour again, you can always press this button to invoke the tour to start again!
           This can be implented anywhere in your application that has access to the Guided Tour Service.`,

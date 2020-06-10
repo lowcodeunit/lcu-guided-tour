@@ -1,0 +1,17 @@
+@mixin iframe-component($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+
+
+  .iframe-container {
+    .mat-icon {
+      color: mat-color($primary, 500);
+      margin-right: 1em;
+    }
+
+    pre code {
+      color: mat-color($primary, 500);
+      margin: 0 .5em;
+    }
+  }
+}

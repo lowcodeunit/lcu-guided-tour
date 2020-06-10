@@ -99,27 +99,35 @@ export class GuidedTourService {
       this.WaitUntilSelectorFound();
     }
 
-    public PrepareNextStep(isFound: boolean, isBack?: boolean): void {
+    public PrepareNextStep(isFound: boolean): void {
       if (isFound) {
         this._guidedTourCurrentStepSubject.next(this.getPreparedTourStep(this._currentTourStepIndex));
       } else {
-        isBack ? this.backStep() : this.nextStep();
+        this._guidedTourCurrentStepSubject.next(this.getErrorTourStep(this._currentTour.Steps[this._currentTourStepIndex].Selector));
       }
       this._loadingTourStepStream.next(false);
     }
 
 
     public WaitUntilSelectorFound(): void {
-      if (this._currentTour.Steps[this._currentTourStepIndex].Selector) {
-        let timeElapsed = 0;
-        const timeInt = 100;
-        const maxTimeElapsed = 10000;
+      const iframeSelector = this._currentTour.Steps[this._currentTourStepIndex].IframeSelector;
+      const selector = this._currentTour.Steps[this._currentTourStepIndex].Selector;
+      const lookup = this._currentTour.Steps[this._currentTourStepIndex].Lookup;
+      if (selector) {
+        let selectedElement: any = null;
+        let timeElapsed: number = 0;
+        const timeInt: number = 100;
+        const maxTimeElapsed: number = 10000;
 
         const visiblePoller$ = timer(0, timeInt).subscribe(
           (_: any) => {
             timeElapsed += timeInt;
 
-            const selectedElement = this.dom.querySelector(this._currentTour.Steps[this._currentTourStepIndex].Selector);
+            if (iframeSelector) {
+              selectedElement = this.findElementInIframe(iframeSelector, selector);
+            } else {
+              selectedElement = this.dom.querySelector(selector);
+            }
 
             if (selectedElement) {
               this.checkIfElementIsMoving(selectedElement);
@@ -128,8 +136,7 @@ export class GuidedTourService {
               this._waitUntilSelectorFoundSubject.next(false);
               visiblePoller$.unsubscribe();
               this.errorHandler.handleError(
-                new Error(`Error finding selector ${this._currentTour.Steps[this._currentTourStepIndex].Selector}
-                  on step: '${this._currentTour.Steps[this._currentTourStepIndex].Lookup}', during guided tour: '${this._currentTour.Lookup}'`)
+                new Error(`Error finding selector ${selector} on step: '${lookup}', during guided tour: '${this._currentTour.Lookup}'`)
               );
             }
           }
@@ -168,6 +175,17 @@ export class GuidedTourService {
       );
     }
 
+    public findElementInIframe(iframeSelector: string, elementSelector: string): any {
+        const iframe = this.dom.querySelector(iframeSelector);
+        let selectedElement: any = null;
+
+        if (iframe) {
+          const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+          selectedElement = iframeDocument.querySelector(elementSelector);
+        }
+        return selectedElement;
+    }
+
     public skipTour(): void {
         this._onTourSkipped.next(this._currentTour);
         this.resetTour();
@@ -202,6 +220,7 @@ export class GuidedTourService {
         }
     }
 
+    // TODO: This is unfinished functionality. Sets the current step based off of the last step the user visited (history)
     public SetCurrentStepIndex(tourHistory: { [tourLookup: string]: GuidedTourStepRecord }, tour: GuidedTour): void {
       let currentIndex: number = 0;
 
@@ -224,21 +243,6 @@ export class GuidedTourService {
     private _setFirstAndLast(): void {
         this._onLastStep = (this._currentTour.Steps.length - 1) === this._currentTourStepIndex;
         this._onFirstStep = this._currentTourStepIndex === 0;
-    }
-
-    private _checkSelectorValidity(): boolean {
-        if (this._currentTour.Steps[this._currentTourStepIndex].Selector) {
-            const selectedElement = this.dom.querySelector(this._currentTour.Steps[this._currentTourStepIndex].Selector);
-            if (!selectedElement) {
-                this.errorHandler.handleError(
-                    // If error handler is configured this should not block the browser.
-                    new Error(`Error finding selector ${this._currentTour.Steps[this._currentTourStepIndex].Selector}
-                      on step ${this._currentTourStepIndex + 1} during guided tour: ${this._currentTour.ID}`)
-                );
-                return false;
-            }
-        }
-        return true;
     }
 
     public get onLastStep(): boolean {
@@ -271,6 +275,23 @@ export class GuidedTourService {
 
     private getPreparedTourStep(index: number): TourStep {
         return this.setTourOrientation(this._currentTour.Steps[index]);
+    }
+
+    private getErrorTourStep(missingSelector: string): TourStep {
+      const errorStep: TourStep = {
+        Lookup: 'step-error',
+        Content: `Ooops. It appears that this tour has encountered an issue. Thinky could not find the element named <b>${missingSelector}</b>
+        anywhere on the screen. Here are some possible reasons:
+        <ul>
+          <li>The element Thinky is looking for isn't on the screen</li>
+          <li>The targeted element didn't render in time, possibly indicating a loss of network connectivity, or a problem with the application</li>
+          <li>Something else happened! Visit <a href="https://support.fathym.com" target="_blank">https://support.fathym.com</a>
+              for additional documentation and support</li>
+        </ul>`,
+        Title: 'Error',
+        Subtitle: 'Error Finding Step',
+      }
+      return this.setTourOrientation(errorStep);
     }
 
     private setTourOrientation(step: TourStep): TourStep {

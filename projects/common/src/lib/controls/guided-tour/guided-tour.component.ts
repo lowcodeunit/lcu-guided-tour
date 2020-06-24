@@ -425,6 +425,22 @@ export class GuidedTourComponent implements AfterViewInit, OnDestroy {
         return 0;
     }
 
+    public get centerTopPosition(): number {
+      if (!this.tourStepWidth) {
+          return null;
+      }
+      const rect = this.dom.querySelector('body').getBoundingClientRect();
+      return (rect.height / 2) - (this.tourStepWidth / 2);
+    }
+
+    public get centerLeftPosition(): number {
+      if (!this.tourStepWidth) {
+          return null;
+      }
+      const rect = this.dom.querySelector('body').getBoundingClientRect();
+      return (rect.width / 2) - (this.tourStepWidth / 2);
+    }
+
     protected getHighlightPadding(): number {
         let paddingAdjustment = this.currentTourStep.UseHighlightPadding ? this.highlightPadding : 0;
         if (this.currentTourStep.HighlightPadding) {

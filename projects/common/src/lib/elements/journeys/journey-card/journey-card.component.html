@@ -1,0 +1,58 @@
+<mat-card>
+  <mat-card-content>
+    <div
+      [gdColumns.gt-sm]="Columns"
+    >
+      <div>
+        <iframe
+          mat-card-image
+          *ngIf="Journey.ContentType === JourneyContentTypes.Video"
+          [src]="Journey.ContentURL | safe"
+          webkitallowfullscreen
+          mozallowfullscreen
+          allowfullscreen
+          class="journey-image"
+          [class.highlighted]="Highlight"
+        ></iframe>
+
+        <img
+          mat-card-image
+          *ngIf="Journey.ContentType === JourneyContentTypes.Image"
+          [src]="Journey.ContentURL"
+          class="journey-image"
+          [class.highlighted]="Highlight"
+        />
+      </div>
+
+      <div class="details" [gdColumn.gt-sm]="DetailsSpan">
+        <h2>{{ Journey.Name }}</h2>
+
+        <h3>{{ Journey.Uses.join(", ") }}</h3>
+
+        <div class="mat-body">{{ Journey.Description }}</div>
+      </div>
+
+      <div class="actions">
+        <div>
+          <a mat-raised-button class="mat-full-width" color="primary">Get Started</a>
+        </div>
+
+        <div>
+          <a mat-raised-button class="mat-full-width" color="accent">Learn More</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="coming-soon-overlay" *ngIf="Journey.ComingSoon">
+      <h1>Coming Soon!</h1>
+    </div>
+  </mat-card-content>
+</mat-card>
+<!--
+<div
+gdColumns="33% 33% 33%"
+gdColumns.lt-sm="50% 50%"
+gdColumns.lt-xs="100%"
+gdGap="2em"
+gdGap.lt-sm="1em"
+></div> -->

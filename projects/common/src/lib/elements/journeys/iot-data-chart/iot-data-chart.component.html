@@ -1,0 +1,11 @@
+<div *ngIf="ChartData && ChartLabels">
+  <canvas baseChart
+    [datasets]="ChartData"
+    [labels]="ChartLabels"
+    [options]="ChartOptions"
+    [colors]="ChartColors"
+    [legend]="ChartLegend"
+    [chartType]="ChartType"
+    [plugins]="ChartPlugins">
+  </canvas>
+</div>

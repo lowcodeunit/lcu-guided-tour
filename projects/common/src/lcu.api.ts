@@ -17,3 +17,7 @@ export * from './lib/services/guided-tour.service';
 export * from './lib/services/windowref.service';
 export * from './lib/state/guided-tour-management-state.context';
 export * from './lib/state/guided-tour-management.state';
+export * from './lib/elements/journeys/journeys.component';
+export * from './lib/elements/journeys/iot-data-chart/iot-data-chart.component';
+export * from './lib/elements/journeys/journey-card/journey-card.component';
+export * from './lib/elements/journeys/journey-details/journey-details.component';

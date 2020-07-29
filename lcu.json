@@ -1,14 +1,20 @@
 {
-  "templates": {
-    "repository": "lowcodeunit-devkit/lcu-cli-templates-core",
-    "scope": "@lowcodeunit",
-    "workspace": "lcu-guided-tour"
-  },
-  "config": {
-    "wc": ["wc/lcu-guided-tour.lcu.js"],
-    "solutions": {},
-    "elements": {},
-    "data-flow": {},
-    "dependencies": {}
-  }
+	"templates": {
+		"repository": "lowcodeunit-devkit/lcu-cli-templates-core",
+		"scope": "@lowcodeunit",
+		"workspace": "lcu-guided-tour"
+	},
+	"config": {
+		"wc": [
+			"wc/lcu-guided-tour.lcu.js"
+		],
+		"solutions": {
+			"journeys": {
+				"element": "lcu-guided-tour-journeys-element"
+			}
+		},
+		"elements": {},
+		"data-flow": {},
+		"dependencies": {}
+	}
 }

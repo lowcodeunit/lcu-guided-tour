@@ -1,0 +1,17 @@
+:host ::ngdeep {
+  fieldset {
+    margin-bottom: 1.25em;
+  }
+
+  .streaming-data {
+    height: 300px;
+
+    .mat-card-content {
+      height: calc(100% - 84.3px);
+    }
+  }
+
+  .highlighted-journey:nth-child(even) {
+    border: pink solid 5px;
+  }
+}

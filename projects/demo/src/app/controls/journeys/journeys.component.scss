@@ -1,0 +1,42 @@
+@mixin home-component($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $fg-color: mat-color(map-get($theme, foreground), text);
+
+  .home-container {
+    margin: 2% 5%;
+
+    .mat-tab-body-wrapper {
+      margin-top: 10px;
+    }
+
+    .section {
+      background-color: rgba(mat-color($primary), 0.1);
+      border-top: 1px solid $fg-color;
+      border-bottom: 1px solid $fg-color;
+      border-left: 2px solid $fg-color;
+      border-right: 2px solid $fg-color;
+      padding: 15px;
+
+      &:first-of-type {
+        border-top-width: 2px;
+      }
+
+      &:last-of-type {
+        border-bottom-width: 2px;
+      }
+
+      h4 {
+        margin-top: 0;
+      }
+    }
+
+    #boundingBox {
+      align-items: center;
+      background-color: rgba(mat-color($primary), 0.1);
+      border: 2px solid $fg-color;
+      height: 450px;
+      justify-content: center;
+    }
+  }
+}

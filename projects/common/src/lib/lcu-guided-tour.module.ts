@@ -10,6 +10,13 @@ import { GuidedTourService } from './services/guided-tour.service';
 import { WindowRefService } from './services/windowref.service';
 import { GuideBotEventService } from './services/guide-bot-event.service';
 import { GuidedTourManagementStateContext } from './state/guided-tour-management-state.context';
+import { LcuGuidedTourJourneysElementComponent } from './elements/journeys/journeys.component';
+import { JourneysManagementStateContext } from './state/journeys/journeys-state.context';
+import { JourneyCardComponent } from './elements/journeys/journey-card/journey-card.component';
+import { IotDataChartComponent } from './elements/journeys/iot-data-chart/iot-data-chart.component';
+import { JourneyDetailsComponent } from './elements/journeys/journey-details/journey-details.component';
+import { ChartsModule } from 'ng2-charts';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,6 +24,10 @@ import { GuidedTourManagementStateContext } from './state/guided-tour-management
     GuideBotComponent,
     GuideBotChatComponent,
     GuideBotLogoComponent,
+    LcuGuidedTourJourneysElementComponent,
+    JourneyCardComponent,
+    IotDataChartComponent,
+    JourneyDetailsComponent,
   ],
   imports: [
     FathymSharedModule,
@@ -24,6 +35,7 @@ import { GuidedTourManagementStateContext } from './state/guided-tour-management
     ReactiveFormsModule,
     FlexLayoutModule,
     MaterialModule,
+    ChartsModule,
   ],
   providers: [WindowRefService],
   exports: [
@@ -31,7 +43,14 @@ import { GuidedTourManagementStateContext } from './state/guided-tour-management
     GuideBotComponent,
     GuideBotChatComponent,
     GuideBotLogoComponent,
+    LcuGuidedTourJourneysElementComponent,
+    JourneyCardComponent,
+    IotDataChartComponent,
+    JourneyDetailsComponent,
+    ChartsModule,
+    HttpClientModule,
   ],
+  entryComponents: [LcuGuidedTourJourneysElementComponent],
 })
 export class LcuGuidedTourModule {
   static forRoot(): ModuleWithProviders<LcuGuidedTourModule> {
@@ -40,6 +59,8 @@ export class LcuGuidedTourModule {
       providers: [
         ErrorHandler,
         GuidedTourService,
+        GuidedTourService,
+        JourneysManagementStateContext,
         GuideBotEventService,
         GuidedTourManagementStateContext,
       ],

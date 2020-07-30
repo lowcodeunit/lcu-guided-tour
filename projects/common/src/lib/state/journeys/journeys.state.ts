@@ -24,6 +24,8 @@ export class JourneysIoTDetails {
 }
 
 export class JourneyOption {
+  public ActionURL: string;
+
   public Active: boolean;
 
   public ComingSoon: boolean;
@@ -43,6 +45,16 @@ export class JourneyOption {
   public Roles: string[];
 
   public Uses: string[];
+}
+
+export class JourneyOptionDetails {
+  public Abstract: string;
+
+  public Blog: string;
+
+  public Documentation: string;
+
+  public RelatedJourneys: string[];
 }
 
 export enum JourneyContentTypes {

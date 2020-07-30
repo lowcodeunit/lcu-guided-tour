@@ -27,19 +27,21 @@
       <div class="details" [gdColumn.gt-sm]="DetailsSpan">
         <h2>{{ Journey.Name }}</h2>
 
-        <h3>{{ Journey.Uses.join(", ") }}</h3>
-
         <div class="mat-body">{{ Journey.Description }}</div>
       </div>
 
       <div class="actions">
         <div>
-          <a mat-raised-button class="mat-full-width" color="primary">Get Started</a>
+          <a mat-raised-button class="mat-full-width" color="primary" >Get Started</a>
         </div>
 
         <div>
           <a mat-raised-button class="mat-full-width" color="accent">Learn More</a>
         </div>
+
+        <mat-chip-list class="tags spread">
+          <mat-chip class="tag" color="accent" *ngFor="let use of Journey.Uses">{{ use }}</mat-chip>
+        </mat-chip-list>
       </div>
     </div>
 

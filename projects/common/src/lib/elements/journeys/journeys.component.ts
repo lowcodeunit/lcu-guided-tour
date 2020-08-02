@@ -1,6 +1,10 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { LCUElementContext, LcuElementComponent } from '@lcu/common';
-import { JourneyContentTypes, JourneyOption, LimitedJourneysManagementState } from '../../state/journeys/journeys.state';
+import {
+  JourneyContentTypes,
+  JourneyOption,
+  LimitedJourneysManagementState,
+} from '../../state/journeys/journeys.state';
 import { JourneysManagementStateContext } from '../../state/journeys/journeys-state.context';
 
 export class LcuGuidedTourJourneysElementState {}
@@ -28,6 +32,8 @@ export class LcuGuidedTourJourneysElementComponent
    * Content Types
    */
   public ContentTypes = JourneyContentTypes;
+
+  public CurrentJourney: JourneyOption;
 
   /**
    * Array of journeys divided up into role types (used to populate UI)
@@ -72,7 +78,19 @@ export class LcuGuidedTourJourneysElementComponent
     return !!journey.Roles.find((r) => r === roleType);
   }
 
+  public MoreDetails(journey: JourneyOption) {
+    this.State.Loading = true;
+
+    return this.state.MoreDetails(journey ? journey.Lookup : null);
+  }
+
   //  Helpers
+  protected setCurrentJourney() {
+    this.CurrentJourney = this.State.Journeys.find(
+      (j) => j.Lookup === this.State.CurrentJourneyLookup
+    );
+  }
+
   /**
    * Divides the journeys from the state into individual arrays of role-based journeys
    */
@@ -100,6 +118,8 @@ export class LcuGuidedTourJourneysElementComponent
       this.divideJourneys();
 
       this.highlightJourneys();
+
+      this.setCurrentJourney();
     }
   }
 

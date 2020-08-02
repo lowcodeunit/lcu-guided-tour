@@ -32,11 +32,11 @@
 
       <div class="actions">
         <div>
-          <a mat-raised-button class="mat-full-width" color="primary" >Get Started</a>
+          <a mat-raised-button class="mat-full-width" color="primary" [href]="Journey.ActionURL">Get Started</a>
         </div>
 
         <div>
-          <a mat-raised-button class="mat-full-width" color="accent">Learn More</a>
+          <a mat-raised-button class="mat-full-width" color="accent" (click)="MoreDetails()">Learn More</a>
         </div>
 
         <mat-chip-list class="tags spread">

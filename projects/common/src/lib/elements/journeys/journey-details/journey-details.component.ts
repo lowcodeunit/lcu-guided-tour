@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -10,6 +10,7 @@ import {
 import { JourneysIoTDetails } from '../../../state/journeys/journeys.state';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { JourneyOption } from './../../../state/journeys/journeys.state';
 
 @Component({
   selector: 'lcu-journey-details',
@@ -46,6 +47,9 @@ export class JourneyDetailsComponent implements OnInit {
 
   public ChartPlugins: any[] = [];
 
+  @Output('close')
+  public CloseClicked: EventEmitter<boolean>;
+
   public IoTChartColors: Color[];
 
   public IoTChartOptions: ChartOptions;
@@ -59,8 +63,13 @@ export class JourneyDetailsComponent implements OnInit {
   @Input('iot-data')
   public IoTData?: JourneysIoTDetails[];
 
+  @Input('journey')
+  public Journey?: JourneyOption;
+
   //  Constructors
-  constructor(protected formBldr: FormBuilder, protected http: HttpClient) {}
+  constructor(protected formBldr: FormBuilder, protected http: HttpClient) {
+    this.CloseClicked = new EventEmitter();
+  }
 
   public ngOnInit(): void {
     this.IoTDataForm = this.formBldr.group({
@@ -76,6 +85,14 @@ export class JourneyDetailsComponent implements OnInit {
   }
 
   //  API Methods
+  public Close() {
+    this.CloseClicked.emit(true);
+  }
+
+  public Keys(value: {}) {
+    return Object.keys(value);
+  }
+
   public SendDeviceData() {
     const data = {
       deviceid: this.IoTDataForm.controls.deviceId.value,

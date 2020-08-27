@@ -1,6 +1,7 @@
 {
 	"name": "@lowcodeunit/lcu-guided-tour-common",
 	"version": "0.0.1",
+	"mytest": "shannon",
 	"peerDependencies": {
 		"@angular/common": "^9.1.0",
 		"@angular/core": "^9.1.0",

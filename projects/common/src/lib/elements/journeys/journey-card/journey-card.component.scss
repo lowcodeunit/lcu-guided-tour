@@ -12,6 +12,7 @@
 
   .journey-image {
     width: 100%;
+    height: auto;
     height: 150px;
     margin: 0 !important;
   }
@@ -27,5 +28,19 @@
 
   .tags {
     margin-top: 1em;
+  }
+}
+
+@mixin journey-card-component($theme) {
+
+  mat-card {
+    padding: 0px !important;
+  }
+
+  .divider-hor-1 {
+    margin: 25px 10px 25px 10px; 
+    // background-color: map-get(map-get($theme, 'foreground'), 'divider'); 
+    background-color: mat-color(map-get($theme, primary));
+    height: 1px;
   }
 }

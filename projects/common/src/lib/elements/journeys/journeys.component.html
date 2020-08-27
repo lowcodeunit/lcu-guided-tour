@@ -1,106 +1,121 @@
 <ng-container *ngIf="!State.Loading">
-  <div class="spread" *ngIf="!State.CurrentJourneyLookup">
-    <h1>Welcome to Fathym!</h1>
+  <div *ngIf="!State.CurrentJourneyLookup">
+    <div fxLayout="column" fxLayoutGap="5px">
+      <div fxLayout="row" fxLayoutGap="5px">
+        <div fxFlex="75" fxLayoutAlign="start end" class="welcome-bg background-fill">
+          <div class="welcome-index" fxLayout="row" fxLayoutGap="30px">
+            <div fxFlex="30">
+              <h1 fxLayout="column">
+                <span class="plain-text accent-text">Welcome to</span>
+                <span class="mat-display-2 title">Fathym!</span>
+              </h1>
+            </div>
+            <div class="divider-fill-vert"></div>
+            <div fxLayout="column" fxLayoutAlign="end start">
+              <ng-container *ngIf="State.IsIoTStarter">
+                <div fxLayout="row" fxLayoutAlign="end end">
+                  <h2 class="plain-text accent-text" fxFlex="40">To start your IoT journey -</h2>
+                  <div>
+                    <p>
+                      We have setup a few things automatically
+                      for you. This will allow you to start working with your devices and
+                      data immediately. Start exploring to see your data visualized in
+                      minutes on a best practice cloud setup for Azure.
+                    </p>
 
-    <div fxLayout="row wrap">
-      <div fxFlex="100%" class="mat-body">
-        <ng-container *ngIf="State.IsIoTStarter">
-          <p>
-            To start your IoT journey, we have setup a few things automatically
-            for you. This will allow you to start working with your devices and
-            data immediately. Start exploring to see your data visualized in
-            minutes on a best practice cloud setup for Azure.
-          </p>
+                    <p>
+                      Your data is ready to begin using. Connect it with your favorite
+                      tools or let us help you walk through learning some new ones.
+                    </p>
+                  </div>
+                </div>
+              </ng-container>
 
-          <p>
-            Your data is ready to begin using. Connect it with your favorite
-            tools or let us help you walk through learning some new ones.
-          </p>
-        </ng-container>
+              <ng-container *ngIf="!State.IsIoTStarter">
+                <p>
+                  The Fathym Low-Code Framework enables you to host, manage and deploy
+                  data-driven applications.
+                </p>
 
-        <ng-container *ngIf="!State.IsIoTStarter">
-          <p>
-            The Fathym Low-Code Framework enables you to host, manage and deploy
-            data-driven applications.
-          </p>
+                <p>
+                  Each element of the Low-Code Framework is built from Low Code Units
+                  – modular and reusable building blocks of code that can be as large
+                  as an application, or as small as a data visualization.
+                </p>
 
-          <p>
-            Each element of the Low-Code Framework is built from Low Code Units
-            – modular and reusable building blocks of code that can be as large
-            as an application, or as small as a data visualization.
-          </p>
-
-          <p>
-            The framework drastically cuts down development time by automating
-            and applying best practice workflows for cloud infrastructure
-            automation and application management. You can create data
-            applications without having to manage and maintain the underlying
-            infrastructure.
-          </p>
-        </ng-container>
+                <p>
+                  The framework drastically cuts down development time by automating
+                  and applying best practice workflows for cloud infrastructure
+                  automation and application management. You can create data
+                  applications without having to manage and maintain the underlying
+                  infrastructure.
+                </p>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <div fxFlex class="background-fill blank-header"></div>
       </div>
 
-      <!-- <div class="accent-divider"></div> -->
+      <!-- <div fxLayout="row" fxLayoutGap="5px">
+        <div class="cat" fxFlex="25"></div>
+        <div class="cat" fxFlex="25"></div>
+        <div class="cat" fxFlex="25"></div>
+        <div class="cat" fxFlex="25"></div>
+      </div> -->
 
-      <div fxFlex="100%">
-        <div
-          class="highlighted-journey spread"
-          *ngFor="let hJourney of HighlightedJourneys"
-        >
-          <lcu-journey-card
-            *ngIf="hJourney.Active"
-            [journey]="hJourney"
-            [highlight]="true"
-            (more-details)="MoreDetails($event)"
-          ></lcu-journey-card>
+      <div fxLayout="row">
+        <div fxFlex fxLayout="row" fxLayoutGap="5px">
+          <div fxFlex="25" fxLayout="row" fxFill fxLayoutAlign="start start"
+            style="padding-left: 50px; padding-right: 50px;" class="background-fill box-side-triangle">
+            <div fxLauout="column" style="padding-top: 100px">
+
+              <div class="divider-fill-hor"></div>
+
+              <h3 style="font-size: 20px;" class="plain-text whats-next-text">What's Next?</h3>
+              <p>
+                Use the Journeys below to familiarize yourself with the rest of what
+                you can do with Fathym!
+              </p>
+
+              <div class="divider-fill-hor"></div>
+            </div>
+          </div>
+
+          <div class="background-fill" fxFlex>
+            <div class="highlighted-journey spread" *ngFor="let hJourney of HighlightedJourneys">
+              <lcu-journey-card *ngIf="hJourney.Active" [journey]="hJourney" [highlight]="true"
+                (more-details)="MoreDetails($event)"></lcu-journey-card>
+            </div>
+
+            <!-- <mat-card gdColumn="auto / span 2" class="spread"> -->
+            <mat-tab-group mat-align-tabs="left" backgroundColor="accent">
+              <mat-tab *ngFor="let journeySet of DividedJourneys" label="{{ journeySet.JourneyName }}">
+                <div gdColumns.lt-sm="48% 48%" gdColumns.lt-xs="100%" gdColumns="32% 32% 32%" gdGap="2em"
+                  gdGap.lt-sm="1em" class="spread">
+                  <ng-container *ngFor="let journey of journeySet.Journeys">
+                    <lcu-journey-card *ngIf="
+                          ContainsRoleType(journey, journeySet.JourneyName) &&
+                          journey.Active
+                        " [journey]="journey" (more-details)="MoreDetails($event)"></lcu-journey-card>
+                  </ng-container>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+            <!-- </mat-card> -->
+          </div>
+
         </div>
-
-        <mat-card gdColumn="auto / span 2" class="spread">
-          <h3>What's Next?</h3>
-
-          <p>
-            Use the Journeys below to familiarize yourself with the rest of what
-            you can do with Fathym!
-          </p>
-
-          <mat-tab-group mat-align-tabs="left">
-            <mat-tab
-              *ngFor="let journeySet of DividedJourneys"
-              label="{{ journeySet.JourneyName }}"
-            >
-              <div
-                gdColumns.lt-sm="48% 48%"
-                gdColumns.lt-xs="100%"
-                gdColumns="32% 32% 32%"
-                gdGap="2em"
-                gdGap.lt-sm="1em"
-                class="spread"
-              >
-                <ng-container *ngFor="let journey of journeySet.Journeys">
-                  <lcu-journey-card
-                    *ngIf="
-                      ContainsRoleType(journey, journeySet.JourneyName) &&
-                      journey.Active
-                    "
-                    [journey]="journey"
-                    (more-details)="MoreDetails($event)"
-                  ></lcu-journey-card>
-                </ng-container>
-              </div>
-            </mat-tab>
-          </mat-tab-group>
-        </mat-card>
       </div>
     </div>
+
+
+
   </div>
 
   <ng-container *ngIf="State.CurrentJourneyLookup">
-    <lcu-journey-details
-      *ngIf="State.IsIoTStarter"
-      [iot-data]="State.IoTData"
-      [journey]="CurrentJourney"
-      (close)="MoreDetails(null)"
-    ></lcu-journey-details>
+    <lcu-journey-details *ngIf="State.IsIoTStarter" [iot-data]="State.IoTData" [journey]="CurrentJourney"
+      (close)="MoreDetails(null)"></lcu-journey-details>
   </ng-container>
 </ng-container>
 

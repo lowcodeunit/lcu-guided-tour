@@ -22,7 +22,9 @@
 			]
 		},
 		"noImplicitAny": true,
-		"suppressImplicitAnyIndexErrors": true
+		"suppressImplicitAnyIndexErrors": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true 
 	},
 	"angularCompilerOptions": {
 		"fullTemplateTypeCheck": true,

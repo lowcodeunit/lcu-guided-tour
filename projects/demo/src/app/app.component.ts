@@ -14,6 +14,7 @@ import {
 } from '@lowcodeunit/lcu-guided-tour-common';
 import { AppEventService } from './app-event.service';
 import { GuidedTour } from 'projects/common/src/lcu.api';
+// import { version } from '@lowcodeunit/lcu-guided-tour-common/package.json';
 
 @Component({
   selector: 'lcu-root',
@@ -21,6 +22,7 @@ import { GuidedTour } from 'projects/common/src/lcu.api';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  // public readonly APP_VERSION: string = version;
   public BotBoundingContainer: string = '#boundingBox';
   public BotPadding: number = 5;
   public BotScale: number = 1;

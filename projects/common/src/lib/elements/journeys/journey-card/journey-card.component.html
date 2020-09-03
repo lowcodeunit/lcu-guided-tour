@@ -3,8 +3,9 @@
     <div
       [gdColumns.gt-sm]="Columns"
     >
-      <div>
+      <div style="background-color: rgba(0, 0, 0, 0.25); border-top-left-radius: 4px; border-top-right-radius: 4px;">
         <iframe
+          style="background-color: rgba(0, 0, 0, 1);"
           mat-card-image
           *ngIf="Journey.ContentType === JourneyContentTypes.Video"
           [src]="Journey.ContentURL | safe"
@@ -14,7 +15,6 @@
           class="journey-image"
           [class.highlighted]="Highlight"
         ></iframe>
-
         <img
           mat-card-image
           *ngIf="Journey.ContentType === JourneyContentTypes.Image"
@@ -23,26 +23,36 @@
           [class.highlighted]="Highlight"
         />
       </div>
-
+      <div style="margin: 0px 16px 16px 16px">
       <div class="details" [gdColumn.gt-sm]="DetailsSpan">
-        <h2>{{ Journey.Name }}</h2>
+        <h2 class="paragraph-title-bold">{{ Journey.Name }}</h2>
 
-        <div class="mat-body">{{ Journey.Description }}</div>
+        <div class="mat-body">
+          <p>
+            {{ Journey.Description }}
+          </p>
+        </div>
       </div>
 
-      <div class="actions">
-        <div>
-          <a mat-raised-button class="mat-full-width" color="primary" [href]="Journey.ActionURL">Get Started</a>
+      <div class="actions" fxLayout="column" fxLayoutGap="10px">
+        <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end"> 
+          <div>
+            <button mat-raised-button class="mat-full-width" color="primary" (click)="JourneyAction(Journey.ActionURL)">Get Started</button>
+          </div>
+
+          <div>
+            <button mat-raised-button class="mat-full-width" color="accent" (click)="MoreDetails()">Learn More</button>
+          </div>
         </div>
 
-        <div>
-          <a mat-raised-button class="mat-full-width" color="accent" (click)="MoreDetails()">Learn More</a>
-        </div>
+        <div class="divider-hor-1"></div>
 
-        <mat-chip-list class="tags spread">
+        <mat-chip-list style="margin-top: 25px !important">
           <mat-chip class="tag" color="accent" *ngFor="let use of Journey.Uses">{{ use }}</mat-chip>
         </mat-chip-list>
       </div>
+      </div>
+
     </div>
 
     <div class="coming-soon-overlay" *ngIf="Journey.ComingSoon">

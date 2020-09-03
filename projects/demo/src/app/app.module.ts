@@ -13,8 +13,8 @@ import { HomeComponent } from './controls/home/home.component';
 import { DocumentationComponent } from './controls/documentation/documentation.component';
 import { IframeComponent } from './controls/iframe/iframe.component';
 import { JourneysComponent } from './controls/journeys/journeys.component';
-import { LcuGuidedTourModule } from '@lowcodeunit/lcu-guided-tour-common';
 import { environment } from '../environments/environment';
+import { LcuGuidedTourModule } from '@lowcodeunit/lcu-guided-tour-common';
 
 @NgModule({
   declarations: [

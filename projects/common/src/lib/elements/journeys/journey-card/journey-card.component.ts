@@ -43,4 +43,13 @@ export class JourneyCardComponent implements OnInit {
   public MoreDetails() {
     this.MoreDetailsClicked.emit(this.Journey);
   }
+
+  // Helpers
+  public JourneyAction(url: string): void {
+    if (!url) {
+      return;
+    }
+    
+    window.open(url);
+  }
 }

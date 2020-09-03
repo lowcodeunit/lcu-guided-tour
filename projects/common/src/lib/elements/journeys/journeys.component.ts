@@ -27,7 +27,7 @@ export class LcuGuidedTourJourneysElementComponent
   //  Fields
 
   //  Properties
-
+  
   /**
    * Content Types
    */

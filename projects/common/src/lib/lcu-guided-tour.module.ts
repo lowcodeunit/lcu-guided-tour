@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders, ErrorHandler } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FathymSharedModule, MaterialModule } from '@lcu/common';
+import { FathymSharedModule, MaterialModule, DirectiveModule } from '@lcu/common';
 import { GuidedTourComponent } from './controls/guided-tour/guided-tour.component';
 import { GuideBotComponent } from './controls/guide-bot/guide-bot.component';
 import { GuideBotChatComponent } from './controls/guide-bot/bot-chat/bot-chat.component';
@@ -36,6 +36,7 @@ import { HttpClientModule } from '@angular/common/http';
     FlexLayoutModule,
     MaterialModule,
     ChartsModule,
+    DirectiveModule
   ],
   providers: [WindowRefService],
   exports: [
@@ -49,6 +50,7 @@ import { HttpClientModule } from '@angular/common/http';
     JourneyDetailsComponent,
     ChartsModule,
     HttpClientModule,
+    DirectiveModule
   ],
   entryComponents: [LcuGuidedTourJourneysElementComponent],
 })

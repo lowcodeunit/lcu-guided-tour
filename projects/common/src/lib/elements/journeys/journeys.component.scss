@@ -14,4 +14,125 @@
   .highlighted-journey:nth-child(even) {
     border: pink solid 5px;
   }
+
+  .welcome-container {
+    height: auto;
+
+  }
+}
+
+@mixin journeys-component($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $divider-size: 5px;
+   // $divider: map-get(map-get($theme, 'foreground'), 'divider');
+   $divider: mat-color($primary);
+  $background: map-get(map-get($theme, 'background'), 'background');
+  $background2: map-get($theme, background);
+  $background-fill: mat-color($background2, app-bar, .5);
+  $foreground: map-get(map-get($theme, 'foreground'), 'base');
+  $secondary-text: map-get(map-get($theme, 'foreground'), 'secondary-text');
+
+  .secondary-text {
+    color: $secondary-text;
+  }
+
+  .background-fill {
+    background-color: $background-fill;
+  }
+
+  .divider-fill-vert {
+    background-color: $divider;
+    top:10%; 
+    bottom:10%; 
+    min-width: $divider-size;
+  }
+
+  .divider-fill-hor {
+    background-color: $divider;
+    height: $divider-size;
+    width: 60%;
+  }
+
+  // @mixin backgroundShorthand($imgpath,$position:0 0,$repeat: no-repeat) {
+  //   background: transparent url(#{$imgpath}) $repeat $position;
+  // }
+
+  // .welcome-bg-image {
+  //   @include backgroundShorthand('/assets/images/welcome-bg.jpg');
+  //   opacity: 0.5;
+  // }
+
+  // .welcome-bg {
+  //    @extend .welcome-bg-image;
+  // }
+
+  .welcome-bg-overlay {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    // width:100%;
+    // height:100%;
+    z-index:1;
+    background-color: rgba(0,0,0,1);
+  }
+
+  .blank-header {
+    background-image: url('/assets/images/welcome-bg.jpg');
+    background-position: center;
+    background-size: cover;
+    opacity: .5;
+  }
+
+  .welcome-bg::after {
+    content:'';
+    // background-image: url('/assets/images/welcome-bg.jpg');
+    background-size: cover;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    width:100%;
+    height:100%;
+    z-index:0;
+    opacity: .35;
+  }
+  .welcome-bg {
+    position: relative;
+    padding: 30px 50px 20px 50px;
+
+    .accent-text {
+      color: mat-color($accent);
+    }
+
+    .welcome-index {
+      z-index: 1;
+    }
+  }
+
+  .whats-next-text {
+    color: mat-color($accent);
+  }
+
+  .cat {
+    background-color: rgba(107, 210, 236, .25);
+    height: 200px;
+  }
+
+  .box-side-triangle {
+    $path: polygon(90% 25%, 100% 35%, 90% 45%, 90% 100%, 0% 100%, 0% 0%, 90% 0);
+    -webkit-clip-path: $path;
+    clip-path: $path;
+  }
+
+  .box-triangle-inset {
+    // https://bennettfeely.com/clippy/ - interactive clip creator
+    $path: polygon(0 0, 0 25%, 4% 36%, 0 45%, 0 100%, 100% 100%, 100% 0);
+    -webkit-clip-path: $path;
+    clip-path: $path;
+  }
 }

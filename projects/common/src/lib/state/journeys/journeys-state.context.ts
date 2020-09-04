@@ -16,6 +16,14 @@ export class JourneysManagementStateContext extends StateContext<
   }
 
   //  API Methods
+  public MoreDetails(journeyLookup: string): void {
+    this.Execute({
+      Arguments: {
+        JourneyLookup: journeyLookup
+      },
+      Type: 'MoreDetails'
+    });
+  }
 
   //  Helpers
   protected defaultValue() {

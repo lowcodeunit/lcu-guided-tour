@@ -1,206 +1,238 @@
-<div
-  gdColumns="30% 70%"
-  gdColumns.lt-sm="40% 60%"
-  gdColumns.lt-xs="100%"
-  gdGap="2em"
-  gdGap.lt-sm="1em"
-  class="spread"
->
-  <mat-card>
-    <mat-nav-list>
-      <mat-list-item>
-        <h3>Visualize Your Data Flow</h3>
-      </mat-list-item>
+<div>
+  <div class="spread">
+    <h1>
+      <button mat-icon-button (click)="Close()">
+        <mat-icon>home</mat-icon>
+      </button>
 
-      <mat-list-item>
-        <p>
-          Some default applications to get you started with your data.
-        </p>
-      </mat-list-item>
+      {{ Journey.Name }} Details
+    </h1>
 
-      <mat-list-item>
-        <a matLine color="primary" href="/freeboard" target="_blank">
-          Freeboard - Open Source Dashboard
-        </a>
-      </mat-list-item>
+    <p>{{ Journey.Description }}</p>
 
-      <mat-list-item>
-        <a matLine color="primary" href="/lcu-charts" target="_blank">
-          LCU Charts - Data Visualization
-        </a>
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-card>
-
-  <mat-card class="streaming-data">
-    <mat-card-header>
-      <mat-card-title>
-        <h3>Streaming Data</h3>
-      </mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content>
-      <!-- <lcu-iot-data-chart
-        *ngIf="IoTDataResults"
-        [data-set]="IoTDataResults"
-        [labels]="IoTDataLabels"
-      ></lcu-iot-data-chart> -->
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card gdColumn="auto / span 2">
-    <h3>Send Your Own Data</h3>
-
-    <p>
-      We've set your IoT Data Flow up in the easiest possible, best practice
-      starting point. Sending data into your flow is as simple as sending an
-      REST request. We've got a few ways to get you started.
+    <p *ngFor="let abs of Journey.Details?.Abstract">
+      {{ abs }}
     </p>
+  </div>
 
-    <mat-accordion>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Test From Here
-          </mat-panel-title>
+  <div
+    gdColumns="40% 60%"
+    gdColumns.lt-xs="100%"
+    gdGap="2em"
+    gdGap.lt-sm="1em"
+    class="spread"
+  >
+    <mat-card>
+      <mat-nav-list>
+        <mat-list-item>
+          <h3>Getting Started</h3>
+        </mat-list-item>
 
-          <mat-panel-description>
-            (Web Form)
-          </mat-panel-description>
-        </mat-expansion-panel-header>
+        <mat-list-item *ngFor="let support of Keys(Journey.Details?.Support)">
+          <a
+            matLine
+            color="primary"
+            [href]="Journey.Details.Support[support]"
+            target="_blank"
+          >
+            {{ support }}
+          </a>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-card>
 
-        <p>
-          The simplest way to get testing straight away is our embedded form:
-        </p>
+    <mat-card gdRow.gt-xs="auto / span 3">
+      <h3>Send Your Own Data</h3>
 
-        <form (ngSubmit)="SendDeviceData()" [formGroup]="IoTDataForm">
-          <mat-form-field class="mat-full-width">
-            <input
-              matInput
-              placeholder="DeviceID"
-              name="deviceId"
-              value="my-test-device-1"
-            />
-          </mat-form-field>
+      <p>
+        We've set your IoT Data Flow up in the easiest possible, best practice
+        starting point. Sending data into your flow is as simple as sending an
+        REST request. We've got a few ways to get you started.
+      </p>
 
-          <mat-form-field class="mat-full-width">
-            <input
-              matInput
-              placeholder="DeviceType"
-              name="deviceType"
-              value="my-test-device"
-            />
-          </mat-form-field>
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Test From Here
+            </mat-panel-title>
 
-          <fieldset>
-            <legend>Device Data</legend>
+            <mat-panel-description>
+              (Web Form)
+            </mat-panel-description>
+          </mat-expansion-panel-header>
 
+          <p>
+            The simplest way to get testing straight away is our embedded form:
+          </p>
+
+          <form (ngSubmit)="SendDeviceData()" [formGroup]="IoTDataForm">
             <mat-form-field class="mat-full-width">
               <input
                 matInput
-                placeholder="Latitude"
-                name="latitude"
-                value="44.9153586"
+                placeholder="DeviceID"
+                name="deviceId"
+                value="my-test-device-1"
               />
             </mat-form-field>
 
             <mat-form-field class="mat-full-width">
               <input
                 matInput
-                placeholder="Longitude"
-                name="longitude"
-                value="-83.4399405"
-              />
-            </mat-form-field>
-          </fieldset>
-
-          <fieldset>
-            <legend>Sensor Readings</legend>
-
-            <mat-form-field class="mat-full-width">
-              <input
-                matInput
-                name="temp"
-                placeholder="Temperature"
-                value="98"
+                placeholder="DeviceType"
+                name="deviceType"
+                value="my-test-device"
               />
             </mat-form-field>
 
-            <mat-form-field class="mat-full-width">
-              <input
-                matInput
-                name="windHeading"
-                placeholder="WindHeading"
-                value="274"
-              />
-            </mat-form-field>
-          </fieldset>
+            <fieldset>
+              <legend>Device Data</legend>
 
-          <div>
-            <div fxFlex></div>
+              <mat-form-field class="mat-full-width">
+                <input
+                  matInput
+                  placeholder="Latitude"
+                  name="latitude"
+                  value="44.9153586"
+                />
+              </mat-form-field>
 
-            <button type="submit" mat-raised-button color="accent">
-              Send Device Data
-            </button>
-          </div>
-        </form>
-      </mat-expansion-panel>
+              <mat-form-field class="mat-full-width">
+                <input
+                  matInput
+                  placeholder="Longitude"
+                  name="longitude"
+                  value="-83.4399405"
+                />
+              </mat-form-field>
+            </fieldset>
 
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Using API Testing Tools
-          </mat-panel-title>
+            <fieldset>
+              <legend>Sensor Readings</legend>
 
-          <mat-panel-description>
-            (Postman & Insomnia)
-          </mat-panel-description>
-        </mat-expansion-panel-header>
+              <mat-form-field class="mat-full-width">
+                <input
+                  matInput
+                  name="temp"
+                  placeholder="Temperature"
+                  value="98"
+                />
+              </mat-form-field>
 
-        <p>hey</p>
-      </mat-expansion-panel>
+              <mat-form-field class="mat-full-width">
+                <input
+                  matInput
+                  name="windHeading"
+                  placeholder="WindHeading"
+                  value="274"
+                />
+              </mat-form-field>
+            </fieldset>
 
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Using Code
-          </mat-panel-title>
+            <div>
+              <div fxFlex></div>
 
-          <mat-panel-description>
-            (cURL, C# & JS)
-          </mat-panel-description>
-        </mat-expansion-panel-header>
+              <button type="submit" mat-raised-button color="accent">
+                Send Device Data
+              </button>
+            </div>
+          </form>
+        </mat-expansion-panel>
 
-        <p>hey</p>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Using API Testing Tools
+            </mat-panel-title>
 
-        <pre
-          >{{ "{" }}
-'DeviceID': 'xxx',
-'DeviceType': 'a-thing',
-'Version': 'xxx',
-'Timestamp': 'xxx',
-'DeviceData': {{ "{" }}
-    'Latitude': xxxx,
-    'Longitude': xxxx,
-    'Floor': 12,
-    'Room': 'Conference Chuck'
-    'key': 'value',
-    'pairs': 'of-data'
-  },
-  'SensorReadings': {{ "{" }}
-      'Temp': 98.8,
-      'OtherSensor': 'vertical'
-  },
-  'SensorMetadata': {{ "{" }}
-      'Temp': {{ "{" }}
-          'Battery': .2,
-          'Tilt': .8
-      }
+            <mat-panel-description>
+              (Postman & Insomnia)
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <p>hey</p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Using Code
+            </mat-panel-title>
+
+            <mat-panel-description>
+              (cURL, C# & JS)
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <p>hey</p>
+
+          <pre
+            >{{ "{" }}
+  'DeviceID': 'xxx',
+  'DeviceType': 'a-thing',
+  'Version': 'xxx',
+  'Timestamp': 'xxx',
+  'DeviceData': {{ "{" }}
+      'Latitude': xxxx,
+      'Longitude': xxxx,
+      'Floor': 12,
+      'Room': 'Conference Chuck'
+      'key': 'value',
+      'pairs': 'of-data'
+    },
+    'SensorReadings': {{ "{" }}
+        'Temp': 98.8,
+        'OtherSensor': 'vertical'
+    },
+    'SensorMetadata': {{ "{" }}
+        'Temp': {{ "{" }}
+            'Battery': .2,
+            'Tilt': .8
+        }
+    }
   }
-}
-              </pre
-        >
-      </mat-expansion-panel>
-    </mat-accordion>
-  </mat-card>
+                </pre
+          >
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-card>
+
+    <mat-card>
+      <mat-nav-list>
+        <mat-list-item>
+          <h3>Documentation</h3>
+        </mat-list-item>
+
+        <mat-list-item *ngFor="let doc of Keys(Journey.Details?.Documentation)">
+          <a
+            matLine
+            color="primary"
+            [href]="Journey.Details.Documentation[doc]"
+            target="_blank"
+          >
+            {{ doc }}
+          </a>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-card>
+
+    <mat-card>
+      <mat-nav-list>
+        <mat-list-item>
+          <h3>Related Journeys</h3>
+        </mat-list-item>
+
+        <mat-list-item *ngFor="let rj of Keys(Journey.Details?.RelatedJourneys)">
+          <a
+            matLine
+            color="primary"
+            [href]="Journey.Details.RelatedJourneys[rj]"
+            target="_blank"
+          >
+            {{ rj }}
+          </a>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-card>
+  </div>
 </div>

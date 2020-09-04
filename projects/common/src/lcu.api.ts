@@ -1,8 +1,9 @@
+export * from './lib/lcu-guided-tour.module';
+
 export * from './lib/controls/guide-bot/bot-chat/bot-chat.component';
 export * from './lib/controls/guide-bot/bot-logo/bot-logo.component';
 export * from './lib/controls/guide-bot/guide-bot.component';
 export * from './lib/controls/guided-tour/guided-tour.component';
-export * from './lib/lcu-guided-tour.module';
 export * from './lib/models/guide-bot/chat-message.model';
 export * from './lib/models/guide-bot/chat-tour-button.model';
 export * from './lib/models/guide-bot/guide-bot-position.enum';

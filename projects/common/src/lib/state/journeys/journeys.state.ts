@@ -1,10 +1,10 @@
-import { Application, DAFViewApplicationConfig } from '@lcu/common';
+import { Application } from '@lcu/common';
 
 /**
  * Model class for state data
  */
 export class LimitedJourneysManagementState {
-  public ActiveJourneyLookup?: string;
+  public CurrentJourneyLookup?: string;
 
   public IoTData?: JourneysIoTDetails[];
 
@@ -36,6 +36,8 @@ export class JourneyOption {
 
   public Description: string;
 
+  public Details: JourneyOptionDetails;
+
   public HighlightedOrder?: number;
 
   public Lookup: string;
@@ -48,13 +50,13 @@ export class JourneyOption {
 }
 
 export class JourneyOptionDetails {
-  public Abstract: string;
+  public Abstract: string[];
 
-  public Blog: string;
+  public Documentation: { [title: string]: string };
 
-  public Documentation: string;
+  public RelatedJourneys: { [title: string]: string };
 
-  public RelatedJourneys: string[];
+  public Support: { [title: string]: string };
 }
 
 export enum JourneyContentTypes {

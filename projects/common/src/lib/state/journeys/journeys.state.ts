@@ -1,4 +1,4 @@
-import { Application, DAFViewApplicationConfig } from '@lcu/common';
+import { Application } from '@lcu/common';
 
 /**
  * Model class for state data

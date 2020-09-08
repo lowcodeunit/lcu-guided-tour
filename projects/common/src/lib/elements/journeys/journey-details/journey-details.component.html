@@ -8,11 +8,9 @@
       {{ Journey.Name }} Details
     </h1>
 
-    <p>{{ Journey.Description }}</p>
+    <p [innerHTML]="Journey.Description"></p>
 
-    <p *ngFor="let abs of Journey.Details?.Abstract">
-      {{ abs }}
-    </p>
+    <p *ngFor="let abs of Journey.Details?.Abstract" [innerHTML]="abs"></p>
   </div>
 
   <div
@@ -53,13 +51,9 @@
       <mat-accordion>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title>
-              Test From Here
-            </mat-panel-title>
+            <mat-panel-title> Test From Here </mat-panel-title>
 
-            <mat-panel-description>
-              (Web Form)
-            </mat-panel-description>
+            <mat-panel-description> (Web Form) </mat-panel-description>
           </mat-expansion-panel-header>
 
           <p>
@@ -141,9 +135,7 @@
 
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title>
-              Using API Testing Tools
-            </mat-panel-title>
+            <mat-panel-title> Using API Testing Tools </mat-panel-title>
 
             <mat-panel-description>
               (Postman & Insomnia)
@@ -155,13 +147,9 @@
 
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title>
-              Using Code
-            </mat-panel-title>
+            <mat-panel-title> Using Code </mat-panel-title>
 
-            <mat-panel-description>
-              (cURL, C# & JS)
-            </mat-panel-description>
+            <mat-panel-description> (cURL, C# & JS) </mat-panel-description>
           </mat-expansion-panel-header>
 
           <p>hey</p>
@@ -222,7 +210,9 @@
           <h3>Related Journeys</h3>
         </mat-list-item>
 
-        <mat-list-item *ngFor="let rj of Keys(Journey.Details?.RelatedJourneys)">
+        <mat-list-item
+          *ngFor="let rj of Keys(Journey.Details?.RelatedJourneys)"
+        >
           <a
             matLine
             color="primary"

@@ -22,3 +22,6 @@ export * from './lib/elements/journeys/journeys.component';
 export * from './lib/elements/journeys/iot-data-chart/iot-data-chart.component';
 export * from './lib/elements/journeys/journey-card/journey-card.component';
 export * from './lib/elements/journeys/journey-details/journey-details.component';
+export * from './lib/elements/journey-details-iot-starter/journey-details-iot-starter.component';
+export * from './lib/elements/journey-details-micro-frontend-starter/journey-details-micro-frontend-starter.component';
+export * from './lib/elements/journey-details-iot-edge-beyond/journey-details-iot-edge-beyond.component';

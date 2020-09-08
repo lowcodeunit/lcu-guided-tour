@@ -82,6 +82,13 @@ export class JourneyDetailsComponent implements OnInit {
     });
 
     this.configureCharts();
+
+    this.Journey.Details.SupportConfig = {
+      Assets: [
+        'https://mike-97d.fathym-int.com/_lcu/lcu-data-apps-lcu/wc/lcu-data-apps.lcu.js',
+      ],
+      ElementName: 'lcu-data-apps-config-manager-element',
+    };
   }
 
   //  API Methods

@@ -34,7 +34,7 @@ export class JourneyCardComponent implements OnInit {
 
   //  Life Cycle
   public ngOnInit(): void {
-    this.Columns = this.Highlight ? '25% 25% 25% 25%' : '100%';
+    this.Columns = this.Highlight ? '33% 66%' : '100%';
 
     this.DetailsSpan = this.Highlight ? 'auto / span 2' : null;
   }
@@ -49,7 +49,7 @@ export class JourneyCardComponent implements OnInit {
     if (!url) {
       return;
     }
-    
+
     window.open(url);
   }
 }

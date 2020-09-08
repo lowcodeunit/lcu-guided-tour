@@ -71,8 +71,6 @@ export class LcuGuidedTourJourneyDetailsIotStarterElementComponent
   //  Constructors
   constructor(protected injector: Injector, protected formBldr: FormBuilder, protected http: HttpClient) {
     super(injector);
-
-
   }
 
   //  Life Cycle

@@ -28,14 +28,7 @@ export class JourneyDetailsComponent implements OnInit {
   @Input('journey')
   public Journey?: JourneyOption;
 
-  public get SupportConfigContext() {
-    return {
-      State: {
-        IoTData: this.IoTData,
-        Journey: this.Journey,
-      },
-    };
-  }
+  public SupportConfigContext: any;
 
   //  Constructors
   constructor() {
@@ -49,6 +42,13 @@ export class JourneyDetailsComponent implements OnInit {
     //   ],
     //   ElementName: 'lcu-data-apps-config-manager-element',
     // };
+
+    this.SupportConfigContext = {
+      State: {
+        IoTData: this.IoTData,
+        Journey: this.Journey,
+      },
+    };
   }
 
   //  API Methods

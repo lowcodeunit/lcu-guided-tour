@@ -22,6 +22,7 @@ export class GuideBotComponent implements OnInit {
   @Input('bot-scale') public BotScale: number = 1;
   @Input('bot-screen-position') public BotLogoPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
   @Input('bot-sub-items') public BotSubItems: GuideBotSubItem[] = this.setDefaultBotSubItems();
+  @Input('bot-z-index') public BotZIndex: number = 1110;
   @Input('bounding-element-selector') public BoundingElementSelector: string = 'body';
   @Input('enable-chat') public ChatEnabled: boolean = false;
   @Input('enable-first-time-popup') public FirstTimePopupEnabled: boolean = false;

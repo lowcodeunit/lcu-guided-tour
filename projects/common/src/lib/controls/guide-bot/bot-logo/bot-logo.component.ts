@@ -37,6 +37,7 @@ export class GuideBotLogoComponent implements OnInit, AfterViewInit, OnChanges {
   @Input('bot-sub-items') public BotSubItems: GuideBotSubItem[];
   @Input('bot-scale') public BotScale: number;
   @Input('bounding-element-selector') public BoundingElementSelector: string;
+  @Input('bot-z-index') public BotZIndex: number = 1110;
 
   @Output('tour-started-event') public TourStartedEvent: EventEmitter<boolean>;
 

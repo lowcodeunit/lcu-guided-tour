@@ -1,5 +1,5 @@
 <!-- THINKY GUIDE -->
-<div #guide class="thinky-guide">
+<div #guide class="thinky-guide" [ngStyle]="{'z-index': BotZIndex }">
   <div class="thinky-logo" (click)="ToggleBotSubItems()">
     <div #bounce class="thinky-bounce play"></div>
   </div>

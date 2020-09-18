@@ -1,0 +1,134 @@
+<h3>Send Your Own Data</h3>
+
+<p>
+  We've set your IoT Data Flow up in the easiest possible, best practice
+  starting point. Sending data into your flow is as simple as sending an REST
+  request. We've got a few ways to get you started.
+</p>
+
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Test From Here </mat-panel-title>
+
+      <mat-panel-description> (Web Form) </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <p>The simplest way to get testing straight away is our embedded form:</p>
+
+    <form (ngSubmit)="SendDeviceData()" [formGroup]="IoTDataForm">
+      <mat-form-field class="mat-full-width">
+        <input
+          matInput
+          placeholder="DeviceID"
+          name="deviceId"
+          value="my-test-device-1"
+        />
+      </mat-form-field>
+
+      <mat-form-field class="mat-full-width">
+        <input
+          matInput
+          placeholder="DeviceType"
+          name="deviceType"
+          value="my-test-device"
+        />
+      </mat-form-field>
+
+      <fieldset>
+        <legend>Device Data</legend>
+
+        <mat-form-field class="mat-full-width">
+          <input
+            matInput
+            placeholder="Latitude"
+            name="latitude"
+            value="44.9153586"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="mat-full-width">
+          <input
+            matInput
+            placeholder="Longitude"
+            name="longitude"
+            value="-83.4399405"
+          />
+        </mat-form-field>
+      </fieldset>
+
+      <fieldset>
+        <legend>Sensor Readings</legend>
+
+        <mat-form-field class="mat-full-width">
+          <input matInput name="temp" placeholder="Temperature" value="98" />
+        </mat-form-field>
+
+        <mat-form-field class="mat-full-width">
+          <input
+            matInput
+            name="windHeading"
+            placeholder="WindHeading"
+            value="274"
+          />
+        </mat-form-field>
+      </fieldset>
+
+      <div>
+        <div fxFlex></div>
+
+        <button type="submit" mat-raised-button color="accent">
+          Send Device Data
+        </button>
+      </div>
+    </form>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Using API Testing Tools </mat-panel-title>
+
+      <mat-panel-description> (Postman & Insomnia) </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <p>hey</p>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Using Code </mat-panel-title>
+
+      <mat-panel-description> (cURL, C# & JS) </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <p>hey</p>
+
+    <pre
+      >{{ "{" }}
+  'DeviceID': 'xxx',
+  'DeviceType': 'a-thing',
+  'Version': 'xxx',
+  'Timestamp': 'xxx',
+  'DeviceData': {{ "{" }}
+      'Latitude': xxxx,
+      'Longitude': xxxx,
+      'Floor': 12,
+      'Room': 'Conference Chuck'
+      'key': 'value',
+      'pairs': 'of-data'
+    },
+    'SensorReadings': {{ "{" }}
+        'Temp': 98.8,
+        'OtherSensor': 'vertical'
+    },
+    'SensorMetadata': {{ "{" }}
+        'Temp': {{ "{" }}
+            'Battery': .2,
+            'Tilt': .8
+        }
+    }
+  }
+                </pre
+    >
+  </mat-expansion-panel>
+</mat-accordion>

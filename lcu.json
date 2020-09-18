@@ -1,20 +1,28 @@
 {
-	"templates": {
-		"repository": "lowcodeunit-devkit/lcu-cli-templates-core",
-		"scope": "@lowcodeunit",
-		"workspace": "lcu-guided-tour"
-	},
-	"config": {
-		"wc": [
-			"wc/lcu-guided-tour.lcu.js"
-		],
-		"solutions": {
-			"journeys": {
-				"element": "lcu-guided-tour-journeys-element"
-			}
-		},
-		"elements": {},
-		"data-flow": {},
-		"dependencies": {}
-	}
+  "templates": {
+    "repository": "lowcodeunit-devkit/lcu-cli-templates-core",
+    "scope": "@lowcodeunit",
+    "workspace": "lcu-guided-tour"
+  },
+  "config": {
+    "wc": ["wc/lcu-guided-tour.lcu.js"],
+    "solutions": {
+      "journeys": {
+        "element": "lcu-guided-tour-journeys-element"
+      }
+    },
+    "elements": {
+      "journey-details-iot-starter": {
+        "element": "lcu-guided-tour-journey-details-iot-starter-element"
+      },
+      "journey-details-micro-frontend-starter": {
+        "element": "lcu-guided-tour-journey-details-micro-frontend-starter-element"
+      },
+      "journey-details-iot-edge-beyond": {
+        "element": "lcu-guided-tour-journey-details-iot-edge-beyond-element"
+      }
+    },
+    "data-flow": {},
+    "dependencies": {}
+  }
 }

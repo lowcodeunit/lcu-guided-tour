@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
   public BotBoundingContainer: string = '#boundingBox';
   public BotPadding: number = 5;
   public BotScale: number = 1;
+  public BotZIndex: number = 1111;
   public BotScreenPosition: GuideBotScreenPosition = GuideBotScreenPosition.BottomLeft;
   public BotSubItems: GuideBotSubItem[];
   public CurrentTour: GuidedTour;

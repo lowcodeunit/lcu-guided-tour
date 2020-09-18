@@ -17,6 +17,10 @@ import { IotDataChartComponent } from './elements/journeys/iot-data-chart/iot-da
 import { JourneyDetailsComponent } from './elements/journeys/journey-details/journey-details.component';
 import { ChartsModule } from 'ng2-charts';
 import { HttpClientModule } from '@angular/common/http';
+import { LazyElementModule } from '@lowcodeunit/lazy-element';
+import { LcuGuidedTourJourneyDetailsIotStarterElementComponent } from './elements/journey-details-iot-starter/journey-details-iot-starter.component';
+import { LcuGuidedTourJourneyDetailsMicroFrontendStarterElementComponent } from './elements/journey-details-micro-frontend-starter/journey-details-micro-frontend-starter.component';
+import { LcuGuidedTourJourneyDetailsIotEdgeBeyondElementComponent } from './elements/journey-details-iot-edge-beyond/journey-details-iot-edge-beyond.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,9 @@ import { HttpClientModule } from '@angular/common/http';
     JourneyCardComponent,
     IotDataChartComponent,
     JourneyDetailsComponent,
+    LcuGuidedTourJourneyDetailsIotStarterElementComponent,
+    LcuGuidedTourJourneyDetailsMicroFrontendStarterElementComponent,
+    LcuGuidedTourJourneyDetailsIotEdgeBeyondElementComponent,
   ],
   imports: [
     FathymSharedModule,
@@ -36,7 +43,8 @@ import { HttpClientModule } from '@angular/common/http';
     FlexLayoutModule,
     MaterialModule,
     ChartsModule,
-    DirectiveModule
+    DirectiveModule,
+    LazyElementModule,
   ],
   providers: [WindowRefService],
   exports: [
@@ -50,9 +58,12 @@ import { HttpClientModule } from '@angular/common/http';
     JourneyDetailsComponent,
     ChartsModule,
     HttpClientModule,
-    DirectiveModule
+    DirectiveModule,
+    LcuGuidedTourJourneyDetailsIotStarterElementComponent,
+    LcuGuidedTourJourneyDetailsMicroFrontendStarterElementComponent,
+    LcuGuidedTourJourneyDetailsIotEdgeBeyondElementComponent
   ],
-  entryComponents: [LcuGuidedTourJourneysElementComponent],
+  entryComponents: [LcuGuidedTourJourneysElementComponent, LcuGuidedTourJourneyDetailsIotStarterElementComponent, LcuGuidedTourJourneyDetailsMicroFrontendStarterElementComponent, LcuGuidedTourJourneyDetailsIotEdgeBeyondElementComponent],
 })
 export class LcuGuidedTourModule {
   static forRoot(): ModuleWithProviders<LcuGuidedTourModule> {

@@ -11,6 +11,15 @@
 		"solutions": {
 			"journeys": {
 				"element": "lcu-guided-tour-journeys-element"
+			},
+			"journey-details-iot-starter": {
+				"element": "lcu-guided-tour-journey-details-iot-starter-element"
+			},
+			"journey-details-micro-frontend-starter": {
+				"element": "lcu-guided-tour-journey-details-micro-frontend-starter-element"
+			},
+			"journey-details-iot-edge-beyond": {
+				"element": "lcu-guided-tour-journey-details-iot-edge-beyond-element"
 			}
 		},
 		"elements": {},

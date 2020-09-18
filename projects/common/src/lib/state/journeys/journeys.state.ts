@@ -1,4 +1,5 @@
 import { Application } from '@lcu/common';
+import { LazyElementConfig } from '@lowcodeunit/lazy-element';
 
 /**
  * Model class for state data
@@ -57,6 +58,8 @@ export class JourneyOptionDetails {
   public RelatedJourneys: { [title: string]: string };
 
   public Support: { [title: string]: string };
+
+  public SupportConfig: LazyElementConfig;
 }
 
 export enum JourneyContentTypes {

@@ -29,7 +29,7 @@
         <div class="spread" *ngIf="Highlight">
           <div class="divider-hor-1"></div>
 
-          <mat-chip-list style="margin-top: 25px !important">
+          <mat-chip-list>
             <mat-chip
               class="tag"
               color="accent"
@@ -39,11 +39,11 @@
           </mat-chip-list>
         </div>
       </div>
-      <div style="margin: 0px 16px 16px 16px">
+      <div style="margin: 0px 16px 16px 16px;">
         <div class="details" [gdColumn.gt-sm]="DetailsSpan">
           <h2 class="paragraph-title-bold">{{ Journey.Name }}</h2>
 
-          <div class="mat-body">
+          <div class="mat-body plain-text">
             <p [innerHTML]="Journey.Description"></p>
           </div>
         </div>

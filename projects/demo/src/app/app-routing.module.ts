@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'documentation', component: DocumentationComponent },
   { path: 'iframe', component: IframeComponent },
   { path: 'journeys', component: JourneysComponent },
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
+  { path: '', redirectTo: 'journeys', pathMatch: 'full' }
 ];
 
 @NgModule({

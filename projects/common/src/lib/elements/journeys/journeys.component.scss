@@ -124,7 +124,7 @@
   }
 
   .box-side-triangle {
-    $path: polygon(90% 25%, 100% 35%, 90% 45%, 90% 100%, 0% 100%, 0% 0%, 90% 0);
+    $path: polygon(90% 0%, 100% 7%, 90% 12%, 90% 100%, 0% 100%, 0% 0%, 90% 0);
     -webkit-clip-path: $path;
     clip-path: $path;
   }

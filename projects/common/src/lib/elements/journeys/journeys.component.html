@@ -61,7 +61,7 @@
             style="padding-left: 50px; padding-right: 50px"
             class="background-fill box-side-triangle"
           >
-            <div fxLauout="column" style="padding-top: 100px">
+            <div fxLayout="column" style="padding-top: 100px">
               <div class="divider-fill-hor"></div>
 
               <h3 style="font-size: 20px" class="plain-text whats-next-text">
@@ -103,7 +103,7 @@
                   gdGap.lt-sm="1em"
                   class="spread"
                 >
-                  <ng-container *ngFor="let journey of journeySet.Journeys">
+                  <ng-container *ngFor="let journey of journeySet.Journeys" style="background-color: orangered; height: auto; width: 800px">
                     <lcu-journey-card
                       *ngIf="
                         ContainsRoleType(journey, journeySet.JourneyName) &&

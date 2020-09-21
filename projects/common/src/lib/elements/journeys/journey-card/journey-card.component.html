@@ -1,6 +1,10 @@
 <mat-card>
-  <mat-card-content>
-    <div [gdColumns.gt-sm]="Columns">
+  <mat-card-content fxFlex>
+    <!-- [gdColumns.gt-sm]="Columns"  -->
+    <div 
+      fxLayout="column" 
+      fxLayoutAlign="start" 
+      style="height: 100%;">
       <div
         style="
           background-color: rgba(0, 0, 0, 0.25);
@@ -39,7 +43,10 @@
           </mat-chip-list>
         </div>
       </div>
-      <div style="margin: 0px 16px 16px 16px;">
+      <div 
+        fxLayout="column"
+        fxLayoutAlign="space-between start" 
+        style="height: 100%; margin: 0px 16px 16px 16px;">
         <div class="details" [gdColumn.gt-sm]="DetailsSpan">
           <h2 class="paragraph-title-bold">{{ Journey.Name }}</h2>
 
@@ -48,8 +55,9 @@
           </div>
         </div>
 
-        <div class="actions" fxLayout="column" fxLayoutGap="10px">
-          <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end">
+        <div fxLayout="column" fxLayoutAlign="start" class="actions" 
+             fxLayoutGap="10px" style="width: 100%;">
+          <div fxLayout="row" fxLayoutGap="10px">
             <div>
               <button
                 mat-raised-button
@@ -76,7 +84,7 @@
           <ng-container *ngIf="!Highlight">
             <div class="divider-hor-1"></div>
 
-            <mat-chip-list style="margin-top: 25px !important">
+            <mat-chip-list>
               <mat-chip
                 class="tag"
                 color="accent"

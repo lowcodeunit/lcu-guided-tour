@@ -1,23 +1,17 @@
 <mat-card>
   <mat-card-content fxFlex>
-    <!-- fxLayout.lg="Highlight? 'row' : 'column'" 
-      fxLayout.md="Highlight? 'row' : 'column'" 
-      [fxLayout.sm]="Highlight? 'column' : 'column'"
-      [fxLayout.xs]="Highlight? 'column' : 'column'"
-      [gdColumns.gt-sm]="Columns"
-      fxLayout="columns"  -->
+    <!-- [gdColumns.gt-sm]="Columns" -->
     <div 
-
-      [gdColumns.gt-sm]="Columns"
-      fxLayout.xs="columns"
-      fxLayout.sm="columns" 
-      fxLayout.md="columns"
-      fxLayout.lg="columns"
-      fxLayout.Xl="columns"
+      fxFlex
+      fxLayoutAlign="start start"
+      fxLayout="{{Highlight != true ? 'column' : 'row'}}"
+      fxLayout.lt-lg="{{Highlight != true ? 'column' : 'row'}}"
+      fxLayout.gt-lg="{{Highlight != true ? 'column' : 'row'}}"
       fxLayoutAlign="start">
       <div
+        fxFlex="{{Highlight != true ? '0' : '30'}}"
         style="
-          background-color: rgba(0, 0, 0, 0.25);
+          background-color: rgba(0, 0, 0, .4);
           border-top-left-radius: 4px;
           border-top-right-radius: 4px;
         "
@@ -56,7 +50,7 @@
       <div 
         fxLayout="column"
         fxLayoutAlign="space-between start" 
-        style="height: 100%; margin: 0px 16px 16px 16px;">
+        style="height: 100% !important; margin: 0px 16px 16px 16px;">
         <div class="details" [gdColumn.gt-sm]="DetailsSpan">
           <h2 class="paragraph-title-bold">{{ Journey.Name }}</h2>
 

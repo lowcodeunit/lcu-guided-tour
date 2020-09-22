@@ -35,9 +35,6 @@
 
   }
 }
-
-// @mixin journeys-component($theme) {
- 
   .secondary-text {
     color: $secondary-text;
   }
@@ -109,7 +106,7 @@
     position: relative;
     padding: 30px 50px 20px 50px;
 
-    .accent-text {
+    .theme-accent-text {
       color: mat-color($accent);
     }
 
@@ -139,4 +136,3 @@
     -webkit-clip-path: $path;
     clip-path: $path;
   }
-// }

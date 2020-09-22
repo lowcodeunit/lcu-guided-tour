@@ -1,11 +1,19 @@
 <mat-card>
   <mat-card-content fxFlex>
-    <!-- [fxLayout]="Highlight? 'row' : 'column'" 
-      [fxLayout.sm]="Highlight? 'column' : 'column'" 
-      [fxLayout.xs]="Highlight? 'column' : 'column'" -->
-    <div 
+    <!-- fxLayout.lg="Highlight? 'row' : 'column'" 
+      fxLayout.md="Highlight? 'row' : 'column'" 
+      [fxLayout.sm]="Highlight? 'column' : 'column'"
+      [fxLayout.xs]="Highlight? 'column' : 'column'"
       [gdColumns.gt-sm]="Columns"
-      fxLayout="columns" 
+      fxLayout="columns"  -->
+    <div 
+
+      [gdColumns.gt-sm]="Columns"
+      fxLayout.xs="columns"
+      fxLayout.sm="columns" 
+      fxLayout.md="columns"
+      fxLayout.lg="columns"
+      fxLayout.Xl="columns"
       fxLayoutAlign="start">
       <div
         style="

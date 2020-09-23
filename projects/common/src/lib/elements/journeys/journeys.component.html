@@ -21,22 +21,19 @@
               </h2>
 
               <p>
-                The Fathym Low-Code Framework enables you to host, manage and
-                deploy data-driven applications.
+                The Fathym Low-Code Framework enables you to take charge of your
+                hybrid-clouds, cloud-native applications, and deployment strategies.
               </p>
 
               <p>
-                Each element of the Low-Code Framework is built from Low Code
-                Units – modular and reusable building blocks of code that can be
-                as large as an application, or as small as a data visualization.
+                The framework radically reduces the time and work involved in
+                managing legacy applications, adopting new application delivery
+                strategies (micro-frontends, Jamstack, containerization, cloud-native), and
+                bringing infrastructure and DevOps best practices to bear.
               </p>
 
               <p>
-                The framework drastically cuts down development time by
-                automating and applying best practice workflows for cloud
-                infrastructure automation and application management. You can
-                create data applications without having to manage and maintain
-                the underlying infrastructure.
+                You can get started with the <a href="https://www.fathym-it.com/docs">full documentation</a>.
               </p>
             </div>
           </div>
@@ -61,8 +58,8 @@
             style="padding-left: 50px; padding-right: 50px"
             class="background-fill box-side-triangle"
           >
-            <div fxLayout="column" fxFlex="90" style="padding-top: 100px;">
-              <div  class="divider-fill-hor"></div>
+            <div fxLayout="column" fxFlex="90" style="padding-top: 100px">
+              <div class="divider-fill-hor"></div>
 
               <h3 style="font-size: 20px" class="plain-text whats-next-text">
                 What's Next?
@@ -103,7 +100,14 @@
                   gdGap.lt-sm="1em"
                   class="spread"
                 >
-                  <ng-container *ngFor="let journey of journeySet.Journeys" style="background-color: orangered; height: auto; width: 800px">
+                  <ng-container
+                    *ngFor="let journey of journeySet.Journeys"
+                    style="
+                      background-color: orangered;
+                      height: auto;
+                      width: 800px;
+                    "
+                  >
                     <lcu-journey-card
                       *ngIf="
                         ContainsRoleType(journey, journeySet.JourneyName) &&

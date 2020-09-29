@@ -1,3 +1,5 @@
+@import "../../../../../assets/styles/common";
+
 :host {
   .coming-soon-overlay {
     width: 100%;
@@ -39,16 +41,17 @@
   }
 }
 
-@mixin journey-card-component($theme) {
+// @mixin journey-card-component($theme) {
 
   mat-card {
     padding: 0px !important;
+    height: 100%;
   }
 
   .divider-hor-1 {
     margin: 25px 10px 25px 10px;
     // background-color: map-get(map-get($theme, 'foreground'), 'divider');
-    background-color: mat-color(map-get($theme, primary));
+    background-color: mat-color(map-get($global-theme, primary));
     height: 1px;
   }
-}
+// }

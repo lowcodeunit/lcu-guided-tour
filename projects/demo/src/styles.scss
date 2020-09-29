@@ -5,8 +5,8 @@
 @import "./app/app.component.scss";
 @import "./app/controls/home/home.component.scss";
 @import "./app/controls/iframe/iframe.component.scss";
-@import '../../common/src/lib/elements/journeys/journeys.component.scss';
-@import '../../common/src/lib/elements/journeys/journey-card/journey-card.component.scss';
+// @import '../../common/src/lib/elements/journeys/journeys.component.scss';
+// @import '../../common/src/lib/elements/journeys/journey-card/journey-card.component.scss';
 @import "../../common/assets/styles/lcu-guided-tour.scss"; // TODO: Pull from node_modules
 
 @mixin opacity($opacity) {
@@ -43,8 +43,8 @@
   @include home-component($theme);
   @include iframe-component($theme);
 
-  @include journeys-component($theme);
-  @include journey-card-component($theme);
+  // @include journeys-component($theme);
+  // @include journey-card-component($theme);
 }
 
 @mixin primary-logo($logo, $theme, $opacity) {

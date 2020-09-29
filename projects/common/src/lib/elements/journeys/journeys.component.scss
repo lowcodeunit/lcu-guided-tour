@@ -1,3 +1,18 @@
+@import "../../../../assets/styles/common";
+
+ $primary: map-get($global-theme, primary);
+  $accent: map-get($global-theme, accent);
+  $warn: map-get($global-theme, warn);
+  $divider-size: 5px;
+  $divider: mat-color($primary);
+  $background: map-get(map-get($global-theme, 'background'), 'background');
+  $background2: map-get($global-theme, background);
+  // $background-fill: mat-color($background2, app-bar);
+  $background-fill: map_get($mat-grey, 900);
+  $foreground: map-get(map-get($global-theme, 'foreground'), 'base');
+  $secondary-text: map-get(map-get($global-theme, 'foreground'), 'secondary-text');
+
+
 :host ::ngdeep {
   fieldset {
     margin-bottom: 1.25em;
@@ -20,20 +35,6 @@
 
   }
 }
-
-@mixin journeys-component($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $divider-size: 5px;
-   // $divider: map-get(map-get($theme, 'foreground'), 'divider');
-   $divider: mat-color($primary);
-  $background: map-get(map-get($theme, 'background'), 'background');
-  $background2: map-get($theme, background);
-  $background-fill: mat-color($background2, app-bar, .5);
-  $foreground: map-get(map-get($theme, 'foreground'), 'base');
-  $secondary-text: map-get(map-get($theme, 'foreground'), 'secondary-text');
-
   .secondary-text {
     color: $secondary-text;
   }
@@ -44,15 +45,15 @@
 
   .divider-fill-vert {
     background-color: $divider;
-    top:10%; 
-    bottom:10%; 
+    top:10%;
+    bottom:10%;
     min-width: $divider-size;
   }
 
   .divider-fill-hor {
     background-color: $divider;
     height: $divider-size;
-    width: 60%;
+    width: 90%;
   }
 
   // @mixin backgroundShorthand($imgpath,$position:0 0,$repeat: no-repeat) {
@@ -105,7 +106,7 @@
     position: relative;
     padding: 30px 50px 20px 50px;
 
-    .accent-text {
+    .theme-accent-text {
       color: mat-color($accent);
     }
 
@@ -124,7 +125,7 @@
   }
 
   .box-side-triangle {
-    $path: polygon(90% 25%, 100% 35%, 90% 45%, 90% 100%, 0% 100%, 0% 0%, 90% 0);
+    $path: polygon(90% 0%, 100% 7%, 90% 12%, 90% 100%, 0% 100%, 0% 0%, 90% 0);
     -webkit-clip-path: $path;
     clip-path: $path;
   }
@@ -135,4 +136,3 @@
     -webkit-clip-path: $path;
     clip-path: $path;
   }
-}

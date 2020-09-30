@@ -19,27 +19,3 @@ a:not(.mat-button) {
         color: map-get($accent, 200) !important;
     }
 }
-// a {
-//     color: map-get($primary, 500) !important;
-//     &:hover {
-//                 color: map-get($accent, 200) !important;
-//             }
-// }
-// a:link {
-//     color: map-get($primary, 500) !important;
-//   }
-  
-//   /* visited link */
-//   a:visited {
-//     color: green;
-//   }
-  
-//   /* mouse over link */
-//   a:hover {
-//     color: hotpink;
-//   }
-  
-//   /* selected link */
-//   a:active {
-//     color: blue;
-//   }

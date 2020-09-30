@@ -1,15 +1,5 @@
 @import "../../../../../assets/styles/common";
 
-.anchor-test {
-  a:not(.mat-button) {
-    color: map-get($primary, 500) !important;
-
-    &:hover {
-        color: map-get($accent, 200) !important;
-    }
-}
-}
-
 :host {
   .coming-soon-overlay {
     width: 100%;
@@ -22,6 +12,10 @@
     font-size: 20px;
   }
 
+  .video-base {
+    background-color: rgb(206, 12, 12);
+    width:100%
+  }
   .journey-image {
     width: 100%;
     height: auto;

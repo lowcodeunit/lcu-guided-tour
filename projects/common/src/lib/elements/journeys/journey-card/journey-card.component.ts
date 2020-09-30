@@ -32,6 +32,18 @@ export class JourneyCardComponent implements OnInit {
     this.MoreDetailsClicked = new EventEmitter();
   }
 
+public MyDescriptionTestOne(): string {
+  return "<p>test</p>\r\n<p>Read the <a href=\"https://fathym-it.com/framework/docs/getting-started/try-it/micro-frontends\">testy</a> on Fathym Framework micro-frontends now.</p>";
+}
+
+public MyDescriptionTestTwo(): string {
+  return "<p color='primary'>test</p>\r\n<p>Read the <a href=\"https://fathym-it.com/framework/docs/getting-started/try-it/micro-frontends\">testy</a> on Fathym Framework micro-frontends now.</p>";
+}
+
+public MyDescriptionTestThree(): string {
+  return "<p class='anchor-test'>test</p>\r\n<p>Read the <a href=\"https://fathym-it.com/framework/docs/getting-started/try-it/micro-frontends\">testy</a> on Fathym Framework micro-frontends now.</p>";
+}
+
   //  Life Cycle
   public ngOnInit(): void {
     this.Columns = this.Highlight ? '33% 66%' : '100%';

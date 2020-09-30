@@ -1,5 +1,15 @@
 @import "../../../../../assets/styles/common";
 
+.anchor-test {
+  a:not(.mat-button) {
+    color: map-get($primary, 500) !important;
+
+    &:hover {
+        color: map-get($accent, 200) !important;
+    }
+}
+}
+
 :host {
   .coming-soon-overlay {
     width: 100%;

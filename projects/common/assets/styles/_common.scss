@@ -13,10 +13,10 @@ $foreground: map-get(map-get($global-theme, 'foreground'), 'base');
 $secondary-text: map-get(map-get($global-theme, 'foreground'), 'secondary-text');
 
 a:not(.mat-button) {
-    color: purple;
+    color: map-get($primary, 500) !important;
 
     &:hover {
-        color: brown;
+        color: map-get($accent, 200) !important;
     }
 }
 // a {

@@ -1,1 +1,14 @@
 @import "../../../../node_modules/@lcu/common/assets/theming/common-theme";
+
+$primary: map-get($global-theme, primary);
+$accent: map-get($global-theme, accent);
+$warn: map-get($global-theme, warn);
+$divider-size: 5px;
+$divider: mat-color($primary);
+$background: map-get(map-get($global-theme, 'background'), 'background');
+$background2: map-get($global-theme, background);
+// $background-fill: mat-color($background2, app-bar);
+$background-fill: map_get($mat-grey, 900);
+$foreground: map-get(map-get($global-theme, 'foreground'), 'base');
+$secondary-text: map-get(map-get($global-theme, 'foreground'), 'secondary-text');
+

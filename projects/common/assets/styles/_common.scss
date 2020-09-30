@@ -12,3 +12,10 @@ $background-fill: map_get($mat-grey, 900);
 $foreground: map-get(map-get($global-theme, 'foreground'), 'base');
 $secondary-text: map-get(map-get($global-theme, 'foreground'), 'secondary-text');
 
+a:not(.mat-button) {
+    color: map-get($primary, 500) !important;
+
+    &:hover {
+        color: map-get($accent, 200) !important;
+    }
+}

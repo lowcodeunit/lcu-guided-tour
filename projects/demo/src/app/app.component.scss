@@ -1,4 +1,5 @@
-@import '~@angular/material/theming';
+// @import '~@angular/material/theming';
+@import "../../../common/assets/styles/common";
 
 $lcu-charts-footer-height: 50px;
 
@@ -14,11 +15,6 @@ $lcu-charts-footer-height: 50px;
     }
   }
 }
-
-@mixin lcu-component-theme($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
 
   $header-height: 64px;
 
@@ -68,13 +64,13 @@ $lcu-charts-footer-height: 50px;
     justify-content: center;
     padding: 10px;
 
-    a:not(.mat-button) {
-      color: map-get($primary, 500);
+    // a:not(.mat-button) {
+    //   color: map-get($primary, 500);
 
-      &:hover {
-        color: map-get($accent, 200);
-      }
-    }
+    //   &:hover {
+    //     color: map-get($accent, 200);
+    //   }
+    // }
   }
 
   .color-swatch-arctic {
@@ -108,5 +104,3 @@ $lcu-charts-footer-height: 50px;
   .color-swatch-ivy {
     color: mat-color($fathym-primary, 500) !important;
   }
-
-}

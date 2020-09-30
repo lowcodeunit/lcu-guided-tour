@@ -64,13 +64,13 @@ $lcu-charts-footer-height: 50px;
     justify-content: center;
     padding: 10px;
 
-    a:not(.mat-button) {
-      color: map-get($primary, 500);
+    // a:not(.mat-button) {
+    //   color: map-get($primary, 500);
 
-      &:hover {
-        color: map-get($accent, 200);
-      }
-    }
+    //   &:hover {
+    //     color: map-get($accent, 200);
+    //   }
+    // }
   }
 
   .color-swatch-arctic {

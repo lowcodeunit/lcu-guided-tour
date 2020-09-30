@@ -1,14 +1,6 @@
 @import "../../../../../assets/styles/common";
 
 :host {
-  a:not(.mat-button) {
-    color: map-get($primary, 500) !important;
-
-    &:hover {
-        color: map-get($accent, 200) !important;
-    }
-}
-
   .coming-soon-overlay {
     width: 100%;
     height: 100%;

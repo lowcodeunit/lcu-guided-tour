@@ -194,6 +194,7 @@
             "assets": [
               "projects/demo/src/favicon.ico",
               "projects/demo/src/assets",
+              "projects/demo/src/_lcu",
               {
                 "glob": "package.json",
                 "input": "./projects/demo/",

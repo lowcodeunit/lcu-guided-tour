@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { JourneyContentTypes, JourneyOption } from '../../../state/journeys/journeys.state';
 
 @Component({
   selector: 'lcu-journey-card',
   templateUrl: './journey-card.component.html',
-  styleUrls: ['./journey-card.component.scss']
+  styleUrls: ['./journey-card.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class JourneyCardComponent implements OnInit {
   //  Fields

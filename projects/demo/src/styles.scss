@@ -39,7 +39,7 @@
   @include thinky-bounce($theme);
   @include thinky-chat($theme);
   @include guided-tour($theme);
-  @include lcu-component-theme($theme);
+  // @include lcu-component-theme($theme);
   @include home-component($theme);
   @include iframe-component($theme);
 

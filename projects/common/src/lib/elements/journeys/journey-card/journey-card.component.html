@@ -17,7 +17,7 @@
         "
       >
         <iframe
-          style="background-color: rgba(0, 0, 0, 1)"
+          style="background-color: rgba(0, 0, 0, 1); margin: 0px; width:100%"
           mat-card-image
           *ngIf="Journey.ContentType === JourneyContentTypes.Video"
           [src]="Journey.ContentURL | safe"
@@ -53,12 +53,8 @@
         style="height: 100% !important; margin: 0px 16px 16px 16px;">
         <div class="details" [gdColumn.gt-sm]="DetailsSpan">
           <h2 class="paragraph-title-bold">{{ Journey.Name }}</h2>
-          <div style="width:200px">
-            <pre>{{Journey.Description | json}}</pre>
-          </div>
-          
+
           <div class="mat-body plain-text">
-            
             <p [innerHTML]="Journey.Description"></p>
           </div>
         </div>

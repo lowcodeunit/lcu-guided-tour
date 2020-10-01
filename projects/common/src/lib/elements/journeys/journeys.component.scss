@@ -1,5 +1,13 @@
 @import "../../../../assets/styles/common";
 
+// a:not(.mat-button) {
+//   color: map-get($primary, 500) !important;
+
+//   &:hover {
+//       color: map-get($accent, 200) !important;
+//   }
+// }
+
 :host ::ngdeep {
   fieldset {
     margin-bottom: 1.25em;

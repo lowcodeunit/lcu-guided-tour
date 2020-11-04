@@ -8,7 +8,7 @@
       fxLayout.lt-lg="{{Highlight != true ? 'column' : 'row'}}"
       fxLayout.gt-lg="{{Highlight != true ? 'column' : 'row'}}"
       fxLayoutAlign="start">
-      <div
+      <div class="media-container"
         fxFlex="{{Highlight != true ? '0' : '30'}}"
         style="
           background-color: rgba(0, 0, 0, .4);
@@ -16,7 +16,11 @@
           border-top-right-radius: 4px;
         "
       >
-        <iframe
+      <div class="temp-img-container"
+      [ngClass]="{'micro-frontends': Journey.Lookup === 'micro-frontends',
+                  'iot-starter': Journey.Lookup === 'iot-starter'}"></div>
+      <!-- Commented out until we have up to date videos -->
+        <!-- <iframe
           style="background-color: rgba(0, 0, 0, 1); margin: 0px; width:100%"
           mat-card-image
           *ngIf="Journey.ContentType === JourneyContentTypes.Video"
@@ -27,7 +31,7 @@
           class="journey-image"
           [class.highlighted]="Highlight"
         ></iframe>
-        <img
+         <img
           mat-card-image
           *ngIf="Journey.ContentType === JourneyContentTypes.Image"
           [src]="Journey.ContentURL"
@@ -45,7 +49,7 @@
               >{{ use }}</mat-chip
             >
           </mat-chip-list>
-        </div>
+        </div> -->
       </div>
       <div 
         fxLayout="column"

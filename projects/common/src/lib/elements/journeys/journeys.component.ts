@@ -120,6 +120,7 @@ export class LcuGuidedTourJourneysElementComponent
       this.highlightJourneys();
 
       this.setCurrentJourney();
+      // console.log("JOURNEYS: ", this.State.Journeys)
     }
   }
 

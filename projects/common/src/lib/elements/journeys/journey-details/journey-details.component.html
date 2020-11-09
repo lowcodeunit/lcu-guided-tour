@@ -1,11 +1,14 @@
 <div>
   <div class="spread">
     <!-- fxLayoutAlign="start center" -->
-    <h1 fxLayout="row" >
-      <button mat-icon-button (click)="Close()">
+    <!-- <div class="bread-crumb" fxLayout="row" fxLayoutAlign="start end"> -->
+      <button mat-icon-button (click)="Close()" >
         <mat-icon>keyboard_backspace</mat-icon>
+        <span class="welcome-span">Welcome</span>
       </button>
+    <!-- </div> -->
 
+    <h1 fxLayout="row" >
       {{ Journey.Name }} Details
     </h1>
 

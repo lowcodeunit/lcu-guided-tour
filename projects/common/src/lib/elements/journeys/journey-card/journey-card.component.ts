@@ -38,6 +38,8 @@ export class JourneyCardComponent implements OnInit {
     this.Columns = this.Highlight ? '33% 66%' : '100%';
 
     this.DetailsSpan = this.Highlight ? 'auto / span 2' : null;
+
+    console.log("JOURNEY: ", this.Journey);
   }
 
   //  API Methods

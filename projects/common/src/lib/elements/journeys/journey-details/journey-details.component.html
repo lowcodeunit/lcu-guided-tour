@@ -8,8 +8,8 @@
 
       {{ Journey.Name }}
     </h1>
-
-    <p [innerHTML]="Journey.Description"></p>
+<!-- 
+    <p [innerHTML]="Journey.Description"></p> -->
 
     <p *ngFor="let abs of Journey.Details?.Abstract" [innerHTML]="abs"></p>
   </div>

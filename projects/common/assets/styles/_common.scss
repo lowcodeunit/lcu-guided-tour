@@ -1,4 +1,5 @@
 @import "../../../../node_modules/@lcu/common/assets/theming/common-theme";
+@import "../../../../node_modules/@lcu/common/assets/styles/utils/margins-padding";
 
 $primary: map-get($global-theme, primary);
 $accent: map-get($global-theme, accent);
